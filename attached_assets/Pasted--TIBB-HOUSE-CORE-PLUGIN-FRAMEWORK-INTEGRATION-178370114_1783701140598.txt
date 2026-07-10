@@ -1,0 +1,278 @@
+====================================================
+
+TIBB HOUSE CORE PLUGIN FRAMEWORK INTEGRATION
+
+IMPORTANT:
+
+The theme is being developed separately from the existing
+"Tibb House Core" plugin.
+
+The plugin is the content management system.
+
+The theme is the presentation framework.
+
+DO NOT modify, recreate, duplicate, or replace the plugin.
+
+The theme must respect the existing plugin architecture.
+
+The plugin already controls:
+
+• Custom Post Types
+• Custom Taxonomies
+• Custom Fields
+• Meta Data
+• Relationships
+• Admin Dashboard Sections
+• Content Organization
+
+The theme must only retrieve and display this information.
+
+====================================================
+
+CONTENT TO DESIGN CONNECTION
+
+The theme must automatically understand every content section created by the plugin.
+
+Example:
+
+In WordPress Dashboard:
+
+Treatments
+    ↓
+    Add New Treatment
+
+Admin enters:
+
+Treatment Name:
+Hijama
+
+Overview:
+(text)
+
+Constitutional Type:
+(text/data)
+
+Vital Areas:
+(text/data)
+
+Evidence Level:
+(text/data)
+
+Research:
+(text/data)
+
+Remedies:
+(text/data)
+
+Conditions:
+(related entries)
+
+After publishing:
+
+The theme automatically generates the Treatment page.
+
+No manual page creation.
+
+No manual block insertion.
+
+No Elementor editing.
+
+====================================================
+
+DYNAMIC FIELD RENDERING
+
+Every plugin field must have a matching front-end design component.
+
+Example:
+
+Plugin Field:
+
+"Evidence Level"
+
+↓
+
+Theme Output:
+
+Evidence Level Section
+
+inside the Treatment page design.
+
+Plugin Field:
+
+"Vital Areas"
+
+↓
+
+Theme Output:
+
+Vital Areas Section
+
+inside the Treatment page.
+
+Plugin Field:
+
+"Constitutional Type"
+
+↓
+
+Theme Output:
+
+Constitutional Type Section.
+
+Plugin Field:
+
+"Research Evidence"
+
+↓
+
+Theme Output:
+
+Research / Scientific Evidence Section.
+
+The theme must map plugin data fields into the correct visual sections automatically.
+
+====================================================
+
+AUTOMATIC LIVE UPDATES
+
+When an administrator edits existing content:
+
+WordPress Dashboard
+
+Treatment → Edit Treatment
+
+Change:
+
+Evidence Level
+
+Save Update
+
+The front-end website must immediately reflect the updated information.
+
+No cache dependency.
+
+No manual synchronization.
+
+No duplicate content.
+
+====================================================
+
+RELATIONSHIP DISPLAY
+
+If the plugin creates relationships between content:
+
+Example:
+
+Treatment:
+
+Hijama
+
+Connected With:
+
+Conditions
+
+Knowledge Articles
+
+Practitioners
+
+Vital Areas
+
+Evidence Entries
+
+The theme must automatically display those connected relationships.
+
+Example:
+
+Hijama Treatment Page
+
+shows:
+
+Related Conditions
+
+Related Knowledge
+
+Related Practitioners
+
+Related Evidence
+
+Related Areas
+
+====================================================
+
+SECTION VISIBILITY LOGIC
+
+The theme should intelligently control sections.
+
+If plugin data exists:
+
+Display the section.
+
+If plugin data does not exist:
+
+Hide the section completely.
+
+Example:
+
+Treatment has:
+
+Evidence Level ✔
+
+Research ✔
+
+Remedies ✖
+
+Output:
+
+Evidence section visible.
+
+Research section visible.
+
+Remedies section hidden.
+
+The design should automatically adapt based on available content.
+
+====================================================
+
+ADMIN EXPERIENCE
+
+The administrator should only manage content from WordPress Dashboard.
+
+The workflow:
+
+1. Open Treatment section.
+2. Add information.
+3. Publish.
+4. Website automatically updates.
+
+The administrator should never edit theme files or manually design pages.
+
+====================================================
+
+FINAL ARCHITECTURE
+
+The system should work like:
+
+Tibb House Core Plugin
+        |
+        |
+        ↓
+Stores Healthcare Data
+        |
+        |
+        ↓
+Tibb House Theme
+        |
+        |
+        ↓
+Transforms Data Into Designed Pages
+
+
+The plugin controls:
+
+"What information exists"
+
+The theme controls:
+
+"How information looks"
+
+====================================================
