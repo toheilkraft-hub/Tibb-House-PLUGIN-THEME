@@ -1,0 +1,1 @@
+- [WP theme overriding plugin templates](wp-template-filter-order.md) — themes (Astra etc.) can override single_template/archive_template via template_include; always add a template_include safety-net filter too.
