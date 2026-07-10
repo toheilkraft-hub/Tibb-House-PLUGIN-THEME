@@ -1,0 +1,31 @@
+/* Tibb House Core - admin meta box styling */
+
+.tibbhouse-fields p {
+	margin-bottom: 16px;
+}
+
+.tibbhouse-fields label strong {
+	display: inline-block;
+	margin-bottom: 4px;
+}
+
+.tibbhouse-image-preview img {
+	max-width: 200px;
+	height: auto;
+	display: block;
+	margin-bottom: 8px;
+	border: 1px solid #dcdcde;
+	border-radius: 4px;
+}
+
+.tibbhouse-repeater-rows {
+	margin-bottom: 8px;
+}
+
+.tibbhouse-repeater-row input {
+	padding: 6px 8px;
+}
+
+.tibbhouse-repeater-remove {
+	color: #b32d2e;
+}
