@@ -79,6 +79,7 @@ final class Tibbhouse_Core {
 	 */
 	private function init_hooks() {
 		add_action( 'init', array( $this, 'load_textdomain' ) );
+		add_action( 'admin_init', array( $this, 'maybe_seed_on_admin_init' ) );
 
 		register_activation_hook( TIBBHOUSE_CORE_FILE, array( $this, 'activate' ) );
 		register_deactivation_hook( TIBBHOUSE_CORE_FILE, array( $this, 'deactivate' ) );
@@ -110,6 +111,19 @@ final class Tibbhouse_Core {
 		Tibbhouse_Taxonomies::instance()->register_taxonomies();
 		Tibbhouse_Starter_Content::instance()->maybe_seed();
 		flush_rewrite_rules();
+	}
+
+	/**
+	 * Safety net: also seed on admin_init.
+	 *
+	 * Site owners frequently update plugin files in place (FTP/zip upload)
+	 * without clicking Deactivate → Activate, so `register_activation_hook`
+	 * never fires again. This runs the same idempotent, flag-guarded seed
+	 * routine on every wp-admin load so starter content still appears after
+	 * an in-place update, without ever duplicating content.
+	 */
+	public function maybe_seed_on_admin_init() {
+		Tibbhouse_Starter_Content::instance()->maybe_seed();
 	}
 
 	/**

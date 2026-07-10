@@ -58,3 +58,15 @@ function tibbhouse_maybe_create_replit_front_page() {
 	update_post_meta( $page_id, '_wp_page_template', 'template-front-replit.php' );
 }
 add_action( 'after_switch_theme', 'tibbhouse_maybe_create_replit_front_page' );
+
+/**
+ * Safety net: also run the check on admin_init.
+ *
+ * `after_switch_theme` only fires when the theme is freshly activated. If
+ * the theme files are instead updated in place (FTP/zip re-upload) while
+ * already active, that hook never runs again. This runs the same
+ * idempotent check (get_page_by_title guard) on every wp-admin load so the
+ * "TIBB FRONT PAGE REPLIT" page still gets created after an in-place
+ * update, without ever creating duplicates.
+ */
+add_action( 'admin_init', 'tibbhouse_maybe_create_replit_front_page' );
