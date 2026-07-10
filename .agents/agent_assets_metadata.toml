@@ -6,3 +6,9 @@ id = "0ySybj2JtYkdhKU4pVHSf"
 uri = "file://tibbhouse-core.zip"
 type = "unspecified"
 title = "Tibb House Core – WordPress Plugin (updated template loader)"
+
+[[outputs]]
+id = "EciiWgNOjRQY4JZVhFpSr"
+uri = "file://tibbhouse-core-v2.zip"
+type = "unspecified"
+title = "Tibb House Core – WordPress Plugin (v2, template loader fix)"
