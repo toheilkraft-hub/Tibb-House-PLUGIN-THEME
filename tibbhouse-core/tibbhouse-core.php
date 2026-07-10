@@ -71,6 +71,7 @@ final class Tibbhouse_Core {
 		require_once TIBBHOUSE_CORE_PATH . 'includes/class-blocks.php';
 		require_once TIBBHOUSE_CORE_PATH . 'includes/class-template-loader.php';
 		require_once TIBBHOUSE_CORE_PATH . 'includes/class-frontend.php';
+		require_once TIBBHOUSE_CORE_PATH . 'includes/class-starter-content.php';
 	}
 
 	/**
@@ -107,6 +108,7 @@ final class Tibbhouse_Core {
 	public function activate() {
 		Tibbhouse_CPTs::instance()->register_post_types();
 		Tibbhouse_Taxonomies::instance()->register_taxonomies();
+		Tibbhouse_Starter_Content::instance()->maybe_seed();
 		flush_rewrite_rules();
 	}
 

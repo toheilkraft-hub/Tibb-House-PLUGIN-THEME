@@ -92,14 +92,17 @@
 
 <?php
 /**
- * Footer nav fallback: show page list.
+ * Footer nav fallback: reuse the same Tibb House section links as the
+ * header fallback (see header.php) instead of listing arbitrary Pages.
  */
 function tibbhouse_footer_nav_fallback() {
 	echo '<ul class="th-footer-nav">';
-	wp_list_pages( array(
-		'title_li' => '',
-		'echo'     => true,
-		'depth'    => 1,
-	) );
+	foreach ( tibbhouse_nav_fallback_links() as $link ) {
+		printf(
+			'<li><a href="%s">%s</a></li>',
+			esc_url( $link['url'] ),
+			esc_html( $link['label'] )
+		);
+	}
 	echo '</ul>';
 }

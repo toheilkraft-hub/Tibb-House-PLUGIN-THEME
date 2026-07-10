@@ -50,15 +50,60 @@
 
 <?php
 /**
- * Fallback nav: show a plain link to every page when no menu is assigned.
+ * Fallback nav: when no "Primary Navigation" menu has been assigned yet,
+ * link straight to the Tibb House content sections (Treatments, Conditions,
+ * Knowledge, Practitioners, Locations) so the header matches the intended
+ * design instead of listing arbitrary WordPress Pages.
  */
 function tibbhouse_nav_fallback() {
 	echo '<ul class="th-nav-menu">';
-	wp_list_pages( array(
-		'title_li'    => '',
-		'echo'        => true,
-		'depth'       => 1,
-	) );
+	foreach ( tibbhouse_nav_fallback_links() as $link ) {
+		printf(
+			'<li><a href="%s">%s</a></li>',
+			esc_url( $link['url'] ),
+			esc_html( $link['label'] )
+		);
+	}
 	echo '</ul>';
+}
+
+/**
+ * Build the list of fallback nav links from the Tibb House Core CPTs.
+ *
+ * Falls back to `wp_list_pages()` output only if the plugin isn't active
+ * (no managed post types are registered).
+ *
+ * @return array[] List of ['url' => ..., 'label' => ...].
+ */
+function tibbhouse_nav_fallback_links() {
+	$sections = array(
+		'treatments'    => __( 'Treatments', 'tibbhouse' ),
+		'conditions'    => __( 'Conditions', 'tibbhouse' ),
+		'knowledge'     => __( 'Knowledge', 'tibbhouse' ),
+		'practitioners' => __( 'Practitioners', 'tibbhouse' ),
+		'locations'     => __( 'Locations', 'tibbhouse' ),
+	);
+
+	$links = array();
+	foreach ( $sections as $post_type => $label ) {
+		if ( ! post_type_exists( $post_type ) ) {
+			continue;
+		}
+		$archive_link = get_post_type_archive_link( $post_type );
+		if ( $archive_link ) {
+			$links[] = array( 'url' => $archive_link, 'label' => $label );
+		}
+	}
+
+	if ( ! empty( $links ) ) {
+		return $links;
+	}
+
+	// Plugin not active: fall back to listing top-level Pages.
+	$pages = get_pages( array( 'sort_column' => 'menu_order' ) );
+	foreach ( $pages as $page ) {
+		$links[] = array( 'url' => get_permalink( $page ), 'label' => $page->post_title );
+	}
+	return $links;
 }
 ?>
