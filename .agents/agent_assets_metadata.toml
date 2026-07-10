@@ -24,3 +24,15 @@ id = "9PSzIJhGkvK1HbAwayODw"
 uri = "file://tibbhouse-complete.zip"
 type = "unspecified"
 title = "tibbhouse-complete.zip — Plugin + Theme (with Gallery & Video)"
+
+[[outputs]]
+id = "uBz4ZqFB0heiygc7kwAHQ"
+uri = "file://tibbhouse-core-latest.zip"
+type = "unspecified"
+title = "Tibb House Core Plugin (updated)"
+
+[[outputs]]
+id = "3bDtMMyx21AgDeogzqlqN"
+uri = "file://tibbhouse-theme-latest.zip"
+type = "unspecified"
+title = "Tibb House Theme (updated)"
