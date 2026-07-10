@@ -24,6 +24,9 @@ while ( have_posts() ) :
 	$faq                 = get_post_meta( $post_id, 'th_faq', true );
 	$evidence_level      = get_post_meta( $post_id, 'th_evidence_level', true );
 	$outcome_measurement = get_post_meta( $post_id, 'th_outcome_measurement', true );
+	$gallery             = get_post_meta( $post_id, 'th_gallery', true );
+	$gallery             = is_array( $gallery ) ? array_filter( array_map( 'absint', $gallery ) ) : array();
+	$video_url           = get_post_meta( $post_id, 'th_video_url', true );
 
 	// Taxonomies
 	$constitutional_types = get_the_terms( $post_id, 'constitutional_type' );
@@ -153,6 +156,68 @@ while ( have_posts() ) :
 		<div class="tibbhouse-section th-reveal">
 			<div class="tibbhouse-section-label"><?php esc_html_e( 'Outcome Measurement', 'tibbhouse-core' ); ?></div>
 			<div class="tibbhouse-section-body"><?php echo wp_kses_post( wpautop( $outcome_measurement ) ); ?></div>
+		</div>
+		<?php endif; ?>
+
+		<!-- Photo Gallery -->
+		<?php if ( ! empty( $gallery ) ) : ?>
+		<div class="tibbhouse-section th-reveal">
+			<div class="tibbhouse-section-label"><?php esc_html_e( 'Photo Gallery', 'tibbhouse-core' ); ?></div>
+			<div class="th-gallery-grid" role="list">
+				<?php foreach ( $gallery as $index => $attachment_id ) : ?>
+				<?php
+				$full_url  = wp_get_attachment_image_url( $attachment_id, 'large' );
+				$thumb_url = wp_get_attachment_image_url( $attachment_id, 'medium' );
+				$alt       = trim( wp_strip_all_tags( get_post_meta( $attachment_id, '_wp_attachment_image_alt', true ) ) );
+				if ( ! $alt ) {
+					/* translators: %d: image number */
+					$alt = sprintf( __( 'Gallery image %d', 'tibbhouse-core' ), $index + 1 );
+				}
+				if ( ! $full_url ) { continue; }
+				?>
+				<button
+					class="th-gallery-item"
+					type="button"
+					data-full="<?php echo esc_url( $full_url ); ?>"
+					data-alt="<?php echo esc_attr( $alt ); ?>"
+					data-index="<?php echo esc_attr( $index ); ?>"
+					aria-label="<?php echo esc_attr( $alt ); ?>"
+					role="listitem"
+				>
+					<img
+						src="<?php echo esc_url( $thumb_url ); ?>"
+						alt="<?php echo esc_attr( $alt ); ?>"
+						loading="lazy"
+					>
+					<span class="th-gallery-zoom" aria-hidden="true">
+						<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><circle cx="11" cy="11" r="8"/><path d="M21 21l-4.35-4.35M11 8v6M8 11h6"/></svg>
+					</span>
+				</button>
+				<?php endforeach; ?>
+			</div>
+		</div>
+		<?php endif; ?>
+
+		<!-- Video -->
+		<?php if ( $video_url ) : ?>
+		<?php
+		// Try oEmbed first (YouTube, Vimeo, etc.) — falls back to a <video> tag for MP4.
+		$embed_html = wp_oembed_get( $video_url, array( 'width' => 960 ) );
+		?>
+		<div class="tibbhouse-section th-reveal">
+			<div class="tibbhouse-section-label"><?php esc_html_e( 'Video', 'tibbhouse-core' ); ?></div>
+			<div class="th-video-wrap">
+				<?php if ( $embed_html ) : ?>
+					<div class="th-video-embed"><?php echo $embed_html; // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped ?></div>
+				<?php else : ?>
+					<div class="th-video-embed">
+						<video controls preload="metadata" style="width:100%;border-radius:var(--th-radius);">
+							<source src="<?php echo esc_url( $video_url ); ?>" type="video/mp4">
+							<?php esc_html_e( 'Your browser does not support the video tag.', 'tibbhouse-core' ); ?>
+						</video>
+					</div>
+				<?php endif; ?>
+			</div>
 		</div>
 		<?php endif; ?>
 

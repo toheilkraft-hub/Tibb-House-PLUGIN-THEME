@@ -29,3 +29,58 @@
 .tibbhouse-repeater-remove {
 	color: #b32d2e;
 }
+
+/* ── Gallery field ── */
+.tibbhouse-gallery-wrap {
+  padding: 8px 0;
+}
+
+.tibbhouse-gallery-items {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px;
+  min-height: 24px;
+  margin-bottom: 10px;
+}
+
+.tibbhouse-gallery-item {
+  position: relative;
+  width: 80px;
+  height: 80px;
+  border-radius: 4px;
+  overflow: hidden;
+  border: 2px solid #dcdcde;
+  flex-shrink: 0;
+}
+
+.tibbhouse-gallery-item img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  display: block;
+}
+
+.tibbhouse-gallery-remove {
+  position: absolute;
+  top: 2px;
+  right: 2px;
+  width: 20px;
+  height: 20px;
+  border-radius: 50%;
+  background: #b32d2e;
+  color: #fff;
+  border: none;
+  cursor: pointer;
+  font-size: 14px;
+  line-height: 1;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 0;
+  opacity: 0;
+  transition: opacity .15s;
+}
+
+.tibbhouse-gallery-item:hover .tibbhouse-gallery-remove {
+  opacity: 1;
+}

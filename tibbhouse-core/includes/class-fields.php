@@ -72,6 +72,8 @@ class Tibbhouse_Fields {
 				'th_cta_link'           => array( 'string', __( 'CTA Link', 'tibbhouse-core' ), 'url' ),
 				'th_hero_image'         => array( 'integer', __( 'Hero Image', 'tibbhouse-core' ), 'image' ),
 				'th_outcome_measurement'=> array( 'string', __( 'Outcome Measurement', 'tibbhouse-core' ), 'textarea' ),
+				'th_gallery'            => array( 'array',  __( 'Photo Gallery', 'tibbhouse-core' ), 'gallery' ),
+				'th_video_url'          => array( 'string', __( 'Video URL (YouTube / Vimeo / MP4)', 'tibbhouse-core' ), 'url' ),
 			),
 			'conditions'    => array(
 				'th_symptoms'                => array( 'string', __( 'Symptoms', 'tibbhouse-core' ), 'textarea' ),
@@ -245,6 +247,28 @@ class Tibbhouse_Fields {
 				);
 				break;
 
+			case 'gallery':
+				$ids = is_array( $value ) ? array_filter( array_map( 'absint', $value ) ) : array();
+				echo '<p><label><strong>' . esc_html( $label ) . '</strong></label></p>';
+				echo '<div class="tibbhouse-gallery-wrap" id="' . esc_attr( $meta_key ) . '_wrap" data-key="' . esc_attr( $meta_key ) . '">';
+				echo '<div class="tibbhouse-gallery-items">';
+				foreach ( $ids as $id ) {
+					$img = wp_get_attachment_image( $id, 'thumbnail' );
+					if ( ! $img ) { continue; }
+					echo '<div class="tibbhouse-gallery-item">';
+					echo wp_kses_post( $img );
+					echo '<input type="hidden" name="' . esc_attr( $meta_key ) . '[]" value="' . esc_attr( $id ) . '">';
+					echo '<button type="button" class="tibbhouse-gallery-remove" title="' . esc_attr__( 'Remove', 'tibbhouse-core' ) . '">&times;</button>';
+					echo '</div>';
+				}
+				echo '</div>';
+				echo '<button type="button" class="button tibbhouse-gallery-add" data-key="' . esc_attr( $meta_key ) . '">' . esc_html__( 'Add / Select Images', 'tibbhouse-core' ) . '</button>';
+				if ( ! empty( $ids ) ) {
+					echo ' <button type="button" class="button tibbhouse-gallery-clear" data-key="' . esc_attr( $meta_key ) . '">' . esc_html__( 'Clear All', 'tibbhouse-core' ) . '</button>';
+				}
+				echo '</div>';
+				break;
+
 			case 'toggle':
 				printf(
 					'<p><label for="%1$s"><input type="checkbox" id="%1$s" name="%1$s" value="1" %2$s /> <strong>%3$s</strong></label></p>',
@@ -414,6 +438,11 @@ class Tibbhouse_Fields {
 
 			case 'image':
 				update_post_meta( $post_id, $meta_key, absint( $raw ) );
+				break;
+
+			case 'gallery':
+				$clean = is_array( $raw ) ? array_values( array_filter( array_map( 'absint', $raw ) ) ) : array();
+				update_post_meta( $post_id, $meta_key, $clean );
 				break;
 
 			case 'text':

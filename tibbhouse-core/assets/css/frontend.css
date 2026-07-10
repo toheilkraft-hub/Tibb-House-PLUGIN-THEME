@@ -1148,3 +1148,196 @@
   background: var(--th-border-dark);
   margin: 48px 0;
 }
+
+/* =====================================================
+   PHOTO GALLERY GRID
+   ===================================================== */
+.th-gallery-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(180px, 1fr));
+  gap: 10px;
+  margin-top: 8px;
+}
+
+.th-gallery-item {
+  position: relative;
+  aspect-ratio: 1 / 1;
+  overflow: hidden;
+  border-radius: var(--th-radius);
+  background: var(--th-green-light);
+  border: none;
+  padding: 0;
+  cursor: zoom-in;
+  display: block;
+  width: 100%;
+}
+
+.th-gallery-item img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  display: block;
+  transition: transform .4s ease;
+}
+
+.th-gallery-item:hover img {
+  transform: scale(1.07);
+}
+
+.th-gallery-zoom {
+  position: absolute;
+  inset: 0;
+  background: rgba(10,61,46,.45);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  opacity: 0;
+  transition: opacity .25s;
+}
+
+.th-gallery-item:hover .th-gallery-zoom,
+.th-gallery-item:focus-visible .th-gallery-zoom {
+  opacity: 1;
+}
+
+.th-gallery-zoom svg {
+  width: 32px;
+  height: 32px;
+  color: var(--th-white);
+  filter: drop-shadow(0 1px 3px rgba(0,0,0,.4));
+}
+
+/* ── Lightbox ── */
+#th-lightbox {
+  position: fixed;
+  inset: 0;
+  z-index: 99998;
+  background: rgba(5,20,12,.92);
+  display: none;
+  align-items: center;
+  justify-content: center;
+  padding: 24px;
+  backdrop-filter: blur(6px);
+  -webkit-backdrop-filter: blur(6px);
+}
+
+#th-lightbox.open {
+  display: flex;
+}
+
+.th-lightbox-inner {
+  position: relative;
+  max-width: min(960px, 100%);
+  max-height: 90vh;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 16px;
+}
+
+#th-lightbox-img {
+  max-width: 100%;
+  max-height: 80vh;
+  object-fit: contain;
+  border-radius: var(--th-radius);
+  box-shadow: 0 24px 64px rgba(0,0,0,.6);
+  display: block;
+  transition: opacity .25s;
+}
+
+.th-lightbox-close {
+  position: fixed;
+  top: 20px;
+  right: 20px;
+  width: 44px;
+  height: 44px;
+  border-radius: 50%;
+  background: rgba(255,255,255,.12);
+  border: 1px solid rgba(255,255,255,.2);
+  color: var(--th-white);
+  font-size: 1.4rem;
+  line-height: 1;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  transition: background .2s;
+  z-index: 1;
+}
+
+.th-lightbox-close:hover {
+  background: rgba(255,255,255,.25);
+}
+
+.th-lightbox-nav {
+  display: flex;
+  gap: 12px;
+}
+
+.th-lightbox-prev,
+.th-lightbox-next {
+  width: 44px;
+  height: 44px;
+  border-radius: 50%;
+  background: rgba(255,255,255,.12);
+  border: 1px solid rgba(255,255,255,.2);
+  color: var(--th-white);
+  font-size: 1.2rem;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  transition: background .2s;
+}
+
+.th-lightbox-prev:hover,
+.th-lightbox-next:hover {
+  background: var(--th-gold);
+  color: var(--th-dark);
+  border-color: var(--th-gold);
+}
+
+#th-lightbox-caption {
+  color: rgba(255,255,255,.6);
+  font-size: .82rem;
+  text-align: center;
+  max-width: 480px;
+}
+
+@media (max-width: 600px) {
+  .th-gallery-grid { grid-template-columns: repeat(2, 1fr); gap: 6px; }
+}
+
+/* =====================================================
+   VIDEO EMBED
+   ===================================================== */
+.th-video-wrap {
+  margin-top: 8px;
+}
+
+.th-video-embed {
+  position: relative;
+  width: 100%;
+  padding-bottom: 56.25%; /* 16:9 */
+  height: 0;
+  border-radius: var(--th-radius-lg);
+  overflow: hidden;
+  background: var(--th-dark);
+  box-shadow: var(--th-shadow-lg);
+}
+
+.th-video-embed iframe,
+.th-video-embed video,
+.th-video-embed object,
+.th-video-embed embed {
+  position: absolute;
+  top: 0; left: 0;
+  width: 100% !important;
+  height: 100% !important;
+  border: none;
+  border-radius: var(--th-radius-lg);
+}
+
+/* =====================================================
+   GALLERY ADMIN (loaded only on admin pages via admin.css reference)
+   ===================================================== */
