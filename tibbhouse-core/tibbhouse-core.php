@@ -70,6 +70,7 @@ final class Tibbhouse_Core {
 		require_once TIBBHOUSE_CORE_PATH . 'includes/class-rest.php';
 		require_once TIBBHOUSE_CORE_PATH . 'includes/class-blocks.php';
 		require_once TIBBHOUSE_CORE_PATH . 'includes/class-template-loader.php';
+		require_once TIBBHOUSE_CORE_PATH . 'includes/class-frontend.php';
 	}
 
 	/**
@@ -90,6 +91,7 @@ final class Tibbhouse_Core {
 		Tibbhouse_Rest::instance();
 		Tibbhouse_Blocks::instance();
 		Tibbhouse_Template_Loader::instance();
+		Tibbhouse_Frontend::instance();
 	}
 
 	/**

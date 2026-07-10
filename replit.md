@@ -1,6 +1,6 @@
-# [Project name]
+# Tibb House Core Plugin
 
-_Replace the heading above with the project's name, and this line with one sentence describing what this app does for users._
+A WordPress plugin powering the Tibb House natural & Islamic medicine platform — managing Treatments, Conditions, Knowledge articles, Practitioners, and Locations with a fully designed frontend (preloader, card layouts, taxonomy badges, FAQ accordion, related content grids).
 
 ## Run & Operate
 

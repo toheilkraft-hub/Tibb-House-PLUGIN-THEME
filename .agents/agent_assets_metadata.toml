@@ -11,10 +11,16 @@ title = "Tibb House Core – WordPress Plugin (updated template loader)"
 id = "EciiWgNOjRQY4JZVhFpSr"
 uri = "file://tibbhouse-core-v2.zip"
 type = "unspecified"
-title = "Tibb House Core – WordPress Plugin (v2, template loader fix)"
+title = "tibbhouse-core-v2.zip — WordPress Plugin"
 
 [[outputs]]
 id = "_f16TAM35PywXFyysvOSW"
 uri = "file://tibbhouse-core-v3.zip"
 type = "unspecified"
 title = "Tibb House Core – WordPress Plugin (v3, Astra template override fix)"
+
+[[outputs]]
+id = "9PSzIJhGkvK1HbAwayODw"
+uri = "file://tibbhouse-complete.zip"
+type = "unspecified"
+title = "tibbhouse-complete.zip — Plugin + Theme"

@@ -204,26 +204,62 @@ class Tibbhouse_Relationships {
 			return '';
 		}
 
-		ob_start();
-		echo '<div class="tibbhouse-related-content">';
-		foreach ( $groups as $label => $posts ) {
-			if ( empty( $posts ) ) {
-				continue;
+		// Determine whether any group has posts.
+		$has_any = false;
+		foreach ( $groups as $posts ) {
+			if ( ! empty( $posts ) ) {
+				$has_any = true;
+				break;
 			}
-			echo '<div class="tibbhouse-related-group">';
-			echo '<h3 class="tibbhouse-related-title">' . esc_html( $label ) . '</h3>';
-			echo '<div class="tibbhouse-card-grid">';
-			foreach ( $posts as $related_post ) {
-				printf(
-					'<a class="tibbhouse-card" href="%1$s">%2$s<span class="tibbhouse-card-title">%3$s</span></a>',
-					esc_url( get_permalink( $related_post ) ),
-					get_the_post_thumbnail( $related_post, 'medium' ),
-					esc_html( get_the_title( $related_post ) )
-				);
-			}
-			echo '</div></div>';
 		}
-		echo '</div>';
+		if ( ! $has_any ) {
+			return '';
+		}
+
+		// Map post type slugs to readable single labels.
+		$type_labels = array(
+			'treatments'    => _x( 'Treatment', 'related card label', 'tibbhouse-core' ),
+			'conditions'    => _x( 'Condition', 'related card label', 'tibbhouse-core' ),
+			'knowledge'     => _x( 'Article', 'related card label', 'tibbhouse-core' ),
+			'practitioners' => _x( 'Practitioner', 'related card label', 'tibbhouse-core' ),
+			'locations'     => _x( 'Location', 'related card label', 'tibbhouse-core' ),
+		);
+
+		ob_start();
+		?>
+<section class="tibbhouse-related">
+	<div class="tibbhouse-related-inner">
+		<?php foreach ( $groups as $label => $posts ) : ?>
+			<?php if ( empty( $posts ) ) { continue; } ?>
+			<h2><?php echo esc_html( $label ); ?></h2>
+			<div class="th-related-grid">
+				<?php foreach ( $posts as $related_post ) : ?>
+				<?php
+				$rtype  = get_post_type( $related_post );
+				$rlabel = isset( $type_labels[ $rtype ] ) ? $type_labels[ $rtype ] : $rtype;
+				$thumb  = get_the_post_thumbnail( $related_post, 'medium' );
+				?>
+				<a class="th-related-card" href="<?php echo esc_url( get_permalink( $related_post ) ); ?>">
+					<div class="th-related-card-thumb">
+						<?php if ( $thumb ) : ?>
+							<?php echo $thumb; // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped ?>
+						<?php else : ?>
+							<div class="th-related-card-thumb-placeholder">
+								<svg viewBox="0 0 24 24"><path d="M12 2a10 10 0 1 0 0 20A10 10 0 0 0 12 2zm1 14H11v-4h2v4zm0-6H11V8h2v2z"/></svg>
+							</div>
+						<?php endif; ?>
+					</div>
+					<div class="th-related-card-body">
+						<div class="th-related-card-type"><?php echo esc_html( $rlabel ); ?></div>
+						<div class="th-related-card-title"><?php echo esc_html( get_the_title( $related_post ) ); ?></div>
+					</div>
+				</a>
+				<?php endforeach; ?>
+			</div>
+		<?php endforeach; ?>
+	</div>
+</section>
+		<?php
 		return ob_get_clean();
 	}
 

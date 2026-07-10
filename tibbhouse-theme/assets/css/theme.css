@@ -1,0 +1,778 @@
+/* =====================================================
+   Tibb House Theme — Global Styles
+   Works alongside the Tibb House Core plugin.
+   ===================================================== */
+
+@import url('https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,400;0,500;0,600;0,700;1,400;1,600&family=Inter:wght@300;400;500;600&display=swap');
+
+/* ── Tokens (mirror plugin tokens so both share the same palette) ── */
+:root {
+  --th-green:        #0a3d2e;
+  --th-green-mid:    #0f5c43;
+  --th-green-light:  #e8f2ed;
+  --th-gold:         #c9a84c;
+  --th-gold-light:   #f0d890;
+  --th-cream:        #faf7f2;
+  --th-white:        #ffffff;
+  --th-dark:         #111810;
+  --th-text:         #2c2c2c;
+  --th-muted:        #6b7280;
+  --th-border:       rgba(10,61,46,.1);
+  --th-shadow-sm:    0 2px 8px rgba(10,61,46,.07);
+  --th-shadow-md:    0 6px 24px rgba(10,61,46,.12);
+  --th-radius:       12px;
+  --th-radius-pill:  9999px;
+  --th-font-heading: 'Cormorant Garamond', Georgia, serif;
+  --th-font-body:    'Inter', system-ui, sans-serif;
+  --th-nav-h:        72px;
+}
+
+/* ── Base ── */
+*, *::before, *::after { box-sizing: border-box; }
+
+html { scroll-behavior: smooth; }
+
+body {
+  font-family: var(--th-font-body);
+  font-size: 16px;
+  line-height: 1.7;
+  color: var(--th-text);
+  background: var(--th-cream);
+  margin: 0;
+  padding-top: var(--th-nav-h); /* offset for fixed nav */
+}
+
+img { max-width: 100%; height: auto; display: block; }
+
+a { color: var(--th-green); }
+a:hover { color: var(--th-gold); }
+
+h1,h2,h3,h4,h5,h6 {
+  font-family: var(--th-font-heading);
+  color: var(--th-dark);
+  line-height: 1.2;
+  margin: 0 0 .6em;
+}
+
+/* =====================================================
+   NAVIGATION
+   ===================================================== */
+#tibbhouse-nav {
+  position: fixed;
+  top: 0; left: 0; right: 0;
+  height: var(--th-nav-h);
+  background: rgba(255,255,255,.95);
+  backdrop-filter: blur(12px);
+  -webkit-backdrop-filter: blur(12px);
+  border-bottom: 1px solid var(--th-border);
+  z-index: 9000;
+  transition: box-shadow .3s;
+}
+
+#tibbhouse-nav.scrolled {
+  box-shadow: var(--th-shadow-md);
+}
+
+.th-nav-inner {
+  max-width: 1200px;
+  margin: 0 auto;
+  padding: 0 5%;
+  height: 100%;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 24px;
+}
+
+/* Logo */
+.th-nav-logo {
+  text-decoration: none;
+  flex-shrink: 0;
+  display: flex;
+  align-items: center;
+}
+
+.th-logo-svg {
+  width: auto;
+  height: 42px;
+}
+
+.th-nav-logo img {
+  height: 42px;
+  width: auto;
+}
+
+/* Menu */
+.th-nav-menu {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  list-style: none;
+  margin: 0;
+  padding: 0;
+}
+
+.th-nav-menu > li > a {
+  display: block;
+  padding: 8px 14px;
+  font-size: .85rem;
+  font-weight: 500;
+  color: var(--th-dark);
+  text-decoration: none;
+  border-radius: var(--th-radius-pill);
+  transition: background .2s, color .2s;
+  letter-spacing: .02em;
+}
+
+.th-nav-menu > li > a:hover,
+.th-nav-menu > li.current-menu-item > a,
+.th-nav-menu > li.current-menu-ancestor > a {
+  background: var(--th-green-light);
+  color: var(--th-green);
+}
+
+/* CTA button in nav */
+.th-nav-menu > li.menu-cta > a {
+  background: var(--th-gold);
+  color: var(--th-dark);
+  font-weight: 600;
+  padding: 8px 20px;
+}
+
+.th-nav-menu > li.menu-cta > a:hover {
+  background: var(--th-green);
+  color: var(--th-white);
+}
+
+/* Dropdown */
+.th-nav-menu .sub-menu {
+  display: none;
+  position: absolute;
+  top: calc(100% + 8px);
+  left: 0;
+  min-width: 200px;
+  background: var(--th-white);
+  border: 1px solid var(--th-border);
+  border-radius: var(--th-radius);
+  box-shadow: var(--th-shadow-md);
+  list-style: none;
+  padding: 8px;
+  margin: 0;
+  z-index: 100;
+}
+
+.th-nav-menu li {
+  position: relative;
+}
+
+.th-nav-menu li:hover > .sub-menu {
+  display: block;
+}
+
+.th-nav-menu .sub-menu a {
+  display: block;
+  padding: 9px 14px;
+  font-size: .83rem;
+  color: var(--th-dark);
+  text-decoration: none;
+  border-radius: 8px;
+  transition: background .15s;
+}
+
+.th-nav-menu .sub-menu a:hover {
+  background: var(--th-green-light);
+  color: var(--th-green);
+}
+
+/* Hamburger */
+.th-nav-toggle {
+  display: none;
+  background: none;
+  border: none;
+  cursor: pointer;
+  padding: 8px;
+  color: var(--th-dark);
+  border-radius: 8px;
+  transition: background .2s;
+}
+
+.th-nav-toggle:hover { background: var(--th-green-light); }
+
+.th-nav-toggle svg { display: block; }
+
+/* Mobile nav */
+@media (max-width: 800px) {
+  .th-nav-toggle { display: flex; align-items: center; justify-content: center; }
+
+  .th-nav-menu-wrap {
+    display: none;
+    position: fixed;
+    inset: var(--th-nav-h) 0 0 0;
+    background: rgba(10,61,46,.97);
+    backdrop-filter: blur(12px);
+    padding: 32px 5%;
+    overflow-y: auto;
+    z-index: 8999;
+  }
+
+  .th-nav-menu-wrap.open { display: block; }
+
+  .th-nav-menu {
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 4px;
+  }
+
+  .th-nav-menu > li > a {
+    color: rgba(255,255,255,.9);
+    font-size: 1.1rem;
+    padding: 12px 16px;
+    width: 100%;
+  }
+
+  .th-nav-menu > li > a:hover,
+  .th-nav-menu > li.current-menu-item > a {
+    background: rgba(201,168,76,.15);
+    color: var(--th-gold-light);
+  }
+
+  .th-nav-menu .sub-menu {
+    position: static;
+    display: block;
+    background: none;
+    border: none;
+    box-shadow: none;
+    padding-left: 16px;
+  }
+
+  .th-nav-menu .sub-menu a {
+    color: rgba(255,255,255,.6);
+  }
+
+  .th-nav-menu > li.menu-cta > a {
+    margin-top: 8px;
+    background: var(--th-gold);
+    color: var(--th-dark);
+  }
+}
+
+/* =====================================================
+   HERO (standard pages — not CPT pages)
+   ===================================================== */
+.tibbhouse-page-hero {
+  background: linear-gradient(135deg, var(--th-green) 0%, var(--th-green-mid) 100%);
+  padding: 72px 5%;
+  text-align: center;
+  position: relative;
+  overflow: hidden;
+}
+
+.tibbhouse-page-hero::after {
+  content: '';
+  position: absolute;
+  bottom: -2px; left: 0; right: 0;
+  height: 56px;
+  background: var(--th-cream);
+  border-radius: 50% 50% 0 0 / 56px 56px 0 0;
+}
+
+.tibbhouse-page-hero h1 {
+  font-family: var(--th-font-heading);
+  font-size: clamp(2rem, 5vw, 3.4rem);
+  font-weight: 600;
+  color: var(--th-white);
+  margin: 0;
+  position: relative;
+}
+
+/* =====================================================
+   MAIN CONTENT AREA
+   ===================================================== */
+.tibbhouse-main {
+  max-width: 1100px;
+  margin: 0 auto;
+  padding: 60px 5%;
+}
+
+.tibbhouse-main.with-sidebar {
+  display: grid;
+  grid-template-columns: 1fr 300px;
+  gap: 60px;
+  align-items: start;
+}
+
+/* ── Entry (standard posts / pages) ── */
+.entry-content {
+  font-size: 1rem;
+  line-height: 1.8;
+  color: var(--th-text);
+}
+
+.entry-content h2 { font-size: 1.7rem; color: var(--th-green); margin-top: 2em; }
+.entry-content h3 { font-size: 1.35rem; color: var(--th-dark); margin-top: 1.6em; }
+.entry-content p  { margin: 0 0 1.2em; }
+.entry-content a  { color: var(--th-green); text-decoration: underline; text-decoration-color: rgba(10,61,46,.3); }
+.entry-content a:hover { color: var(--th-gold); }
+
+.entry-content img {
+  border-radius: var(--th-radius);
+  margin: 1.5em 0;
+}
+
+.entry-content ul, .entry-content ol {
+  padding-left: 1.5em;
+  margin: 0 0 1.2em;
+}
+
+.entry-content li { margin-bottom: .4em; }
+
+.entry-content blockquote {
+  border-left: 4px solid var(--th-gold);
+  margin: 2em 0;
+  padding: 1em 1.5em;
+  background: var(--th-green-light);
+  border-radius: 0 var(--th-radius) var(--th-radius) 0;
+  font-family: var(--th-font-heading);
+  font-size: 1.15rem;
+  font-style: italic;
+  color: var(--th-green);
+}
+
+.entry-content table {
+  width: 100%;
+  border-collapse: collapse;
+  margin: 1.5em 0;
+  font-size: .9rem;
+}
+
+.entry-content th {
+  background: var(--th-green);
+  color: var(--th-white);
+  padding: 10px 14px;
+  text-align: left;
+  font-weight: 600;
+}
+
+.entry-content td {
+  padding: 10px 14px;
+  border-bottom: 1px solid var(--th-border);
+}
+
+.entry-content tr:nth-child(even) td { background: var(--th-green-light); }
+
+/* ── Page breadcrumbs ── */
+.tibbhouse-theme-breadcrumbs {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 6px;
+  font-size: .8rem;
+  color: var(--th-muted);
+  margin-bottom: 28px;
+}
+
+.tibbhouse-theme-breadcrumbs a { color: var(--th-muted); text-decoration: none; }
+.tibbhouse-theme-breadcrumbs a:hover { color: var(--th-green); }
+.tibbhouse-theme-breadcrumbs .sep { opacity: .4; }
+
+/* =====================================================
+   SIDEBAR
+   ===================================================== */
+.tibbhouse-sidebar {
+  position: sticky;
+  top: calc(var(--th-nav-h) + 24px);
+}
+
+.widget {
+  background: var(--th-white);
+  border: 1px solid var(--th-border);
+  border-radius: var(--th-radius);
+  padding: 24px;
+  margin-bottom: 24px;
+}
+
+.widget-title {
+  font-family: var(--th-font-heading);
+  font-size: 1.1rem;
+  font-weight: 600;
+  color: var(--th-green);
+  margin: 0 0 16px;
+  padding-bottom: 10px;
+  border-bottom: 2px solid var(--th-gold);
+}
+
+.widget ul { list-style: none; padding: 0; margin: 0; }
+.widget ul li { padding: 7px 0; border-bottom: 1px solid var(--th-border); font-size: .88rem; }
+.widget ul li:last-child { border-bottom: none; }
+.widget ul li a { text-decoration: none; color: var(--th-text); }
+.widget ul li a:hover { color: var(--th-green); }
+
+/* =====================================================
+   BLOG / POSTS LIST
+   ===================================================== */
+.tibbhouse-posts-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
+  gap: 28px;
+}
+
+.tibbhouse-post-card {
+  background: var(--th-white);
+  border-radius: var(--th-radius);
+  overflow: hidden;
+  border: 1px solid var(--th-border);
+  transition: transform .25s, box-shadow .25s;
+  display: flex;
+  flex-direction: column;
+}
+
+.tibbhouse-post-card:hover {
+  transform: translateY(-4px);
+  box-shadow: var(--th-shadow-md);
+}
+
+.tibbhouse-post-card-thumb {
+  height: 200px;
+  overflow: hidden;
+  background: var(--th-green-light);
+}
+
+.tibbhouse-post-card-thumb img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  transition: transform .4s;
+}
+
+.tibbhouse-post-card:hover .tibbhouse-post-card-thumb img {
+  transform: scale(1.06);
+}
+
+.tibbhouse-post-card-body {
+  padding: 24px;
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+}
+
+.tibbhouse-post-card-meta {
+  font-size: .75rem;
+  color: var(--th-muted);
+  margin-bottom: 8px;
+  letter-spacing: .05em;
+}
+
+.tibbhouse-post-card-title {
+  font-family: var(--th-font-heading);
+  font-size: 1.25rem;
+  font-weight: 600;
+  color: var(--th-dark);
+  text-decoration: none;
+  display: block;
+  margin-bottom: 10px;
+  line-height: 1.25;
+}
+
+.tibbhouse-post-card-title:hover { color: var(--th-green); }
+
+.tibbhouse-post-card-excerpt {
+  font-size: .88rem;
+  color: var(--th-muted);
+  line-height: 1.65;
+  flex: 1;
+  margin-bottom: 16px;
+  display: -webkit-box;
+  -webkit-line-clamp: 3;
+  -webkit-box-orient: vertical;
+  overflow: hidden;
+}
+
+.tibbhouse-post-card-footer {
+  font-size: .82rem;
+  font-weight: 600;
+  color: var(--th-green);
+  display: flex;
+  align-items: center;
+  gap: 5px;
+  text-decoration: none;
+}
+
+/* =====================================================
+   PAGINATION
+   ===================================================== */
+.navigation.pagination {
+  margin-top: 48px;
+}
+
+.nav-links {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px;
+  align-items: center;
+  justify-content: center;
+}
+
+.nav-links a,
+.nav-links .page-numbers {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  min-width: 40px;
+  height: 40px;
+  padding: 0 12px;
+  border-radius: 8px;
+  font-size: .85rem;
+  font-weight: 500;
+  text-decoration: none;
+  color: var(--th-dark);
+  border: 1px solid var(--th-border);
+  background: var(--th-white);
+  transition: background .2s, color .2s, border-color .2s;
+}
+
+.nav-links a:hover {
+  background: var(--th-green);
+  color: var(--th-white);
+  border-color: var(--th-green);
+}
+
+.nav-links .current {
+  background: var(--th-green);
+  color: var(--th-white);
+  border-color: var(--th-green);
+}
+
+/* =====================================================
+   FOOTER
+   ===================================================== */
+#tibbhouse-footer {
+  background: var(--th-green);
+  color: rgba(255,255,255,.8);
+  padding: 72px 5% 0;
+  margin-top: 80px;
+}
+
+.th-footer-inner {
+  max-width: 1200px;
+  margin: 0 auto;
+}
+
+.th-footer-grid {
+  display: grid;
+  grid-template-columns: 2fr 1fr 1fr;
+  gap: 60px;
+  padding-bottom: 60px;
+  border-bottom: 1px solid rgba(255,255,255,.1);
+}
+
+.th-footer-brand .th-logo-svg text { fill: var(--th-white) !important; }
+.th-footer-brand .th-logo-svg text:last-child { fill: var(--th-gold-light) !important; }
+
+.th-footer-brand p {
+  font-size: .88rem;
+  line-height: 1.75;
+  color: rgba(255,255,255,.6);
+  margin: 16px 0 24px;
+  max-width: 320px;
+}
+
+.th-footer-social {
+  display: flex;
+  gap: 10px;
+}
+
+.th-footer-social a {
+  width: 36px;
+  height: 36px;
+  border-radius: 50%;
+  background: rgba(255,255,255,.1);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: rgba(255,255,255,.7);
+  text-decoration: none;
+  font-size: .75rem;
+  font-weight: 700;
+  transition: background .2s, color .2s;
+}
+
+.th-footer-social a:hover {
+  background: var(--th-gold);
+  color: var(--th-dark);
+}
+
+.th-footer-col h4 {
+  font-family: var(--th-font-body);
+  font-size: .7rem;
+  font-weight: 700;
+  letter-spacing: .25em;
+  text-transform: uppercase;
+  color: var(--th-gold-light);
+  margin-bottom: 20px;
+}
+
+.footer-widget-title {
+  font-family: var(--th-font-body) !important;
+  font-size: .7rem !important;
+  font-weight: 700 !important;
+  letter-spacing: .25em !important;
+  text-transform: uppercase !important;
+  color: var(--th-gold-light) !important;
+  margin-bottom: 20px !important;
+}
+
+.th-footer-col ul,
+#tibbhouse-footer .widget ul {
+  list-style: none;
+  padding: 0;
+  margin: 0;
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+}
+
+.th-footer-col ul li a,
+#tibbhouse-footer .widget ul li a {
+  font-size: .88rem;
+  color: rgba(255,255,255,.6);
+  text-decoration: none;
+  transition: color .2s;
+}
+
+.th-footer-col ul li a:hover,
+#tibbhouse-footer .widget ul li a:hover {
+  color: var(--th-gold-light);
+}
+
+.th-footer-nav {
+  display: flex;
+  list-style: none;
+  padding: 0;
+  margin: 0;
+  flex-direction: column;
+  gap: 10px;
+}
+
+.th-footer-bottom {
+  padding: 20px 0;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  flex-wrap: wrap;
+  gap: 12px;
+  font-size: .8rem;
+  color: rgba(255,255,255,.4);
+}
+
+.th-footer-bottom a {
+  color: rgba(255,255,255,.5);
+  text-decoration: none;
+  transition: color .2s;
+}
+
+.th-footer-bottom a:hover { color: var(--th-gold-light); }
+
+/* =====================================================
+   404 / SEARCH / MISC
+   ===================================================== */
+.tibbhouse-404-wrap,
+.tibbhouse-search-wrap {
+  max-width: 640px;
+  margin: 80px auto;
+  padding: 0 5%;
+  text-align: center;
+}
+
+.tibbhouse-404-wrap h1 {
+  font-size: 8rem;
+  font-family: var(--th-font-heading);
+  color: var(--th-green);
+  line-height: 1;
+  margin-bottom: 8px;
+}
+
+.tibbhouse-404-wrap h2 {
+  font-size: 1.8rem;
+  color: var(--th-dark);
+  margin-bottom: 12px;
+}
+
+.tibbhouse-404-wrap p { color: var(--th-muted); margin-bottom: 28px; }
+
+.th-search-form {
+  display: flex;
+  gap: 8px;
+  max-width: 480px;
+  margin: 0 auto 32px;
+}
+
+.th-search-form input[type="search"] {
+  flex: 1;
+  padding: 12px 18px;
+  border: 1.5px solid var(--th-border);
+  border-radius: var(--th-radius-pill);
+  font-family: var(--th-font-body);
+  font-size: .95rem;
+  color: var(--th-text);
+  background: var(--th-white);
+  outline: none;
+  transition: border-color .2s;
+}
+
+.th-search-form input[type="search"]:focus {
+  border-color: var(--th-green);
+}
+
+.th-search-form button {
+  background: var(--th-green);
+  color: var(--th-white);
+  border: none;
+  border-radius: var(--th-radius-pill);
+  padding: 12px 24px;
+  font-family: var(--th-font-body);
+  font-size: .9rem;
+  font-weight: 600;
+  cursor: pointer;
+  transition: background .2s;
+}
+
+.th-search-form button:hover { background: var(--th-gold); color: var(--th-dark); }
+
+.th-back-home {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  background: var(--th-green);
+  color: var(--th-white);
+  padding: 14px 32px;
+  border-radius: var(--th-radius-pill);
+  text-decoration: none;
+  font-weight: 600;
+  font-size: .9rem;
+  transition: background .2s, transform .2s;
+}
+
+.th-back-home:hover {
+  background: var(--th-gold);
+  color: var(--th-dark);
+  transform: translateY(-2px);
+}
+
+/* =====================================================
+   RESPONSIVE
+   ===================================================== */
+@media (max-width: 900px) {
+  .tibbhouse-main.with-sidebar {
+    grid-template-columns: 1fr;
+  }
+  .tibbhouse-sidebar { position: static; }
+  .th-footer-grid { grid-template-columns: 1fr 1fr; }
+  .th-footer-brand { grid-column: 1 / -1; }
+}
+
+@media (max-width: 600px) {
+  body { padding-top: var(--th-nav-h); }
+  .th-footer-grid { grid-template-columns: 1fr; gap: 36px; }
+  .tibbhouse-posts-grid { grid-template-columns: 1fr; }
+  .tibbhouse-404-wrap h1 { font-size: 5rem; }
+}
