@@ -11,16 +11,7 @@ paths = [ "/" ]
 localPort = 22729
 
 [services.development]
-run = "pnpm --filter @workspace/api-server run dev"
-
-[services.production]
-build = [ "pnpm", "--filter", "@workspace/api-server", "run", "build" ]
-serve = "static"
-publicDir = "artifacts/api-server/dist/public"
-
-[[services.production.rewrites]]
-from = "/*"
-to = "/index.html"
+run = "php -S 0.0.0.0:$PORT -t /home/runner/workspace/wordpress /home/runner/workspace/wordpress/router.php"
 
 [services.env]
 PORT = "22729"
