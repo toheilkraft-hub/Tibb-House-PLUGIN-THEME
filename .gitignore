@@ -50,6 +50,9 @@ Thumbs.db
 
 # WordPress runtime copy (regenerated from tibbhouse-core/ and tibbhouse-theme/ source; includes WP core, uploads, sqlite db)
 /wordpress/
+# ...but track the two hand-crafted config files that aren't auto-generated
+!/wordpress/wp-config.php
+!/wordpress/router.php
 
 # Uploaded reference/attachment files (ephemeral, not app source)
 /attached_assets/
