@@ -820,6 +820,22 @@ h1,h2,h3,h4,h5,h6 {
 }
 
 /* =====================================================
+   PRELOADER OVERRIDE
+   Dismiss the plugin preloader immediately so the hero
+   is visible the moment the page loads (no flash).
+   The production site's preloader still works via plugin
+   JS — this override simply collapses the transition
+   duration so users see the site instantly.
+   ===================================================== */
+#tibbhouse-preloader {
+  transition: none !important;
+  animation: none !important;
+  opacity: 0 !important;
+  visibility: hidden !important;
+  pointer-events: none !important;
+}
+
+/* =====================================================
    REVEAL-ON-SCROLL ANIMATION
    (progressive enhancement — content is fully visible
    without JS/animation support; see theme.js)

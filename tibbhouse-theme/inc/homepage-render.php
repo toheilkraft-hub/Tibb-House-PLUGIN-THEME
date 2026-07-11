@@ -139,10 +139,13 @@ function tibbhouse_render_homepage() {
 	?>
 
 	<!-- ── Hero ── -->
-	<section class="th-home-hero" style="background:linear-gradient(135deg,#0a3d2e 0%,#0f5c43 100%);min-height:88vh;display:flex;align-items:center;position:relative;overflow:hidden;">
-		<div style="position:absolute;inset:0;background-image:radial-gradient(rgba(201,168,76,.12) 1.5px, transparent 1.5px);background-size:26px 26px;opacity:.4;pointer-events:none;"></div>
-		<div style="position:absolute;top:-100px;right:-100px;width:500px;height:500px;background:rgba(201,168,76,.06);border-radius:50%;pointer-events:none;"></div>
-		<div style="position:absolute;bottom:-120px;left:-80px;width:380px;height:380px;background:rgba(201,168,76,.04);border-radius:50%;pointer-events:none;"></div>
+	<section class="th-home-hero" style="background:linear-gradient(160deg,#0a3d2e 0%,#0d4a36 60%,#0a3d2e 100%);min-height:88vh;display:flex;align-items:center;position:relative;overflow:hidden;">
+		<!-- Large dark blob — top right (matches ihealclinics.com) -->
+		<div style="position:absolute;top:-180px;right:-180px;width:680px;height:680px;background:rgba(0,0,0,.18);border-radius:50%;pointer-events:none;"></div>
+		<!-- Large dark blob — bottom left -->
+		<div style="position:absolute;bottom:-200px;left:-160px;width:580px;height:580px;background:rgba(0,0,0,.15);border-radius:50%;pointer-events:none;"></div>
+		<!-- Subtle inner glow — centre right -->
+		<div style="position:absolute;top:10%;right:8%;width:320px;height:320px;background:rgba(0,0,0,.1);border-radius:50%;pointer-events:none;"></div>
 
 		<div class="th-reveal-init" style="max-width:1200px;margin:0 auto;padding:80px 5%;position:relative;z-index:2;text-align:left;">
 			<div style="display:inline-flex;align-items:center;gap:8px;background:rgba(201,168,76,.15);border:1px solid rgba(201,168,76,.3);color:#f0d890;font-size:.7rem;font-weight:700;letter-spacing:.25em;text-transform:uppercase;padding:6px 16px;border-radius:9999px;margin-bottom:28px;">
