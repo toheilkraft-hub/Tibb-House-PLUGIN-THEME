@@ -35,16 +35,32 @@ define( 'NONCE_SALT',       'i1u2h3s4f5e6t7b8a9d0e1f2g3h4i5j6k7l8m9n0o1p2q3r4s5t
 $table_prefix = 'wp_';
 
 // ─── Dynamic Site URL ────────────────────────────────────────────────────────
-// Derive the public URL from the incoming Host header so the site works
-// on any Replit preview domain without hardcoding.
+// Replit's proxy sets X-Forwarded-Host to the real public domain (e.g.
+// abc123.replit.dev).  HTTP_HOST is the internal address (127.0.0.1:PORT)
+// which browsers can't reach — so we must prefer the forwarded header.
 if ( ! defined( 'WP_HOME' ) ) {
-    // Always use http:// for WP_HOME/WP_SITEURL — this prevents WordPress's
-    // redirect_canonical() from ever issuing HTTP→HTTPS redirects (redirect loop).
-    // The replit-https-fix mu-plugin rewrites http:// → https:// in HTML output
-    // instead, which is safe and doesn't interfere with WordPress internals.
-    $host = $_SERVER['HTTP_HOST'] ?? 'localhost';
-    define( 'WP_HOME',    'http://' . $host );
-    define( 'WP_SITEURL', 'http://' . $host );
+    $fwd_host  = $_SERVER['HTTP_X_FORWARDED_HOST']  ?? '';
+    $fwd_proto = $_SERVER['HTTP_X_FORWARDED_PROTO'] ?? '';
+
+    if ( $fwd_host ) {
+        // Rewrite HTTP_HOST so WordPress canonical-redirect logic sees the
+        // real public domain and never redirects away from it.
+        $host = trim( explode( ',', $fwd_host )[0] );
+        $_SERVER['HTTP_HOST']   = $host;
+        $_SERVER['SERVER_NAME'] = $host;
+        $_SERVER['SERVER_PORT'] = ( $fwd_proto === 'https' ) ? '443' : '80';
+    } else {
+        $host = $_SERVER['HTTP_HOST'] ?? 'localhost';
+    }
+
+    if ( $fwd_proto === 'https' ) {
+        $_SERVER['HTTPS'] = 'on';
+        define( 'WP_HOME',    'https://' . $host );
+        define( 'WP_SITEURL', 'https://' . $host );
+    } else {
+        define( 'WP_HOME',    'http://' . $host );
+        define( 'WP_SITEURL', 'http://' . $host );
+    }
 }
 
 // ─── Paths ───────────────────────────────────────────────────────────────────
