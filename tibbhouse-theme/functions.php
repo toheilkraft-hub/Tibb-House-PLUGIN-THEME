@@ -9,7 +9,7 @@ if ( ! defined( 'ABSPATH' ) ) {
 	exit;
 }
 
-define( 'TIBBHOUSE_THEME_VERSION', '1.0.0' );
+define( 'TIBBHOUSE_THEME_VERSION', '1.1.0' );
 define( 'TIBBHOUSE_THEME_URI', get_template_directory_uri() );
 
 require_once get_template_directory() . '/inc/homepage-render.php';
@@ -89,12 +89,16 @@ add_action( 'widgets_init', 'tibbhouse_widgets_init' );
    Enqueue Assets
 ----------------------------------------------------------------------- */
 function tibbhouse_enqueue_scripts() {
+	// Use filemtime so any file change auto-busts the browser cache.
+	$css_ver = filemtime( get_template_directory() . '/assets/css/theme.css' ) ?: TIBBHOUSE_THEME_VERSION;
+	$js_ver  = filemtime( get_template_directory() . '/assets/js/theme.js' )  ?: TIBBHOUSE_THEME_VERSION;
+
 	// Theme stylesheet
 	wp_enqueue_style(
 		'tibbhouse-theme',
 		TIBBHOUSE_THEME_URI . '/assets/css/theme.css',
 		array(),
-		TIBBHOUSE_THEME_VERSION
+		$css_ver
 	);
 
 	// Theme JS (mobile menu, etc.)
@@ -102,7 +106,7 @@ function tibbhouse_enqueue_scripts() {
 		'tibbhouse-theme',
 		TIBBHOUSE_THEME_URI . '/assets/js/theme.js',
 		array(),
-		TIBBHOUSE_THEME_VERSION,
+		$js_ver,
 		true
 	);
 
