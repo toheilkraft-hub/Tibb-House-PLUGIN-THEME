@@ -155,3 +155,139 @@ function tibbhouse_default_logo_svg() {
 	$logo_url = get_template_directory_uri() . '/assets/img/logo-full.png';
 	return '<img src="' . esc_url( $logo_url ) . '" class="th-nav-logo-img" alt="' . esc_attr__( 'Tibb House — بيت الطب', 'tibbhouse' ) . '">';
 }
+
+/* -----------------------------------------------------------------------
+   Customizer — Logo Size & Layout Controls
+----------------------------------------------------------------------- */
+
+/**
+ * Register Customizer settings and controls.
+ */
+function tibbhouse_customize_register( WP_Customize_Manager $wp_customize ) {
+
+	// ── Section ──────────────────────────────────────────────────────────
+	$wp_customize->add_section( 'tibbhouse_layout', array(
+		'title'    => esc_html__( 'Tibb House — Layout', 'tibbhouse' ),
+		'priority' => 30,
+	) );
+
+	// ── Logo height (desktop) ─────────────────────────────────────────────
+	$wp_customize->add_setting( 'tibbhouse_logo_height', array(
+		'default'           => 88,
+		'transport'         => 'postMessage', // live preview without full reload
+		'sanitize_callback' => 'absint',
+	) );
+
+	$wp_customize->add_control( 'tibbhouse_logo_height', array(
+		'label'       => esc_html__( 'Logo height — desktop (px)', 'tibbhouse' ),
+		'description' => esc_html__( 'Drag to resize the logo in the navigation bar.', 'tibbhouse' ),
+		'section'     => 'tibbhouse_layout',
+		'type'        => 'range',
+		'input_attrs' => array(
+			'min'  => 40,
+			'max'  => 160,
+			'step' => 2,
+		),
+	) );
+
+	// ── Logo height (mobile) ──────────────────────────────────────────────
+	$wp_customize->add_setting( 'tibbhouse_logo_height_mobile', array(
+		'default'           => 56,
+		'transport'         => 'postMessage',
+		'sanitize_callback' => 'absint',
+	) );
+
+	$wp_customize->add_control( 'tibbhouse_logo_height_mobile', array(
+		'label'       => esc_html__( 'Logo height — mobile (px)', 'tibbhouse' ),
+		'section'     => 'tibbhouse_layout',
+		'type'        => 'range',
+		'input_attrs' => array(
+			'min'  => 32,
+			'max'  => 100,
+			'step' => 2,
+		),
+	) );
+
+	// ── Footer logo height ────────────────────────────────────────────────
+	$wp_customize->add_setting( 'tibbhouse_footer_logo_height', array(
+		'default'           => 100,
+		'transport'         => 'postMessage',
+		'sanitize_callback' => 'absint',
+	) );
+
+	$wp_customize->add_control( 'tibbhouse_footer_logo_height', array(
+		'label'       => esc_html__( 'Logo height — footer (px)', 'tibbhouse' ),
+		'section'     => 'tibbhouse_layout',
+		'type'        => 'range',
+		'input_attrs' => array(
+			'min'  => 40,
+			'max'  => 180,
+			'step' => 2,
+		),
+	) );
+}
+add_action( 'customize_register', 'tibbhouse_customize_register' );
+
+/**
+ * Output inline CSS driven by Customizer values (front-end + Customizer preview).
+ */
+function tibbhouse_customize_css() {
+	$logo_h        = absint( get_theme_mod( 'tibbhouse_logo_height',        88  ) );
+	$logo_h_mobile = absint( get_theme_mod( 'tibbhouse_logo_height_mobile', 56  ) );
+	$footer_logo_h = absint( get_theme_mod( 'tibbhouse_footer_logo_height', 100 ) );
+	?>
+	<style id="tibbhouse-customizer-css">
+		.th-nav-logo img,
+		.th-logo-svg,
+		.th-nav-logo-img { height: <?php echo $logo_h; ?>px !important; width: auto !important; }
+
+		.th-footer-brand img.th-logo-svg,
+		.th-footer-brand .th-nav-logo img,
+		.th-footer-brand img { height: <?php echo $footer_logo_h; ?>px !important; width: auto !important; }
+
+		@media (max-width: 768px) {
+			.th-nav-logo img,
+			.th-logo-svg,
+			.th-nav-logo-img { height: <?php echo $logo_h_mobile; ?>px !important; }
+		}
+	</style>
+	<?php
+}
+add_action( 'wp_head', 'tibbhouse_customize_css' );
+
+/**
+ * Live-preview JS: pushes slider changes to the iframe instantly via postMessage.
+ */
+function tibbhouse_customize_preview_js() {
+	?>
+	<script>
+	( function( $ ) {
+		function applyLogoCSS( desktop, mobile, footer ) {
+			var el = document.getElementById( 'tibbhouse-customizer-css' );
+			if ( ! el ) { el = document.createElement( 'style' ); el.id = 'tibbhouse-customizer-css'; document.head.appendChild( el ); }
+			el.textContent =
+				'.th-nav-logo img,.th-logo-svg,.th-nav-logo-img{height:' + desktop + 'px!important;width:auto!important}' +
+				'.th-footer-brand img.th-logo-svg,.th-footer-brand .th-nav-logo img,.th-footer-brand img{height:' + footer + 'px!important;width:auto!important}' +
+				'@media(max-width:768px){.th-nav-logo img,.th-logo-svg,.th-nav-logo-img{height:' + mobile + 'px!important}}';
+		}
+
+		var desktop = <?php echo absint( get_theme_mod( 'tibbhouse_logo_height', 88 ) ); ?>;
+		var mobile  = <?php echo absint( get_theme_mod( 'tibbhouse_logo_height_mobile', 56 ) ); ?>;
+		var footer  = <?php echo absint( get_theme_mod( 'tibbhouse_footer_logo_height', 100 ) ); ?>;
+
+		wp.customize( 'tibbhouse_logo_height', function( v ) {
+			v.bind( function( val ) { desktop = +val; applyLogoCSS( desktop, mobile, footer ); } );
+		} );
+		wp.customize( 'tibbhouse_logo_height_mobile', function( v ) {
+			v.bind( function( val ) { mobile = +val; applyLogoCSS( desktop, mobile, footer ); } );
+		} );
+		wp.customize( 'tibbhouse_footer_logo_height', function( v ) {
+			v.bind( function( val ) { footer = +val; applyLogoCSS( desktop, mobile, footer ); } );
+		} );
+	} )( jQuery );
+	</script>
+	<?php
+}
+add_action( 'customize_preview_init', function() {
+	add_action( 'wp_footer', 'tibbhouse_customize_preview_js' );
+} );

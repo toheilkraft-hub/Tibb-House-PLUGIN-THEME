@@ -5,7 +5,7 @@ generated = []
 id = "0ySybj2JtYkdhKU4pVHSf"
 uri = "file://tibbhouse-core.zip"
 type = "unspecified"
-title = "tibbhouse-core.zip — Upload via Plugins › Add New"
+title = "tibbhouse-core.zip"
 
 [[outputs]]
 id = "EciiWgNOjRQY4JZVhFpSr"
@@ -41,4 +41,4 @@ title = "Tibb House Theme (updated)"
 id = "mhUfGwU0keUtW_aJYtbqy"
 uri = "file://tibbhouse-theme.zip"
 type = "unspecified"
-title = "tibbhouse-theme.zip — Upload via Appearance › Themes"
+title = "tibbhouse-theme.zip — updated with logo size controls"
