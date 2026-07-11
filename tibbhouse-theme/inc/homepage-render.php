@@ -139,22 +139,22 @@ function tibbhouse_render_homepage() {
 	?>
 
 	<!-- ── Hero ── -->
-	<section class="th-home-hero" style="background:linear-gradient(160deg,#0a3d2e 0%,#0d4a36 60%,#0a3d2e 100%);min-height:88vh;display:flex;align-items:center;position:relative;overflow:hidden;">
-		<!-- Large dark blob — top right (matches ihealclinics.com) -->
-		<div style="position:absolute;top:-180px;right:-180px;width:680px;height:680px;background:rgba(0,0,0,.18);border-radius:50%;pointer-events:none;"></div>
-		<!-- Large dark blob — bottom left -->
-		<div style="position:absolute;bottom:-200px;left:-160px;width:580px;height:580px;background:rgba(0,0,0,.15);border-radius:50%;pointer-events:none;"></div>
-		<!-- Subtle inner glow — centre right -->
-		<div style="position:absolute;top:10%;right:8%;width:320px;height:320px;background:rgba(0,0,0,.1);border-radius:50%;pointer-events:none;"></div>
+	<section class="th-home-hero" style="background:linear-gradient(160deg,#f7f3ea 0%,#edf4e8 55%,#f5f0e4 100%);min-height:88vh;display:flex;align-items:center;position:relative;overflow:hidden;">
+		<!-- Soft gold orb — top right -->
+		<div style="position:absolute;top:-180px;right:-180px;width:680px;height:680px;background:radial-gradient(circle,rgba(188,144,79,.12) 0%,transparent 70%);border-radius:50%;pointer-events:none;"></div>
+		<!-- Soft green orb — bottom left -->
+		<div style="position:absolute;bottom:-200px;left:-160px;width:580px;height:580px;background:radial-gradient(circle,rgba(34,58,23,.08) 0%,transparent 70%);border-radius:50%;pointer-events:none;"></div>
+		<!-- Subtle pattern orb — centre right -->
+		<div style="position:absolute;top:10%;right:8%;width:320px;height:320px;background:radial-gradient(circle,rgba(188,144,79,.08) 0%,transparent 70%);border-radius:50%;pointer-events:none;"></div>
 
 		<div class="th-reveal-init" style="max-width:1200px;margin:0 auto;padding:80px 5%;position:relative;z-index:2;text-align:left;">
-			<div style="display:inline-flex;align-items:center;gap:8px;background:rgba(201,168,76,.15);border:1px solid rgba(201,168,76,.3);color:#f0d890;font-size:.7rem;font-weight:700;letter-spacing:.25em;text-transform:uppercase;padding:6px 16px;border-radius:9999px;margin-bottom:28px;">
+			<div style="display:inline-flex;align-items:center;gap:8px;background:rgba(188,144,79,.12);border:1px solid rgba(188,144,79,.35);color:#8a6020;font-size:.7rem;font-weight:700;letter-spacing:.25em;text-transform:uppercase;padding:6px 16px;border-radius:9999px;margin-bottom:28px;">
 				<?php esc_html_e( 'Natural &amp; Islamic Medicine', 'tibbhouse' ); ?>
 			</div>
-			<h1 style="font-family:'Cormorant Garamond',Georgia,serif;font-size:clamp(2.5rem,7vw,5rem);font-weight:700;color:#fff;line-height:1.1;margin:0 0 24px;max-width:780px;text-align:left;">
+			<h1 style="font-family:'Cormorant Garamond',Georgia,serif;font-size:clamp(2.5rem,7vw,5rem);font-weight:700;color:#0a3d2e;line-height:1.1;margin:0 0 24px;max-width:780px;text-align:left;">
 				<?php echo esc_html( get_bloginfo( 'name' ) ); ?>
 			</h1>
-			<p style="font-size:1.1rem;color:rgba(255,255,255,.7);max-width:560px;line-height:1.75;margin:0 0 40px;text-align:left;">
+			<p style="font-size:1.1rem;color:#3d4a35;max-width:560px;line-height:1.75;margin:0 0 40px;text-align:left;">
 				<?php echo esc_html( get_bloginfo( 'description' ) ?: __( 'Explore trusted treatments, understand conditions, and connect with qualified practitioners in natural and Islamic medicine.', 'tibbhouse' ) ); ?>
 			</p>
 			<div style="display:flex;flex-wrap:wrap;gap:14px;">
@@ -162,10 +162,10 @@ function tibbhouse_render_homepage() {
 				$treatments_url    = get_post_type_archive_link( 'treatments' )    ?: home_url( '/' );
 				$practitioners_url = get_post_type_archive_link( 'practitioners' ) ?: home_url( '/' );
 				?>
-				<a href="<?php echo esc_url( $treatments_url ); ?>" style="background:#c9a84c;color:#111;padding:15px 36px;border-radius:9999px;font-weight:700;font-size:.95rem;text-decoration:none;letter-spacing:.03em;">
+				<a href="<?php echo esc_url( $treatments_url ); ?>" style="background:#bc904f;color:#fff;padding:15px 36px;border-radius:9999px;font-weight:700;font-size:.95rem;text-decoration:none;letter-spacing:.03em;box-shadow:0 4px 16px rgba(188,144,79,.35);">
 					<?php esc_html_e( 'Explore Treatments', 'tibbhouse' ); ?>
 				</a>
-				<a href="<?php echo esc_url( $practitioners_url ); ?>" style="border:2px solid rgba(255,255,255,.3);color:#fff;padding:14px 36px;border-radius:9999px;font-weight:600;font-size:.95rem;text-decoration:none;">
+				<a href="<?php echo esc_url( $practitioners_url ); ?>" style="border:2px solid rgba(10,61,46,.3);color:#0a3d2e;padding:14px 36px;border-radius:9999px;font-weight:600;font-size:.95rem;text-decoration:none;background:rgba(10,61,46,.05);">
 					<?php esc_html_e( 'Find a Practitioner', 'tibbhouse' ); ?>
 				</a>
 			</div>

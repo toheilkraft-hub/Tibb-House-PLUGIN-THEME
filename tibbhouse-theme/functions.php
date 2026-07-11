@@ -152,12 +152,6 @@ function tibbhouse_breadcrumbs() {
  * @return string
  */
 function tibbhouse_default_logo_svg() {
-	return '<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 160 48" fill="none" class="th-logo-svg" aria-label="' . esc_attr__( 'Tibb House', 'tibbhouse' ) . '">
-		<circle cx="24" cy="24" r="21" stroke="rgba(201,168,76,0.4)" stroke-width="1.2"/>
-		<path d="M24 6A18 18 0 1 0 24 42A13 13 0 1 1 24 6Z" fill="#c9a84c" opacity=".9"/>
-		<path d="M19 24Q24 15 29 24Q24 33 19 24Z" fill="#0a3d2e"/>
-		<circle cx="24" cy="24" r="2.5" fill="#c9a84c"/>
-		<text x="52" y="22" font-family="Georgia,serif" font-size="14" fill="#0a3d2e" font-weight="700" letter-spacing=".06em">TIBB HOUSE</text>
-		<text x="52" y="36" font-family="Georgia,serif" font-size="7.5" fill="#c9a84c" letter-spacing=".28em">NATURAL MEDICINE</text>
-	</svg>';
+	$logo_url = get_template_directory_uri() . '/assets/img/logo-full.png';
+	return '<img src="' . esc_url( $logo_url ) . '" class="th-nav-logo-img" alt="' . esc_attr__( 'Tibb House — بيت الطب', 'tibbhouse' ) . '" height="52" width="auto">';
 }
