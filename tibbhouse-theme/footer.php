@@ -97,15 +97,6 @@ $th_terms_page    = get_page_by_title( 'Terms & Conditions', OBJECT, 'page' );
 				<a href="<?php echo esc_url( home_url( '/' ) ); ?>"><?php bloginfo( 'name' ); ?></a>.
 				<?php esc_html_e( 'All rights reserved.', 'tibbhouse' ); ?>
 			</span>
-			<span>
-				<?php
-				/* translators: %s: WordPress link */
-				printf(
-					esc_html__( 'Powered by %s', 'tibbhouse' ),
-					'<a href="https://wordpress.org" rel="nofollow">WordPress</a>'
-				);
-				?>
-			</span>
 		</div>
 
 	</div><!-- /.th-footer-inner -->
