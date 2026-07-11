@@ -118,13 +118,14 @@ h1,h2,h3,h4,h5,h6 {
 
 .th-nav-menu > li > a {
   display: block;
-  padding: 8px 14px;
+  padding: 8px 16px;
   font-size: .85rem;
   font-weight: 500;
   color: var(--th-dark);
   text-decoration: none;
   border-radius: var(--th-radius-pill);
-  transition: background .2s, color .2s;
+  border: 1px solid rgba(34,58,23,.18);
+  transition: background .2s, color .2s, border-color .2s;
   letter-spacing: .02em;
 }
 

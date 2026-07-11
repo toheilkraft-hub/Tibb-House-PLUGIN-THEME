@@ -158,16 +158,16 @@ function tibbhouse_render_homepage() {
 				<?php echo esc_html( get_bloginfo( 'description' ) ?: __( 'Explore trusted treatments, understand conditions, and connect with qualified practitioners in natural and Islamic medicine.', 'tibbhouse' ) ); ?>
 			</p>
 			<div style="display:flex;flex-wrap:wrap;gap:14px;">
-				<?php if ( $treatments ) : ?>
-				<a href="<?php echo esc_url( get_post_type_archive_link( 'treatments' ) ); ?>" style="background:#c9a84c;color:#111;padding:15px 36px;border-radius:9999px;font-weight:700;font-size:.95rem;text-decoration:none;letter-spacing:.03em;">
+				<?php
+				$treatments_url    = get_post_type_archive_link( 'treatments' )    ?: home_url( '/' );
+				$practitioners_url = get_post_type_archive_link( 'practitioners' ) ?: home_url( '/' );
+				?>
+				<a href="<?php echo esc_url( $treatments_url ); ?>" style="background:#c9a84c;color:#111;padding:15px 36px;border-radius:9999px;font-weight:700;font-size:.95rem;text-decoration:none;letter-spacing:.03em;">
 					<?php esc_html_e( 'Explore Treatments', 'tibbhouse' ); ?>
 				</a>
-				<?php endif; ?>
-				<?php if ( $practitioners ) : ?>
-				<a href="<?php echo esc_url( get_post_type_archive_link( 'practitioners' ) ); ?>" style="border:2px solid rgba(255,255,255,.3);color:#fff;padding:14px 36px;border-radius:9999px;font-weight:600;font-size:.95rem;text-decoration:none;">
+				<a href="<?php echo esc_url( $practitioners_url ); ?>" style="border:2px solid rgba(255,255,255,.3);color:#fff;padding:14px 36px;border-radius:9999px;font-weight:600;font-size:.95rem;text-decoration:none;">
 					<?php esc_html_e( 'Find a Practitioner', 'tibbhouse' ); ?>
 				</a>
-				<?php endif; ?>
 			</div>
 		</div>
 	</section>
