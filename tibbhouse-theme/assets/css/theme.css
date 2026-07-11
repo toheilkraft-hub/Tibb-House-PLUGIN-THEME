@@ -826,7 +826,7 @@ h1,h2,h3,h4,h5,h6 {
 
 /* Override plugin defaults with the new design */
 #tibbhouse-preloader {
-  background: #0a3d2e !important;
+  background: #fbf8f0 !important;
   transition: opacity .8s cubic-bezier(.4,0,.2,1), visibility .8s ease !important;
   animation: none !important;
 }
@@ -873,18 +873,18 @@ h1,h2,h3,h4,h5,h6 {
 
 /* Text colours on dark bg */
 .th-preloader-name {
-  color: #f0e6cc !important;
+  color: #0a3d2e !important;
   font-size: 1.4rem !important;
   letter-spacing: .3em !important;
   animation: th-fade-in-up .7s ease .6s both !important;
 }
 .th-preloader-tagline {
-  color: rgba(240,230,204,.5) !important;
+  color: rgba(34,58,23,.5) !important;
   letter-spacing: .3em !important;
   animation: th-fade-in-up .7s ease .8s both !important;
 }
 .th-preloader-bar {
-  background: rgba(188,144,79,.15) !important;
+  background: rgba(34,58,23,.1) !important;
   width: 120px !important;
   margin-top: 28px !important;
 }
@@ -904,7 +904,7 @@ h1,h2,h3,h4,h5,h6 {
 
 /* Nav logo */
 .th-nav-logo-img {
-  height: 52px;
+  height: 68px;
   width: auto;
   display: block;
 }
