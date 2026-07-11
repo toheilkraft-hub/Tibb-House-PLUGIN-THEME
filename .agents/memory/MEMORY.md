@@ -3,3 +3,4 @@
 - [No php on PATH in this env](php-cli-in-nix-store.md) — `php -l` needs a binary found via `ls /nix/store | grep php-with-extensions`, not plain `php`.
 - [Tibb House theme/plugin CSS split](tibbhouse-theme-plugin-css-split.md) — light palette tokens live in TWO places (theme.css AND plugin's frontend.css); update both, and mirror edits to root tibbhouse-theme/tibbhouse-core source dirs.
 - [WP auto-setup pipeline](wp-auto-setup-pipeline.md) — self-configuring WP dev env; setup-wordpress.sh + symlinks; export-packages.sh for ZIPs.
+- [WordPress HTTPS proxy fix for Replit](wp-replit-https-proxy.md) — backfill $_SERVER[HTTPS] from X-Forwarded-Proto or CSS loads as http:// → mixed-content blocked.

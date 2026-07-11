@@ -38,10 +38,18 @@ $table_prefix = 'wp_';
 // Derive the public URL from the incoming Host header so the site works
 // on any Replit preview domain without hardcoding.
 if ( ! defined( 'WP_HOME' ) ) {
-    $protocol = ( ! empty( $_SERVER['HTTP_X_FORWARDED_PROTO'] ) && $_SERVER['HTTP_X_FORWARDED_PROTO'] === 'https' )
-        ? 'https'
-        : ( ( isset( $_SERVER['HTTPS'] ) && $_SERVER['HTTPS'] !== 'off' ) ? 'https' : 'http' );
-    $host = $_SERVER['HTTP_HOST'] ?? 'localhost';
+    // When behind the Vite reverse-proxy the connection to PHP is plain HTTP,
+    // but the Vite config always sets X-Forwarded-Proto: https (Replit is HTTPS).
+    // Backfilling $_SERVER['HTTPS'] is essential: it makes WordPress's is_ssl()
+    // return true, which stops redirect_canonical() from looping.
+    if ( ! empty( $_SERVER['HTTP_X_FORWARDED_PROTO'] ) && $_SERVER['HTTP_X_FORWARDED_PROTO'] === 'https' ) {
+        $_SERVER['HTTPS'] = 'on';
+    }
+
+    $protocol = ( isset( $_SERVER['HTTPS'] ) && $_SERVER['HTTPS'] !== 'off' ) ? 'https' : 'http';
+    $host     = $_SERVER['HTTP_HOST'] ?? 'localhost';
+    // Strip any port suffix — Replit public domains never need one.
+    $host = preg_replace( '/:\d+$/', '', $host );
     define( 'WP_HOME',    $protocol . '://' . $host );
     define( 'WP_SITEURL', $protocol . '://' . $host );
 }
