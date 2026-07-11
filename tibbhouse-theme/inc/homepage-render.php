@@ -83,7 +83,7 @@ function tibbhouse_homepage_cards( $posts, $archive_link, $type_label, $single_l
 		return;
 	}
 	?>
-	<section style="padding:80px 0;">
+	<section class="th-homepage-section">
 		<div style="max-width:1200px;margin:0 auto;padding:0 5%;">
 			<div class="th-reveal-init" data-reveal="up" style="display:flex;align-items:flex-end;justify-content:space-between;gap:16px;margin-bottom:44px;flex-wrap:wrap;">
 				<div>

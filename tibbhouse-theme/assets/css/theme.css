@@ -799,12 +799,10 @@ h1,h2,h3,h4,h5,h6 {
 }
 
 /* =====================================================
-   RESPONSIVE
+   RESPONSIVE — base grid breakpoints
    ===================================================== */
 @media (max-width: 900px) {
-  .tibbhouse-main.with-sidebar {
-    grid-template-columns: 1fr;
-  }
+  .tibbhouse-main.with-sidebar { grid-template-columns: 1fr; }
   .tibbhouse-sidebar { position: static; }
   .th-footer-grid { grid-template-columns: 1fr 1fr; }
   .th-footer-brand { grid-column: 1 / -1; }
@@ -812,12 +810,143 @@ h1,h2,h3,h4,h5,h6 {
   .th-home-about-visual { order: -1; }
 }
 
-@media (max-width: 600px) {
-  body { padding-top: var(--th-nav-h); }
+/* =====================================================
+   MOBILE OPTIMISATION
+   ===================================================== */
+
+/* ── Tablet + phone (≤ 768px) ── */
+@media (max-width: 768px) {
+
+  /* Nav — shrink height, smaller logo */
+  :root { --th-nav-h: 60px; }
+  .th-nav-logo-img { height: 44px !important; }
+
+  /* Hero — centre everything, tighter padding */
+  .th-home-hero {
+    min-height: 100svh !important;
+    min-height: 100vh !important; /* fallback */
+  }
+  .th-home-hero > div:last-child {
+    padding: 56px 6% 72px !important;
+    text-align: center !important;
+  }
+  .th-home-hero h1 {
+    text-align: center !important;
+    max-width: 100% !important;
+  }
+  .th-home-hero p {
+    text-align: center !important;
+    margin-left: auto !important;
+    margin-right: auto !important;
+  }
+  /* badge pill — centre */
+  .th-home-hero .th-reveal-init:first-child {
+    margin-left: auto;
+    margin-right: auto;
+  }
+  /* CTA buttons — full-width stack */
+  .th-home-hero div[style*="display:flex"] {
+    flex-direction: column !important;
+    align-items: stretch !important;
+    gap: 12px !important;
+  }
+  .th-home-hero div[style*="display:flex"] a {
+    text-align: center !important;
+  }
+
+  /* Disable parallax on mobile — saves battery, avoids jank */
+  [data-parallax] {
+    transform: none !important;
+    will-change: auto !important;
+  }
+
+  /* Carousel sections */
+  .th-homepage-section { padding: 56px 0 !important; }
+  .th-carousel-track > * { width: min(288px, 82vw) !important; }
+  .th-carousel-nav { display: none !important; } /* swipe on mobile */
+
+  /* Section heading row */
+  .th-homepage-section [style*="display:flex"][style*="justify-content:space-between"] {
+    flex-direction: column !important;
+    align-items: flex-start !important;
+    gap: 8px !important;
+    margin-bottom: 28px !important;
+  }
+
+  /* Quote band */
+  div[style*="padding:60px 5%"] {
+    padding: 44px 6% !important;
+  }
+
+  /* About */
+  .th-home-about { padding: 56px 5%; }
+  .th-home-about-inner { gap: 32px; }
+  .th-home-about-visual { aspect-ratio: 16 / 7; }
+
+  /* CTA band */
+  .th-home-cta-band { padding: 56px 5%; }
+  .th-home-cta-inner {
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 28px;
+  }
+  .th-home-cta-inner > div:last-child {
+    flex-direction: column !important;
+    width: 100%;
+  }
+  .th-home-cta-inner > div:last-child a {
+    text-align: center !important;
+  }
+
+  /* Footer */
   .th-footer-grid { grid-template-columns: 1fr; gap: 36px; }
+
+  /* Preloader — smaller badge */
+  .th-preloader-logo { width: 140px !important; height: 140px !important; }
+  .th-preloader-ring { width: 180px !important; height: 180px !important; }
+
+  /* Reduce animation distances on mobile — less movement feels better on small screens */
+  @media (prefers-reduced-motion: no-preference) {
+    .th-reveal-init,
+    .th-reveal-init[data-reveal="up"]    { transform: translateY(28px) !important; }
+    .th-reveal-init[data-reveal="left"]  { transform: translateX(-28px) !important; }
+    .th-reveal-init[data-reveal="right"] { transform: translateX(28px) !important; }
+    .th-reveal-init[data-reveal="scale"] { transform: scale(.95) !important; }
+    /* Faster reveals on mobile */
+    .th-reveal-init { transition-duration: .65s !important; }
+  }
+}
+
+/* ── Small phones (≤ 480px) ── */
+@media (max-width: 480px) {
+  body { padding-top: var(--th-nav-h); }
+
+  /* Nav inner padding */
+  .th-nav-inner { padding: 0 4%; }
+
+  /* Hero — full bleed on tiny screens */
+  .th-home-hero > div:last-child { padding: 48px 4% 64px !important; }
+
+  /* Cards slightly wider */
+  .th-carousel-track { padding-left: 4%; padding-right: 4%; }
+  .th-carousel-track > * { width: 86vw !important; }
+
+  /* Section headings */
+  .th-homepage-section > div { padding: 0 4% !important; }
+
+  /* About — collapse visual on tiny screens */
+  .th-home-about { padding: 48px 4%; }
+  .th-home-about-visual { aspect-ratio: 16 / 6; }
+
+  /* CTA */
+  .th-home-cta-band { padding: 48px 4%; }
+
+  /* Footer */
+  .th-footer-inner { padding: 48px 4% 32px; }
+
+  /* Smaller post grids */
   .tibbhouse-posts-grid { grid-template-columns: 1fr; }
   .tibbhouse-404-wrap h1 { font-size: 5rem; }
-  .th-home-cta-inner { text-align: left; }
 }
 
 /* =====================================================
