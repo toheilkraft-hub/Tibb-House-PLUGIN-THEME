@@ -48,6 +48,10 @@ waitForPort = 6000
 [workflows.workflow.metadata]
 outputType = "console"
 
+[[ports]]
+localPort = 8080
+externalPort = 80
+
 [agent]
 stack = "PNPM_WORKSPACE"
 expertMode = true
