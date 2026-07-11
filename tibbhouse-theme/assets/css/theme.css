@@ -598,7 +598,7 @@ h1,h2,h3,h4,h5,h6 {
 .th-footer-brand img.th-logo-svg,
 .th-footer-brand .th-nav-logo img,
 .th-footer-brand img {
-  height: 56px;
+  height: 100px;
   width: auto;
   margin-bottom: 8px;
 }
@@ -818,8 +818,8 @@ h1,h2,h3,h4,h5,h6 {
 @media (max-width: 768px) {
 
   /* Nav — shrink height, smaller logo */
-  :root { --th-nav-h: 60px; }
-  .th-nav-logo-img { height: 44px !important; }
+  :root { --th-nav-h: 68px; }
+  .th-nav-logo-img { height: 56px !important; }
 
   /* Hero — centre everything, tighter padding */
   .th-home-hero {
@@ -1033,7 +1033,7 @@ h1,h2,h3,h4,h5,h6 {
 
 /* Nav logo */
 .th-nav-logo-img {
-  height: 68px;
+  height: 88px;
   width: auto;
   display: block;
 }
