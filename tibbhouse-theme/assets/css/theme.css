@@ -5,21 +5,25 @@
 
 @import url('https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,400;0,500;0,600;0,700;1,400;1,600&family=Inter:wght@300;400;500;600&display=swap');
 
-/* ── Tokens (mirror plugin tokens so both share the same palette) ── */
+/* ── Tokens ──
+   Light palette, derived from the Tibb House crest logo (deep green +
+   gold trefoil on an ivory medallion). The deep green is now reserved
+   for text/accents/borders rather than large solid backgrounds, so the
+   overall site reads as light and airy instead of dark-green-dominant. */
 :root {
-  --th-green:        #0a3d2e;
-  --th-green-mid:    #0f5c43;
-  --th-green-light:  #e8f2ed;
-  --th-gold:         #c9a84c;
-  --th-gold-light:   #f0d890;
-  --th-cream:        #faf7f2;
+  --th-green:        #223a17;
+  --th-green-mid:    #33511f;
+  --th-green-light:  #eef2e6;
+  --th-gold:         #bc904f;
+  --th-gold-light:   #e4c68f;
+  --th-cream:        #fbf8f0;
   --th-white:        #ffffff;
-  --th-dark:         #111810;
-  --th-text:         #2c2c2c;
-  --th-muted:        #6b7280;
-  --th-border:       rgba(10,61,46,.1);
-  --th-shadow-sm:    0 2px 8px rgba(10,61,46,.07);
-  --th-shadow-md:    0 6px 24px rgba(10,61,46,.12);
+  --th-dark:         #223a17;
+  --th-text:         #33392e;
+  --th-muted:        #7a7f72;
+  --th-border:       rgba(34,58,23,.12);
+  --th-shadow-sm:    0 2px 8px rgba(34,58,23,.06);
+  --th-shadow-md:    0 6px 24px rgba(34,58,23,.1);
   --th-radius:       12px;
   --th-radius-pill:  9999px;
   --th-font-heading: 'Cormorant Garamond', Georgia, serif;
@@ -260,27 +264,28 @@ h1,h2,h3,h4,h5,h6 {
    HERO (standard pages — not CPT pages)
    ===================================================== */
 .tibbhouse-page-hero {
-  background: linear-gradient(135deg, var(--th-green) 0%, var(--th-green-mid) 100%);
+  background: linear-gradient(135deg, var(--th-cream) 0%, var(--th-green-light) 100%);
   padding: 72px 5%;
   text-align: center;
   position: relative;
   overflow: hidden;
+  border-bottom: 1px solid var(--th-border);
 }
 
-.tibbhouse-page-hero::after {
+.tibbhouse-page-hero::before {
   content: '';
   position: absolute;
-  bottom: -2px; left: 0; right: 0;
-  height: 56px;
-  background: var(--th-cream);
-  border-radius: 50% 50% 0 0 / 56px 56px 0 0;
+  top: -120px; right: -120px;
+  width: 340px; height: 340px;
+  background: radial-gradient(circle, rgba(188,144,79,.14) 0%, transparent 70%);
+  border-radius: 50%;
 }
 
 .tibbhouse-page-hero h1 {
   font-family: var(--th-font-heading);
   font-size: clamp(2rem, 5vw, 3.4rem);
   font-weight: 600;
-  color: var(--th-white);
+  color: var(--th-dark);
   margin: 0;
   position: relative;
 }
@@ -546,10 +551,11 @@ h1,h2,h3,h4,h5,h6 {
    FOOTER
    ===================================================== */
 #tibbhouse-footer {
-  background: var(--th-green);
-  color: rgba(255,255,255,.8);
+  background: var(--th-green-light);
+  color: var(--th-text);
   padding: 72px 5% 0;
   margin-top: 80px;
+  border-top: 1px solid var(--th-border);
 }
 
 .th-footer-inner {
@@ -562,11 +568,11 @@ h1,h2,h3,h4,h5,h6 {
   grid-template-columns: 1.6fr 1fr 1fr 1fr;
   gap: 48px;
   padding-bottom: 48px;
-  border-bottom: 1px solid rgba(255,255,255,.1);
+  border-bottom: 1px solid var(--th-border);
 }
 
 .th-footer-cta-link {
-  color: var(--th-gold-light) !important;
+  color: var(--th-gold) !important;
   font-weight: 600;
 }
 
@@ -581,20 +587,28 @@ h1,h2,h3,h4,h5,h6 {
 
 .th-footer-contact a {
   font-size: .88rem;
-  color: rgba(255,255,255,.7);
+  color: var(--th-text);
   text-decoration: none;
   word-break: break-word;
 }
 
-.th-footer-contact a:hover { color: var(--th-gold-light); }
+.th-footer-contact a:hover { color: var(--th-gold); }
 
-.th-footer-brand .th-logo-svg text { fill: var(--th-white) !important; }
-.th-footer-brand .th-logo-svg text:last-child { fill: var(--th-gold-light) !important; }
+.th-footer-brand img.th-logo-svg,
+.th-footer-brand .th-nav-logo img,
+.th-footer-brand img {
+  height: 56px;
+  width: auto;
+  margin-bottom: 8px;
+}
+
+.th-footer-brand .th-logo-svg text { fill: var(--th-dark) !important; }
+.th-footer-brand .th-logo-svg text:last-child { fill: var(--th-gold) !important; }
 
 .th-footer-brand p {
   font-size: .88rem;
   line-height: 1.75;
-  color: rgba(255,255,255,.6);
+  color: var(--th-muted);
   margin: 16px 0 24px;
   max-width: 320px;
 }
@@ -608,11 +622,12 @@ h1,h2,h3,h4,h5,h6 {
   width: 36px;
   height: 36px;
   border-radius: 50%;
-  background: rgba(255,255,255,.1);
+  background: var(--th-white);
+  border: 1px solid var(--th-border);
   display: flex;
   align-items: center;
   justify-content: center;
-  color: rgba(255,255,255,.7);
+  color: var(--th-green);
   text-decoration: none;
   font-size: .75rem;
   font-weight: 700;
@@ -621,7 +636,8 @@ h1,h2,h3,h4,h5,h6 {
 
 .th-footer-social a:hover {
   background: var(--th-gold);
-  color: var(--th-dark);
+  border-color: var(--th-gold);
+  color: var(--th-white);
 }
 
 .th-footer-col h4 {
@@ -630,7 +646,7 @@ h1,h2,h3,h4,h5,h6 {
   font-weight: 700;
   letter-spacing: .25em;
   text-transform: uppercase;
-  color: var(--th-gold-light);
+  color: var(--th-green);
   margin-bottom: 20px;
 }
 
@@ -640,7 +656,7 @@ h1,h2,h3,h4,h5,h6 {
   font-weight: 700 !important;
   letter-spacing: .25em !important;
   text-transform: uppercase !important;
-  color: var(--th-gold-light) !important;
+  color: var(--th-green) !important;
   margin-bottom: 20px !important;
 }
 
@@ -657,14 +673,14 @@ h1,h2,h3,h4,h5,h6 {
 .th-footer-col ul li a,
 #tibbhouse-footer .widget ul li a {
   font-size: .88rem;
-  color: rgba(255,255,255,.6);
+  color: var(--th-text);
   text-decoration: none;
   transition: color .2s;
 }
 
 .th-footer-col ul li a:hover,
 #tibbhouse-footer .widget ul li a:hover {
-  color: var(--th-gold-light);
+  color: var(--th-gold);
 }
 
 .th-footer-nav {
@@ -684,16 +700,16 @@ h1,h2,h3,h4,h5,h6 {
   flex-wrap: wrap;
   gap: 12px;
   font-size: .8rem;
-  color: rgba(255,255,255,.4);
+  color: var(--th-muted);
 }
 
 .th-footer-bottom a {
-  color: rgba(255,255,255,.5);
+  color: var(--th-muted);
   text-decoration: none;
   transition: color .2s;
 }
 
-.th-footer-bottom a:hover { color: var(--th-gold-light); }
+.th-footer-bottom a:hover { color: var(--th-gold); }
 
 /* =====================================================
    404 / SEARCH / MISC
@@ -895,7 +911,8 @@ h1,h2,h3,h4,h5,h6 {
 .th-home-about-visual {
   aspect-ratio: 4 / 3;
   border-radius: 20px;
-  background: linear-gradient(135deg, var(--th-green) 0%, var(--th-green-mid) 100%);
+  background: linear-gradient(135deg, var(--th-cream) 0%, var(--th-green-light) 100%);
+  border: 1px solid var(--th-border);
   position: relative;
   overflow: hidden;
 }
@@ -904,17 +921,19 @@ h1,h2,h3,h4,h5,h6 {
   content: '';
   position: absolute;
   inset: 0;
-  background-image: radial-gradient(rgba(201,168,76,.35) 1.5px, transparent 1.5px);
+  background-image: radial-gradient(rgba(188,144,79,.4) 1.5px, transparent 1.5px);
   background-size: 22px 22px;
-  opacity: .5;
+  opacity: .6;
 }
 
 .th-home-cta-band {
-  background: linear-gradient(135deg, var(--th-green) 0%, var(--th-green-mid) 100%);
+  background: linear-gradient(135deg, var(--th-cream) 0%, var(--th-green-light) 100%);
   padding: 90px 5%;
   text-align: left;
   position: relative;
   overflow: hidden;
+  border-top: 1px solid var(--th-border);
+  border-bottom: 1px solid var(--th-border);
 }
 
 .th-home-cta-band::before {
@@ -922,7 +941,7 @@ h1,h2,h3,h4,h5,h6 {
   position: absolute;
   top: -140px; right: -140px;
   width: 420px; height: 420px;
-  background: rgba(201,168,76,.08);
+  background: rgba(188,144,79,.12);
   border-radius: 50%;
 }
 

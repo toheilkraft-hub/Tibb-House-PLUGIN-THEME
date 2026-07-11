@@ -215,19 +215,19 @@ function tibbhouse_render_homepage() {
 	<section class="th-home-cta-band">
 		<div class="th-home-cta-inner th-reveal-init">
 			<div>
-				<div style="font-size:.7rem;font-weight:700;letter-spacing:.25em;text-transform:uppercase;color:#f0d890;margin-bottom:10px;"><?php esc_html_e( 'Get In Touch', 'tibbhouse' ); ?></div>
-				<h2 style="font-family:'Cormorant Garamond',Georgia,serif;font-size:clamp(1.8rem,4vw,2.6rem);font-weight:600;color:#fff;margin:0 0 12px;max-width:520px;text-align:left;">
+				<div style="font-size:.7rem;font-weight:700;letter-spacing:.25em;text-transform:uppercase;color:#bc904f;margin-bottom:10px;"><?php esc_html_e( 'Get In Touch', 'tibbhouse' ); ?></div>
+				<h2 style="font-family:'Cormorant Garamond',Georgia,serif;font-size:clamp(1.8rem,4vw,2.6rem);font-weight:600;color:#223a17;margin:0 0 12px;max-width:520px;text-align:left;">
 					<?php esc_html_e( 'Ready to Begin Your Healing Journey?', 'tibbhouse' ); ?>
 				</h2>
-				<p style="font-size:1rem;color:rgba(255,255,255,.7);margin:0;max-width:480px;">
+				<p style="font-size:1rem;color:#6b7280;margin:0;max-width:480px;">
 					<?php esc_html_e( 'Book an appointment or reach out with any questions — our team is here to help.', 'tibbhouse' ); ?>
 				</p>
 			</div>
 			<div style="display:flex;flex-wrap:wrap;gap:14px;">
-				<a href="<?php echo esc_url( $contact_page ? get_permalink( $contact_page ) : home_url( '/' ) ); ?>" style="background:#c9a84c;color:#111;padding:15px 36px;border-radius:9999px;font-weight:700;font-size:.95rem;text-decoration:none;">
+				<a href="<?php echo esc_url( $contact_page ? get_permalink( $contact_page ) : home_url( '/' ) ); ?>" style="background:#223a17;color:#fff;padding:15px 36px;border-radius:9999px;font-weight:700;font-size:.95rem;text-decoration:none;">
 					<?php esc_html_e( 'Book Appointment', 'tibbhouse' ); ?>
 				</a>
-				<a href="<?php echo esc_url( $contact_page ? get_permalink( $contact_page ) : home_url( '/' ) ); ?>" style="border:2px solid rgba(255,255,255,.3);color:#fff;padding:14px 36px;border-radius:9999px;font-weight:600;font-size:.95rem;text-decoration:none;">
+				<a href="<?php echo esc_url( $contact_page ? get_permalink( $contact_page ) : home_url( '/' ) ); ?>" style="border:2px solid rgba(34,58,23,.3);color:#223a17;padding:14px 36px;border-radius:9999px;font-weight:600;font-size:.95rem;text-decoration:none;">
 					<?php esc_html_e( 'Contact Us', 'tibbhouse' ); ?>
 				</a>
 			</div>

@@ -1,3 +1,4 @@
 - [WP theme overriding plugin templates](wp-template-filter-order.md) — themes (Astra etc.) can override single_template/archive_template via template_include; always add a template_include safety-net filter too.
 - [WP activation hooks vs in-place file updates](wp-activation-safety-net.md) — pair activation-hook setup logic with an idempotent admin_init safety net, or in-place file uploads never trigger it.
 - [No php on PATH in this env](php-cli-in-nix-store.md) — `php -l` needs a binary found via `ls /nix/store | grep php-with-extensions`, not plain `php`.
+- [Tibb House theme/plugin CSS split](tibbhouse-theme-plugin-css-split.md) — light palette tokens live in TWO places (theme.css AND plugin's frontend.css); update both, and mirror edits to root tibbhouse-theme/tibbhouse-core source dirs.

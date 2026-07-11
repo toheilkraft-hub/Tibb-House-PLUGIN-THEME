@@ -20,7 +20,11 @@ $th_terms_page    = get_page_by_title( 'Terms & Conditions', OBJECT, 'page' );
 
 			<!-- Brand column -->
 			<div class="th-footer-brand">
-				<?php echo tibbhouse_default_logo_svg(); // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped ?>
+				<?php if ( has_custom_logo() ) : ?>
+					<?php the_custom_logo(); ?>
+				<?php else : ?>
+					<?php echo tibbhouse_default_logo_svg(); // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped ?>
+				<?php endif; ?>
 				<p>
 					<?php echo esc_html( get_bloginfo( 'description' ) ?: __( 'Connecting people with trusted natural and Islamic medicine practitioners, treatments and knowledge.', 'tibbhouse' ) ); ?>
 				</p>

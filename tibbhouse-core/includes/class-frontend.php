@@ -63,12 +63,14 @@ class Tibbhouse_Frontend {
 
 	/**
 	 * Enqueue front-end styles and scripts.
+	 *
+	 * Loaded on every page (not just Tibb House CPT views) because the
+	 * sitewide preloader, and its logo animation, live in this stylesheet
+	 * and need to be present everywhere. The rest of the design system is
+	 * scoped with specific classes (.tibbhouse-archive-wrap, .th-hero-wrap,
+	 * etc.) so loading it globally is safe.
 	 */
 	public function enqueue_assets() {
-		if ( ! $this->is_tibbhouse_page() ) {
-			return;
-		}
-
 		wp_enqueue_style(
 			'tibbhouse-frontend',
 			TIBBHOUSE_CORE_URL . 'assets/css/frontend.css',
@@ -97,9 +99,6 @@ class Tibbhouse_Frontend {
 	 * Render the preloader markup immediately after <body>.
 	 */
 	public function render_preloader() {
-		if ( ! $this->is_tibbhouse_page() ) {
-			return;
-		}
 		$this->preloader_html();
 		$this->preloader_rendered = true;
 	}
@@ -116,9 +115,6 @@ class Tibbhouse_Frontend {
 	 */
 	public function maybe_render_preloader_fallback() {
 		if ( $this->preloader_rendered ) {
-			return;
-		}
-		if ( ! $this->is_tibbhouse_page() ) {
 			return;
 		}
 		// Move preloader to body start via inline JS
@@ -141,9 +137,11 @@ class Tibbhouse_Frontend {
 	 * @return string
 	 */
 	private function preloader_inner() {
-		$logo_url = TIBBHOUSE_CORE_URL . 'assets/img/logo.svg';
+		$logo_url = TIBBHOUSE_CORE_URL . 'assets/img/logo-mark.png';
 		return '
-<img class="th-preloader-logo" src="' . esc_url( $logo_url ) . '" alt="Tibb House" width="120" height="120">
+<div class="th-preloader-ring">
+	<img class="th-preloader-logo" src="' . esc_url( $logo_url ) . '" alt="Tibb House" width="120" height="120">
+</div>
 <div class="th-preloader-name">Tibb House</div>
 <div class="th-preloader-tagline">Natural &amp; Islamic Medicine</div>
 <div class="th-preloader-bar"></div>';
