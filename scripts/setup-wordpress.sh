@@ -53,18 +53,23 @@ fi
 
 # ── 2. SQLite Drop-in ─────────────────────────────────────────────────────────
 step "SQLite Database Integration"
-if [ ! -f "$WP_DIR/wp-content/db.php" ]; then
+SQLITE_PLUGIN_DIR="$WP_DIR/wp-content/plugins/sqlite-database-integration"
+if [ ! -f "$WP_DIR/wp-content/db.php" ] || [ ! -d "$SQLITE_PLUGIN_DIR" ]; then
   echo "  Downloading SQLite integration plugin…"
   curl -fsSL "https://downloads.wordpress.org/plugin/sqlite-database-integration.zip" \
     -o /tmp/sqlite-integration.zip \
     || die "Failed to download SQLite integration."
   mkdir -p /tmp/sqlite-integration
   unzip -q /tmp/sqlite-integration.zip -d /tmp/sqlite-integration
-  # The plugin ships a db.copy file that becomes wp-content/db.php
+  # Copy the db.php drop-in
   cp /tmp/sqlite-integration/sqlite-database-integration/db.copy \
      "$WP_DIR/wp-content/db.php"
+  # Keep the full plugin directory so db.php can find its SQLite implementation
+  mkdir -p "$WP_DIR/wp-content/plugins"
+  rm -rf "$SQLITE_PLUGIN_DIR"
+  cp -r /tmp/sqlite-integration/sqlite-database-integration "$SQLITE_PLUGIN_DIR"
   rm -rf /tmp/sqlite-integration.zip /tmp/sqlite-integration
-  ok "SQLite drop-in installed"
+  ok "SQLite drop-in and plugin installed"
 else
   ok "SQLite drop-in already present"
 fi
