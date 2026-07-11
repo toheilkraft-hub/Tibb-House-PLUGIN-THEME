@@ -11,17 +11,27 @@ env = { "CI" = "true" }
 [workflows]
 runButton = "Project"
 
+# ── Project (default run button) ──────────────────────────────────────────────
+# Runs setup first (idempotent — fast if already configured), then starts
+# both the WordPress PHP server and the Vite proxy that exposes it in preview.
 [[workflows.workflow]]
 name = "Project"
-mode = "parallel"
+mode = "sequential"
 author = "agent"
+
+[[workflows.workflow.tasks]]
+task = "shell.exec"
+args = "bash scripts/setup-wordpress.sh"
 
 [[workflows.workflow.tasks]]
 task = "workflow.run"
 args = "WordPress Server"
 
+[[workflows.workflow.tasks]]
+task = "workflow.run"
+args = "artifacts/api-server: web"
 
-
+# ── WordPress Server (PHP built-in server) ────────────────────────────────────
 [[workflows.workflow]]
 name = "WordPress Server"
 author = "agent"
@@ -40,4 +50,4 @@ expertMode = true
 
 [postMerge]
 path = "scripts/post-merge.sh"
-timeoutMs = 20000
+timeoutMs = 120000
