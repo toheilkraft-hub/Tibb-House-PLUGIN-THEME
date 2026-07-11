@@ -153,5 +153,5 @@ function tibbhouse_breadcrumbs() {
  */
 function tibbhouse_default_logo_svg() {
 	$logo_url = get_template_directory_uri() . '/assets/img/logo-full.png';
-	return '<img src="' . esc_url( $logo_url ) . '" class="th-nav-logo-img" alt="' . esc_attr__( 'Tibb House — بيت الطب', 'tibbhouse' ) . '" height="52" width="auto">';
+	return '<img src="' . esc_url( $logo_url ) . '" class="th-nav-logo-img" alt="' . esc_attr__( 'Tibb House — بيت الطب', 'tibbhouse' ) . '">';
 }
