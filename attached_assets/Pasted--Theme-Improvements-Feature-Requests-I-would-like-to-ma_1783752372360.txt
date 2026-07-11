@@ -1,0 +1,94 @@
+## Theme Improvements & Feature Requests
+
+I would like to make several improvements to the theme before moving on to any additional features.
+
+### 1. Automatic Theme Menu Setup
+
+The navigation menu is currently blank after installing the theme. I want the theme to automatically create and assign its own navigation menu during activation.
+
+When the theme is installed, it should:
+
+* Automatically create a menu named **Tibb House Menu**.
+* Add all primary theme pages to this menu.
+* Automatically assign the menu as the Primary Navigation.
+* Create additional pages such as **TIBB HOUSE – About Us** and **TIBB HOUSE – Contact Us**, just as you already did with the homepage.
+* Keep these pages inside the normal **Pages** section of WordPress.
+* Automatically include these pages in the **Tibb House Menu**, so there is no manual menu configuration required after installation.
+
+The goal is that after activating the theme, the navigation is already complete and functional.
+
+---
+
+### 2. Footer Redesign
+
+The current footer looks unfinished and contains large empty white spaces. I would like it redesigned to feel much more professional.
+
+Please:
+
+* Remove the unnecessary white space.
+* Add the **iHeal** logo.
+* Include a short description beneath the logo.
+* Add a Quick Links section containing items such as:
+
+  * About Us
+  * Contact Us
+  * Privacy Policy
+  * Terms & Conditions
+  * Book Appointment
+* Include contact information such as an email address.
+* Make the footer visually balanced, modern, and consistent with the rest of the website.
+
+---
+
+### 3. Improve the Homepage Design
+
+The homepage currently feels too plain and static.
+
+I would like it to feel much more polished and engaging.
+
+Please:
+
+* Avoid centering all of the text.
+* Use left-aligned content where appropriate.
+* Replace the solid green background with a more elegant design.
+* Add subtle animations that improve the experience without affecting performance.
+* Improve spacing, typography, cards, icons, and section transitions.
+* Make the homepage feel like a premium healthcare website rather than a basic template.
+
+---
+
+### 4. Featured Content Sections
+
+The **Conditions**, **Practitioners**, **Knowledge**, and other featured sections currently feel very limited.
+
+Please expand these sections by:
+
+* Displaying more items.
+* Using responsive sliders/carousels instead of static grids where appropriate.
+* Improving the overall card design.
+* Making these sections feel more dynamic and visually appealing.
+
+At the bottom of the homepage, also add a dedicated **About Us** section and a strong **Contact / Call-to-Action** section with buttons encouraging users to get in touch or book an appointment.
+
+---
+
+### 5. Featured Images for Plugin Content
+
+Currently, the custom content types created by the **Tibb House Core** plugin (such as Treatments, Conditions, Practitioners, Knowledge, Locations, and any other custom post types) do not provide an option to upload a featured image.
+
+I would like the plugin to be updated so that every relevant content type supports **Featured Images (Post Thumbnails)**.
+
+This should allow administrators to upload an image directly from the WordPress editor.
+
+The uploaded image should then automatically be used throughout the theme, including:
+
+* Archive cards
+* Homepage featured sections
+* Sliders
+* Related content
+* Search results
+* Any thumbnail or preview cards
+
+This will make the homepage and archive pages much more visually engaging instead of displaying only text.
+
+The featured image should integrate seamlessly with the existing plugin architecture without affecting any of the current functionality.

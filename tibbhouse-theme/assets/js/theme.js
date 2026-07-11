@@ -36,10 +36,59 @@
     var nav = document.getElementById('tibbhouse-nav');
   }
 
+  /* ── Reveal-on-scroll animations (respects prefers-reduced-motion) ── */
+  function initReveal() {
+    var els = document.querySelectorAll('.th-reveal-init');
+    if (!els.length) return;
+
+    if (window.matchMedia && window.matchMedia('(prefers-reduced-motion: reduce)').matches) {
+      els.forEach(function (el) { el.classList.add('th-revealed'); });
+      return;
+    }
+
+    if (!('IntersectionObserver' in window)) {
+      els.forEach(function (el) { el.classList.add('th-revealed'); });
+      return;
+    }
+
+    var observer = new IntersectionObserver(function (entries) {
+      entries.forEach(function (entry) {
+        if (entry.isIntersecting) {
+          entry.target.classList.add('th-revealed');
+          observer.unobserve(entry.target);
+        }
+      });
+    }, { threshold: 0.12, rootMargin: '0px 0px -40px 0px' });
+
+    els.forEach(function (el) { observer.observe(el); });
+  }
+
+  /* ── Featured content carousels: prev/next scroll buttons ── */
+  function initCarousels() {
+    var buttons = document.querySelectorAll('[data-carousel-prev], [data-carousel-next]');
+    if (!buttons.length) return;
+
+    buttons.forEach(function (btn) {
+      btn.addEventListener('click', function () {
+        var targetId = btn.getAttribute('data-carousel-prev') || btn.getAttribute('data-carousel-next');
+        var track = document.getElementById(targetId);
+        if (!track) return;
+
+        var card = track.querySelector(':scope > *');
+        var step = card ? card.getBoundingClientRect().width + 28 : 320;
+        var dir = btn.hasAttribute('data-carousel-prev') ? -1 : 1;
+
+        track.scrollBy({ left: dir * step, behavior: 'smooth' });
+      });
+    });
+  }
+
   /* ── Init ── */
   function init() {
     initNavScroll();
     initMobileMenu();
+    initReveal();
+    initCarousels();
   }
 
   if (document.readyState === 'loading') {

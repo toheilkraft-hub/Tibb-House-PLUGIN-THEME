@@ -4,6 +4,12 @@
  *
  * @package Tibbhouse
  */
+
+$th_contact_email = get_option( 'admin_email' );
+$th_about_page    = get_page_by_title( 'TIBB HOUSE – About Us', OBJECT, 'page' );
+$th_contact_page  = get_page_by_title( 'TIBB HOUSE – Contact Us', OBJECT, 'page' );
+$th_privacy_page  = get_page_by_title( 'Privacy Policy', OBJECT, 'page' );
+$th_terms_page    = get_page_by_title( 'Terms & Conditions', OBJECT, 'page' );
 ?>
 
 <!-- ── Footer ── -->
@@ -18,12 +24,38 @@
 				<p>
 					<?php echo esc_html( get_bloginfo( 'description' ) ?: __( 'Connecting people with trusted natural and Islamic medicine practitioners, treatments and knowledge.', 'tibbhouse' ) ); ?>
 				</p>
-				<?php if ( is_active_sidebar( 'footer-1' ) ) : ?>
-					<?php dynamic_sidebar( 'footer-1' ); ?>
-				<?php endif; ?>
+				<div class="th-footer-social" aria-label="<?php esc_attr_e( 'Social links', 'tibbhouse' ); ?>">
+					<a href="#" aria-label="Facebook">f</a>
+					<a href="#" aria-label="Instagram">ig</a>
+					<a href="#" aria-label="X / Twitter">x</a>
+				</div>
 			</div>
 
-			<!-- Navigation column -->
+			<!-- Quick Links column -->
+			<div class="th-footer-col">
+				<h4><?php esc_html_e( 'Quick Links', 'tibbhouse' ); ?></h4>
+				<ul>
+					<?php if ( $th_about_page ) : ?>
+					<li><a href="<?php echo esc_url( get_permalink( $th_about_page ) ); ?>"><?php esc_html_e( 'About Us', 'tibbhouse' ); ?></a></li>
+					<?php endif; ?>
+					<?php if ( $th_contact_page ) : ?>
+					<li><a href="<?php echo esc_url( get_permalink( $th_contact_page ) ); ?>"><?php esc_html_e( 'Contact Us', 'tibbhouse' ); ?></a></li>
+					<?php endif; ?>
+					<?php if ( $th_privacy_page ) : ?>
+					<li><a href="<?php echo esc_url( get_permalink( $th_privacy_page ) ); ?>"><?php esc_html_e( 'Privacy Policy', 'tibbhouse' ); ?></a></li>
+					<?php endif; ?>
+					<?php if ( $th_terms_page ) : ?>
+					<li><a href="<?php echo esc_url( get_permalink( $th_terms_page ) ); ?>"><?php esc_html_e( 'Terms & Conditions', 'tibbhouse' ); ?></a></li>
+					<?php endif; ?>
+					<li>
+						<a href="<?php echo esc_url( $th_contact_page ? get_permalink( $th_contact_page ) : home_url( '/' ) ); ?>" class="th-footer-cta-link">
+							<?php esc_html_e( 'Book Appointment', 'tibbhouse' ); ?>
+						</a>
+					</li>
+				</ul>
+			</div>
+
+			<!-- Explore column (Tibb House content sections) -->
 			<div class="th-footer-col">
 				<h4><?php esc_html_e( 'Explore', 'tibbhouse' ); ?></h4>
 				<?php
@@ -37,30 +69,19 @@
 				?>
 			</div>
 
-			<!-- Widget column -->
+			<!-- Contact column -->
 			<div class="th-footer-col">
-				<?php if ( is_active_sidebar( 'footer-2' ) ) : ?>
-					<?php dynamic_sidebar( 'footer-2' ); ?>
-				<?php else : ?>
-				<h4><?php esc_html_e( 'Content', 'tibbhouse' ); ?></h4>
-				<ul>
-					<?php if ( post_type_exists( 'treatments' ) ) : ?>
-					<li><a href="<?php echo esc_url( get_post_type_archive_link( 'treatments' ) ); ?>"><?php esc_html_e( 'Treatments', 'tibbhouse' ); ?></a></li>
+				<h4><?php esc_html_e( 'Contact', 'tibbhouse' ); ?></h4>
+				<ul class="th-footer-contact">
+					<?php if ( $th_contact_email ) : ?>
+					<li>
+						<a href="mailto:<?php echo esc_attr( $th_contact_email ); ?>"><?php echo esc_html( $th_contact_email ); ?></a>
+					</li>
 					<?php endif; ?>
-					<?php if ( post_type_exists( 'conditions' ) ) : ?>
-					<li><a href="<?php echo esc_url( get_post_type_archive_link( 'conditions' ) ); ?>"><?php esc_html_e( 'Conditions', 'tibbhouse' ); ?></a></li>
-					<?php endif; ?>
-					<?php if ( post_type_exists( 'knowledge' ) ) : ?>
-					<li><a href="<?php echo esc_url( get_post_type_archive_link( 'knowledge' ) ); ?>"><?php esc_html_e( 'Knowledge', 'tibbhouse' ); ?></a></li>
-					<?php endif; ?>
-					<?php if ( post_type_exists( 'practitioners' ) ) : ?>
-					<li><a href="<?php echo esc_url( get_post_type_archive_link( 'practitioners' ) ); ?>"><?php esc_html_e( 'Practitioners', 'tibbhouse' ); ?></a></li>
-					<?php endif; ?>
-					<?php if ( post_type_exists( 'locations' ) ) : ?>
-					<li><a href="<?php echo esc_url( get_post_type_archive_link( 'locations' ) ); ?>"><?php esc_html_e( 'Locations', 'tibbhouse' ); ?></a></li>
+					<?php if ( is_active_sidebar( 'footer-1' ) ) : ?>
+						<?php dynamic_sidebar( 'footer-1' ); ?>
 					<?php endif; ?>
 				</ul>
-				<?php endif; ?>
 			</div>
 
 		</div><!-- /.th-footer-grid -->

@@ -161,6 +161,58 @@ class Tibbhouse_Starter_Content {
 	}
 
 	/**
+	 * Attach one of the bundled starter photos (assets/img/starter/*.jpg) to a
+	 * post as its Featured Image, so every seeded content type ships with a
+	 * real, on-brand photo instead of an empty thumbnail.
+	 *
+	 * Safe to call repeatedly: does nothing if the post already has a
+	 * featured image (e.g. an admin already replaced it).
+	 *
+	 * @param int    $post_id  Post to attach the image to.
+	 * @param string $filename Filename inside assets/img/starter/.
+	 */
+	private function attach_starter_image( $post_id, $filename ) {
+		if ( ! $post_id || has_post_thumbnail( $post_id ) ) {
+			return;
+		}
+
+		$source_path = TIBBHOUSE_CORE_PATH . 'assets/img/starter/' . $filename;
+		if ( ! file_exists( $source_path ) ) {
+			return;
+		}
+
+		require_once ABSPATH . 'wp-admin/includes/image.php';
+		require_once ABSPATH . 'wp-admin/includes/file.php';
+		require_once ABSPATH . 'wp-admin/includes/media.php';
+
+		$filetype = wp_check_filetype( $filename, null );
+		$upload   = wp_upload_bits( $filename, null, file_get_contents( $source_path ) ); // phpcs:ignore WordPress.WP.AlternativeFunctions.file_get_contents_file_get_contents
+
+		if ( ! empty( $upload['error'] ) ) {
+			return;
+		}
+
+		$attachment_id = wp_insert_attachment(
+			array(
+				'post_mime_type' => $filetype['type'],
+				'post_title'     => sanitize_file_name( pathinfo( $filename, PATHINFO_FILENAME ) ),
+				'post_content'   => '',
+				'post_status'    => 'inherit',
+			),
+			$upload['file'],
+			$post_id
+		);
+
+		if ( is_wp_error( $attachment_id ) || ! $attachment_id ) {
+			return;
+		}
+
+		$attachment_data = wp_generate_attachment_metadata( $attachment_id, $upload['file'] );
+		wp_update_attachment_metadata( $attachment_id, $attachment_data );
+		set_post_thumbnail( $post_id, $attachment_id );
+	}
+
+	/**
 	 * Seed the Treatments CPT.
 	 *
 	 * @param array $term_ids Taxonomy term ids from seed_taxonomies().
@@ -198,6 +250,7 @@ class Tibbhouse_Starter_Content {
 					'th_cta_text' => 'Book Hijama Session',
 				),
 				'terms'   => array( 'remedies' => array( 'Cupping (Hijama)' ), 'vital_area' => array( 'Circulatory System' ) ),
+				'image'   => 'treatment-cupping.jpg',
 			),
 			array(
 				'title'   => 'Black Seed Oil Therapy',
@@ -218,6 +271,7 @@ class Tibbhouse_Starter_Content {
 				),
 				'meta'    => array( 'th_price' => 'From $35', 'th_duration' => '4-week protocol' ),
 				'terms'   => array( 'remedies' => array( 'Black Seed (Nigella Sativa)' ), 'vital_area' => array( 'Respiratory System' ) ),
+				'image'   => 'treatment-herbal.jpg',
 			),
 			array(
 				'title'   => 'Herbal Steam Respiratory Therapy',
@@ -234,6 +288,7 @@ class Tibbhouse_Starter_Content {
 				),
 				'meta'    => array( 'th_price' => 'From $40', 'th_duration' => '30 minutes' ),
 				'terms'   => array( 'remedies' => array( 'Herbal Steam' ), 'vital_area' => array( 'Respiratory System' ) ),
+				'image'   => 'treatment-massage.jpg',
 			),
 		);
 
@@ -257,6 +312,7 @@ class Tibbhouse_Starter_Content {
 					array( 'heading' => 'Natural Approach', 'paragraphs' => array( 'Cupping therapy and targeted herbal remedies are commonly used to relieve muscular tension and support recovery alongside gentle movement.' ) ),
 				),
 				'terms' => array( 'vital_area' => array( 'Musculoskeletal System' ), 'constitutional_type' => array( 'Cold Temperament' ) ),
+				'image' => 'condition-joint.jpg',
 			),
 			array(
 				'title'   => 'Seasonal Respiratory Congestion',
@@ -266,6 +322,7 @@ class Tibbhouse_Starter_Content {
 					array( 'heading' => 'Natural Approach', 'paragraphs' => array( 'Herbal steam and black seed oil are traditionally used to loosen congestion and support easier breathing.' ) ),
 				),
 				'terms' => array( 'vital_area' => array( 'Respiratory System' ), 'constitutional_type' => array( 'Moist Temperament' ) ),
+				'image' => 'condition-stress.jpg',
 			),
 			array(
 				'title'   => 'Digestive Sluggishness',
@@ -275,6 +332,7 @@ class Tibbhouse_Starter_Content {
 					array( 'heading' => 'Natural Approach', 'paragraphs' => array( 'Dietary therapy and honey-based remedies are used to support healthy digestion and restore balance.' ) ),
 				),
 				'terms' => array( 'vital_area' => array( 'Digestive System' ), 'constitutional_type' => array( 'Cold Temperament' ) ),
+				'image' => 'condition-digestive.jpg',
 			),
 		);
 
@@ -305,6 +363,7 @@ class Tibbhouse_Starter_Content {
 					array( 'heading' => 'Core Principles', 'list' => array( 'Balance of the four temperaments', 'Prevention through diet and lifestyle', 'Use of natural remedies such as honey and black seed' ) ),
 				),
 				'terms' => array( 'knowledge_type' => array( 'Guide' ) ),
+				'image' => 'knowledge-book.jpg',
 			),
 			array(
 				'title'   => 'Understanding the Four Temperaments',
@@ -314,6 +373,7 @@ class Tibbhouse_Starter_Content {
 					array( 'heading' => 'Why It Matters', 'paragraphs' => array( 'Identifying a patient\'s dominant temperament helps practitioners recommend remedies and dietary adjustments suited to their constitution.' ) ),
 				),
 				'terms' => array( 'knowledge_type' => array( 'Guide' ) ),
+				'image' => 'knowledge-herbs.jpg',
 			),
 			array(
 				'title'   => 'The Evidence Behind Honey as a Remedy',
@@ -323,6 +383,7 @@ class Tibbhouse_Starter_Content {
 					array( 'heading' => 'Modern Findings', 'paragraphs' => array( 'Contemporary studies have examined honey\'s antimicrobial and anti-inflammatory properties, lending support to several traditional uses.' ) ),
 				),
 				'terms' => array( 'knowledge_type' => array( 'Research Summary' ), 'evidence_level' => array( 'Observational Evidence' ) ),
+				'image' => 'knowledge-nutrition.jpg',
 			),
 		);
 
@@ -349,6 +410,7 @@ class Tibbhouse_Starter_Content {
 					array( 'heading' => 'About', 'paragraphs' => array( 'Dr. Amina Yusuf has over a decade of experience combining traditional Islamic medicine with modern wellness practices, with a focus on cupping therapy and herbal protocols.' ) ),
 				),
 				'meta' => array( 'th_role' => 'Lead Practitioner', 'th_qualifications' => 'Certified Hijama Practitioner, Diploma in Traditional Herbal Medicine' ),
+				'image' => 'practitioner-1.jpg',
 			),
 			array(
 				'title'   => 'Imam Bilal Ahmed',
@@ -357,6 +419,7 @@ class Tibbhouse_Starter_Content {
 					array( 'heading' => 'About', 'paragraphs' => array( 'Imam Bilal Ahmed guides patients through personalized dietary and lifestyle plans rooted in the four-temperament model of Islamic medicine.' ) ),
 				),
 				'meta' => array( 'th_role' => 'Dietary & Lifestyle Consultant', 'th_qualifications' => 'Certified Islamic Nutrition Counselor' ),
+				'image' => 'practitioner-2.jpg',
 			),
 		);
 
@@ -377,6 +440,7 @@ class Tibbhouse_Starter_Content {
 					array( 'heading' => 'Visit Us', 'paragraphs' => array( 'Our downtown clinic is open six days a week and offers walk-in consultations as well as scheduled treatments.' ) ),
 				),
 				'meta' => array( 'th_address' => '123 Wellness Street, Downtown', 'th_opening_hours' => 'Mon-Sat: 9am - 6pm', 'th_phone' => '+1 (555) 010-0100' ),
+				'image' => 'location-1.jpg',
 			),
 		);
 
@@ -422,6 +486,10 @@ class Tibbhouse_Starter_Content {
 				foreach ( $item['meta'] as $meta_key => $meta_value ) {
 					update_post_meta( $post_id, $meta_key, $meta_value );
 				}
+			}
+
+			if ( ! empty( $item['image'] ) ) {
+				$this->attach_starter_image( $post_id, $item['image'] );
 			}
 		}
 

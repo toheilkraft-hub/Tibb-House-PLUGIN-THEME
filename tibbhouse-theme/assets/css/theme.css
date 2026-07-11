@@ -559,11 +559,34 @@ h1,h2,h3,h4,h5,h6 {
 
 .th-footer-grid {
   display: grid;
-  grid-template-columns: 2fr 1fr 1fr;
-  gap: 60px;
-  padding-bottom: 60px;
+  grid-template-columns: 1.6fr 1fr 1fr 1fr;
+  gap: 48px;
+  padding-bottom: 48px;
   border-bottom: 1px solid rgba(255,255,255,.1);
 }
+
+.th-footer-cta-link {
+  color: var(--th-gold-light) !important;
+  font-weight: 600;
+}
+
+.th-footer-contact {
+  list-style: none;
+  padding: 0;
+  margin: 0;
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+}
+
+.th-footer-contact a {
+  font-size: .88rem;
+  color: rgba(255,255,255,.7);
+  text-decoration: none;
+  word-break: break-word;
+}
+
+.th-footer-contact a:hover { color: var(--th-gold-light); }
 
 .th-footer-brand .th-logo-svg text { fill: var(--th-white) !important; }
 .th-footer-brand .th-logo-svg text:last-child { fill: var(--th-gold-light) !important; }
@@ -768,6 +791,8 @@ h1,h2,h3,h4,h5,h6 {
   .tibbhouse-sidebar { position: static; }
   .th-footer-grid { grid-template-columns: 1fr 1fr; }
   .th-footer-brand { grid-column: 1 / -1; }
+  .th-home-about-inner { grid-template-columns: 1fr; }
+  .th-home-about-visual { order: -1; }
 }
 
 @media (max-width: 600px) {
@@ -775,4 +800,140 @@ h1,h2,h3,h4,h5,h6 {
   .th-footer-grid { grid-template-columns: 1fr; gap: 36px; }
   .tibbhouse-posts-grid { grid-template-columns: 1fr; }
   .tibbhouse-404-wrap h1 { font-size: 5rem; }
+  .th-home-cta-inner { text-align: left; }
+}
+
+/* =====================================================
+   REVEAL-ON-SCROLL ANIMATION
+   (progressive enhancement — content is fully visible
+   without JS/animation support; see theme.js)
+   ===================================================== */
+@media (prefers-reduced-motion: no-preference) {
+  .th-reveal-init {
+    opacity: 0;
+    transform: translateY(24px);
+    transition: opacity .7s ease, transform .7s ease;
+  }
+  .th-reveal-init.th-revealed {
+    opacity: 1;
+    transform: none;
+  }
+}
+
+/* =====================================================
+   CAROUSEL (Featured content sections)
+   ===================================================== */
+.th-carousel-wrap {
+  position: relative;
+}
+
+.th-carousel-track {
+  display: flex;
+  gap: 28px;
+  overflow-x: auto;
+  scroll-snap-type: x proximity;
+  scroll-behavior: smooth;
+  padding-bottom: 8px;
+  -webkit-overflow-scrolling: touch;
+  scrollbar-width: thin;
+  scrollbar-color: var(--th-gold) transparent;
+}
+
+.th-carousel-track::-webkit-scrollbar { height: 6px; }
+.th-carousel-track::-webkit-scrollbar-thumb { background: var(--th-border); border-radius: 6px; }
+
+.th-carousel-track > * {
+  scroll-snap-align: start;
+  flex: 0 0 auto;
+  width: min(320px, 84vw);
+}
+
+.th-carousel-nav {
+  display: flex;
+  gap: 8px;
+}
+
+.th-carousel-btn {
+  width: 40px;
+  height: 40px;
+  border-radius: 50%;
+  border: 1px solid var(--th-border);
+  background: var(--th-white);
+  color: var(--th-green);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+  transition: background .2s, color .2s, border-color .2s;
+}
+
+.th-carousel-btn:hover {
+  background: var(--th-green);
+  border-color: var(--th-green);
+  color: var(--th-white);
+}
+
+.th-carousel-btn svg { width: 18px; height: 18px; }
+
+/* =====================================================
+   HOMEPAGE — About & Contact/CTA sections
+   ===================================================== */
+.th-home-about {
+  background: var(--th-white);
+  padding: 90px 5%;
+}
+
+.th-home-about-inner {
+  max-width: 1200px;
+  margin: 0 auto;
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 64px;
+  align-items: center;
+}
+
+.th-home-about-visual {
+  aspect-ratio: 4 / 3;
+  border-radius: 20px;
+  background: linear-gradient(135deg, var(--th-green) 0%, var(--th-green-mid) 100%);
+  position: relative;
+  overflow: hidden;
+}
+
+.th-home-about-visual::before {
+  content: '';
+  position: absolute;
+  inset: 0;
+  background-image: radial-gradient(rgba(201,168,76,.35) 1.5px, transparent 1.5px);
+  background-size: 22px 22px;
+  opacity: .5;
+}
+
+.th-home-cta-band {
+  background: linear-gradient(135deg, var(--th-green) 0%, var(--th-green-mid) 100%);
+  padding: 90px 5%;
+  text-align: left;
+  position: relative;
+  overflow: hidden;
+}
+
+.th-home-cta-band::before {
+  content: '';
+  position: absolute;
+  top: -140px; right: -140px;
+  width: 420px; height: 420px;
+  background: rgba(201,168,76,.08);
+  border-radius: 50%;
+}
+
+.th-home-cta-inner {
+  max-width: 1200px;
+  margin: 0 auto;
+  position: relative;
+  z-index: 2;
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  justify-content: space-between;
+  gap: 32px;
 }

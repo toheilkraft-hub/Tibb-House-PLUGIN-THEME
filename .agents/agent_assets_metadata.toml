@@ -5,7 +5,7 @@ generated = []
 id = "0ySybj2JtYkdhKU4pVHSf"
 uri = "file://tibbhouse-core.zip"
 type = "unspecified"
-title = "Tibb House Core – WordPress Plugin (updated template loader)"
+title = "Tibb House Core plugin (updated)"
 
 [[outputs]]
 id = "EciiWgNOjRQY4JZVhFpSr"
@@ -36,3 +36,9 @@ id = "3bDtMMyx21AgDeogzqlqN"
 uri = "file://tibbhouse-theme-latest.zip"
 type = "unspecified"
 title = "Tibb House Theme (updated)"
+
+[[outputs]]
+id = "mhUfGwU0keUtW_aJYtbqy"
+uri = "file://tibbhouse-theme.zip"
+type = "unspecified"
+title = "Tibb House theme (updated)"

@@ -14,6 +14,7 @@ define( 'TIBBHOUSE_THEME_URI', get_template_directory_uri() );
 
 require_once get_template_directory() . '/inc/homepage-render.php';
 require_once get_template_directory() . '/inc/homepage-install.php';
+require_once get_template_directory() . '/inc/menu-install.php';
 
 /* -----------------------------------------------------------------------
    Theme Setup
