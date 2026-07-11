@@ -38,16 +38,14 @@
 
   /* ── Reveal-on-scroll animations (respects prefers-reduced-motion) ── */
   function initReveal() {
-    var els = document.querySelectorAll('.th-reveal-init');
-    if (!els.length) return;
+    var reduced = window.matchMedia && window.matchMedia('(prefers-reduced-motion: reduce)').matches;
 
-    if (window.matchMedia && window.matchMedia('(prefers-reduced-motion: reduce)').matches) {
-      els.forEach(function (el) { el.classList.add('th-revealed'); });
-      return;
-    }
+    var revealEls  = document.querySelectorAll('.th-reveal-init');
+    var staggerEls = document.querySelectorAll('[data-stagger]');
 
-    if (!('IntersectionObserver' in window)) {
-      els.forEach(function (el) { el.classList.add('th-revealed'); });
+    if (reduced || !('IntersectionObserver' in window)) {
+      revealEls.forEach(function (el) { el.classList.add('th-revealed'); });
+      staggerEls.forEach(function (el) { el.classList.add('th-revealed'); });
       return;
     }
 
@@ -58,9 +56,35 @@
           observer.unobserve(entry.target);
         }
       });
-    }, { threshold: 0.12, rootMargin: '0px 0px -40px 0px' });
+    }, { threshold: 0.08, rootMargin: '0px 0px -48px 0px' });
 
-    els.forEach(function (el) { observer.observe(el); });
+    revealEls.forEach(function (el) { observer.observe(el); });
+    staggerEls.forEach(function (el) { observer.observe(el); });
+  }
+
+  /* ── Parallax on hero orbs ── */
+  function initParallax() {
+    var hero = document.querySelector('.th-home-hero');
+    if (!hero) return;
+    if (window.matchMedia && window.matchMedia('(prefers-reduced-motion: reduce)').matches) return;
+
+    var orbs = hero.querySelectorAll('[data-parallax]');
+    if (!orbs.length) return;
+
+    var ticking = false;
+    function update() {
+      var sy = window.scrollY;
+      var heroH = hero.offsetHeight;
+      orbs.forEach(function (orb) {
+        var speed = parseFloat(orb.getAttribute('data-parallax')) || 0.25;
+        orb.style.transform = 'translateY(' + (sy * speed) + 'px)';
+      });
+      ticking = false;
+    }
+
+    window.addEventListener('scroll', function () {
+      if (!ticking) { requestAnimationFrame(update); ticking = true; }
+    }, { passive: true });
   }
 
   /* ── Featured content carousels: prev/next scroll buttons ── */
@@ -88,6 +112,7 @@
     initNavScroll();
     initMobileMenu();
     initReveal();
+    initParallax();
     initCarousels();
   }
 
