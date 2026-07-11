@@ -20,21 +20,7 @@ author = "agent"
 task = "workflow.run"
 args = "WordPress Server"
 
-[[workflows.workflow.tasks]]
-task = "workflow.run"
-args = "API Server"
 
-[[workflows.workflow]]
-name = "API Server"
-author = "agent"
-
-[[workflows.workflow.tasks]]
-task = "shell.exec"
-args = "PORT=8080 pnpm --filter @workspace/api-server run dev"
-waitForPort = 8080
-
-[workflows.workflow.metadata]
-outputType = "console"
 
 [[workflows.workflow]]
 name = "WordPress Server"
@@ -47,10 +33,6 @@ waitForPort = 6000
 
 [workflows.workflow.metadata]
 outputType = "console"
-
-[[ports]]
-localPort = 8080
-externalPort = 80
 
 [agent]
 stack = "PNPM_WORKSPACE"
