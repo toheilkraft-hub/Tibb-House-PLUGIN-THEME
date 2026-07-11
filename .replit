@@ -1,4 +1,4 @@
-modules = ["nodejs-24", "php-8.4"]
+modules = ["nodejs-20", "php-8.2", "web", "bash"]
 
 [deployment]
 router = "application"
@@ -51,3 +51,6 @@ expertMode = true
 [postMerge]
 path = "scripts/post-merge.sh"
 timeoutMs = 120000
+
+[nix]
+channel = "stable-25_05"
