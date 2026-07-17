@@ -222,19 +222,27 @@ h1,h2,h3,h4,h5,h6 {
 
   .th-nav-menu-wrap {
     position: fixed;
-    inset: var(--th-nav-h) 0 0 0;
+    top: var(--th-nav-h);
+    left: 0;
+    right: 0;
+    bottom: 0;
+    /* explicit height as belt-and-braces for mobile browsers */
+    height: calc(100dvh - var(--th-nav-h));
+    min-height: calc(100vh - var(--th-nav-h)); /* dvh fallback */
     background: rgba(10,61,46,.97);
     backdrop-filter: blur(12px);
     -webkit-backdrop-filter: blur(12px);
-    padding: 32px 5%;
+    padding: 32px 5% 48px;
     overflow-y: auto;
+    -webkit-overflow-scrolling: touch;
     z-index: 8999;
-    /* hidden — visibility keeps it out of paint & pointer events */
+    box-sizing: border-box;
+    /* hidden state */
     visibility: hidden;
     opacity: 0;
     pointer-events: none;
-    transform: translateY(-10px);
-    transition: visibility 0s linear .25s, opacity .25s ease, transform .25s ease;
+    transform: translateY(-8px);
+    transition: visibility 0s linear .22s, opacity .22s ease, transform .22s ease;
   }
 
   .th-nav-menu-wrap.open {
@@ -242,7 +250,7 @@ h1,h2,h3,h4,h5,h6 {
     opacity: 1;
     pointer-events: auto;
     transform: translateY(0);
-    transition-delay: 0s; /* show instantly, then fade in */
+    transition-delay: 0s;
   }
 
   .th-nav-menu {
