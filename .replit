@@ -44,6 +44,20 @@ waitForPort = 6000
 [workflows.workflow.metadata]
 outputType = "console"
 
+# ── Vite proxy (exposes WordPress in the preview pane) ────────────────────────
+[[workflows.workflow]]
+name = "artifacts/api-server: web"
+author = "agent"
+
+[[workflows.workflow.tasks]]
+task = "shell.exec"
+args = "pnpm --filter @workspace/api-server run dev"
+waitForPort = 22729
+env = { PORT = "22729" }
+
+[workflows.workflow.metadata]
+outputType = "console"
+
 [agent]
 stack = "PNPM_WORKSPACE"
 expertMode = true
