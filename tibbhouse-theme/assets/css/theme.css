@@ -44,6 +44,7 @@ body {
   background: var(--th-cream);
   margin: 0;
   padding-top: var(--th-nav-h); /* offset for fixed nav */
+  overflow-x: hidden; /* prevent horizontal scroll from absolute/wide elements */
 }
 
 img { max-width: 100%; height: auto; display: block; }
@@ -909,13 +910,26 @@ h1,h2,h3,h4,h5,h6 {
     padding: 44px 6% !important;
   }
 
-  /* About — hide the empty decorative box; full-width text panel */
+  /* About — full-width single column on mobile */
   .th-home-about { padding: 56px 5%; }
-  .th-home-about-inner { gap: 0; }
-  .th-home-about-visual { display: none; }
-  .th-home-about-inner > div:first-child { text-align: center; }
+  .th-home-about-inner {
+    grid-template-columns: 1fr !important;
+    gap: 0 !important;
+    width: 100%;
+  }
+  .th-home-about-visual { display: none !important; }
+  .th-home-about-inner > div:first-child {
+    width: 100%;
+    box-sizing: border-box;
+    text-align: center;
+  }
   .th-home-about-inner > div:first-child h2 { text-align: center !important; }
-  .th-home-about-inner > div:first-child p { max-width: 100% !important; margin-left: auto; margin-right: auto; }
+  .th-home-about-inner > div:first-child p {
+    max-width: 100% !important;
+    width: 100% !important;
+    margin-left: 0 !important;
+    margin-right: 0 !important;
+  }
   .th-home-about-inner > div:first-child a { display: flex; justify-content: center; }
 
   /* CTA band */
