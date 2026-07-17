@@ -8,9 +8,8 @@ if (Number.isNaN(port) || port <= 0) throw new Error(`Invalid PORT: "${rawPort}"
 /**
  * Pure reverse-proxy Vite config.
  * Forwards every request to the WordPress PHP server on port 6000.
- * Injects X-Forwarded-Proto: https so the mu-plugin can rewrite asset
+ * Injects X-Forwarded-Proto: https so WordPress rewrites asset
  * URLs to https:// in HTML output (fixes mixed-content blocking).
- * WP_HOME stays http:// so WordPress never issues canonical redirects.
  */
 export default defineConfig({
   server: {
@@ -25,8 +24,6 @@ export default defineConfig({
         ws: true,
         configure: (proxy) => {
           proxy.on('proxyReq', (proxyReq) => {
-            // Belt-and-suspenders: Replit's own proxy already sets this,
-            // but we set it explicitly so it works from any access path.
             proxyReq.setHeader('X-Forwarded-Proto', 'https');
           });
         },
