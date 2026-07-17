@@ -13,27 +13,61 @@
 
   /* ── Mobile menu toggle ── */
   function initMobileMenu() {
+    var nav    = document.getElementById('tibbhouse-nav');
     var toggle = document.getElementById('th-nav-toggle');
     var wrap   = document.getElementById('th-nav-menu-wrap');
-    if (!toggle || !wrap) return;
+    if (!toggle || !wrap || !nav) return;
 
-    toggle.addEventListener('click', function () {
-      var isOpen = wrap.classList.toggle('open');
-      toggle.setAttribute('aria-expanded', isOpen ? 'true' : 'false');
-      toggle.innerHTML = isOpen
-        ? '<svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><line x1="18" y1="6" x2="6" y2="18"/><line x1="6" y1="6" x2="18" y2="18"/></svg>'
-        : '<svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><line x1="3" y1="6"  x2="21" y2="6"/><line x1="3" y1="12" x2="21" y2="12"/><line x1="3" y1="18" x2="21" y2="18"/></svg>';
+    function closeMenu() {
+      wrap.classList.remove('open');
+      toggle.setAttribute('aria-expanded', 'false');
+      toggle.querySelector('svg').setAttribute('data-state', 'closed');
+      toggle.innerHTML =
+        '<svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" aria-hidden="true">' +
+          '<line x1="3" y1="6"  x2="21" y2="6"/>' +
+          '<line x1="3" y1="12" x2="21" y2="12"/>' +
+          '<line x1="3" y1="18" x2="21" y2="18"/>' +
+        '</svg>';
+    }
+
+    function openMenu() {
+      wrap.classList.add('open');
+      toggle.setAttribute('aria-expanded', 'true');
+      toggle.innerHTML =
+        '<svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" aria-hidden="true">' +
+          '<line x1="18" y1="6" x2="6" y2="18"/>' +
+          '<line x1="6" y1="6" x2="18" y2="18"/>' +
+        '</svg>';
+    }
+
+    toggle.addEventListener('click', function (e) {
+      e.stopPropagation(); /* prevent bubbling to document handler */
+      wrap.classList.contains('open') ? closeMenu() : openMenu();
     });
 
-    // Close on outside click
+    /* Also support touchstart for snappier mobile response */
+    toggle.addEventListener('touchstart', function (e) {
+      e.preventDefault();
+      e.stopPropagation();
+      wrap.classList.contains('open') ? closeMenu() : openMenu();
+    }, { passive: false });
+
+    /* Close when a menu link is tapped */
+    wrap.querySelectorAll('a').forEach(function (link) {
+      link.addEventListener('click', function () { closeMenu(); });
+    });
+
+    /* Close on outside tap/click */
     document.addEventListener('click', function (e) {
-      if (!nav.contains(e.target)) {
-        wrap.classList.remove('open');
-        toggle.setAttribute('aria-expanded', 'false');
+      if (wrap.classList.contains('open') && !nav.contains(e.target)) {
+        closeMenu();
       }
     });
-
-    var nav = document.getElementById('tibbhouse-nav');
+    document.addEventListener('touchstart', function (e) {
+      if (wrap.classList.contains('open') && !nav.contains(e.target)) {
+        closeMenu();
+      }
+    }, { passive: true });
   }
 
   /* ── Reveal-on-scroll animations (respects prefers-reduced-motion) ── */

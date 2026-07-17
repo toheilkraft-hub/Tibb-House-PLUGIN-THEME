@@ -61,6 +61,17 @@ h1,h2,h3,h4,h5,h6 {
 /* =====================================================
    NAVIGATION
    ===================================================== */
+/* Screen-reader only utility */
+.sr-only {
+  position: absolute;
+  width: 1px; height: 1px;
+  padding: 0; margin: -1px;
+  overflow: hidden;
+  clip: rect(0,0,0,0);
+  white-space: nowrap;
+  border: 0;
+}
+
 #tibbhouse-nav {
   position: fixed;
   top: 0; left: 0; right: 0;
@@ -210,17 +221,29 @@ h1,h2,h3,h4,h5,h6 {
   .th-nav-toggle { display: flex; align-items: center; justify-content: center; }
 
   .th-nav-menu-wrap {
-    display: none;
     position: fixed;
     inset: var(--th-nav-h) 0 0 0;
     background: rgba(10,61,46,.97);
     backdrop-filter: blur(12px);
+    -webkit-backdrop-filter: blur(12px);
     padding: 32px 5%;
     overflow-y: auto;
     z-index: 8999;
+    /* hidden — visibility keeps it out of paint & pointer events */
+    visibility: hidden;
+    opacity: 0;
+    pointer-events: none;
+    transform: translateY(-10px);
+    transition: visibility 0s linear .25s, opacity .25s ease, transform .25s ease;
   }
 
-  .th-nav-menu-wrap.open { display: block; }
+  .th-nav-menu-wrap.open {
+    visibility: visible;
+    opacity: 1;
+    pointer-events: auto;
+    transform: translateY(0);
+    transition-delay: 0s; /* show instantly, then fade in */
+  }
 
   .th-nav-menu {
     flex-direction: column;
@@ -1849,8 +1872,36 @@ a[style*="9999px"]:active::after {
   .th-hero-decor-col   { min-height: 280px; }
   .th-hero-star-main svg { width: 240px; height: 240px; }
 }
+/* ── Mobile: show golden elements (adapted sizing) ── */
 @media (max-width: 768px) {
-  .th-hero-border-ring,
-  .th-hero-corner,
-  .th-hero-decor-col { display: none; }
+  /* Border rings — show but thinner */
+  .th-hero-border-ring { display: block; inset: 8px; }
+  .th-hero-border-ring.th-hero-border-ring-inner { inset: 18px; }
+  .th-hbr-t, .th-hbr-b { height: 1px !important; }
+  .th-hbr-r, .th-hbr-l { width: 1px !important; }
+
+  /* Corner ornaments — show, smaller */
+  .th-hero-corner { display: block; transform: scale(.7); }
+  .th-hc-tl { top: 0;    left: 0;    transform-origin: top left;     }
+  .th-hc-tr { top: 0;    right: 0;   transform-origin: top right;    }
+  .th-hc-bl { bottom: 0; left: 0;    transform-origin: bottom left;  }
+  .th-hc-br { bottom: 0; right: 0;   transform-origin: bottom right; }
+
+  /* Mid-edge + top diamond — hide (too cramped) */
+  .th-hero-mid-ornament,
+  .th-hero-top-diamond { display: none; }
+
+  /* Decor column — show below text, centered, smaller */
+  .th-hero-decor-col {
+    display: flex;
+    min-height: 220px;
+    margin-top: 8px;
+  }
+  .th-hero-star-main svg { width: 200px !important; height: 200px !important; }
+
+  /* Hide satellite ornaments on mobile — too cluttered */
+  .th-hero-float-1,
+  .th-hero-float-2,
+  .th-hero-float-3,
+  .th-hero-float-4 { display: none; }
 }
