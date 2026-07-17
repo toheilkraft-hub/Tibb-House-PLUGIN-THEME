@@ -40,26 +40,40 @@
   function initReveal() {
     var reduced = window.matchMedia && window.matchMedia('(prefers-reduced-motion: reduce)').matches;
 
-    var revealEls  = document.querySelectorAll('.th-reveal-init');
-    var staggerEls = document.querySelectorAll('[data-stagger]');
+    var revealEls   = document.querySelectorAll('.th-reveal-init');
+    var staggerEls  = document.querySelectorAll('[data-stagger]');
+    var sectionEls  = document.querySelectorAll('.th-section-fade');
 
     if (reduced || !('IntersectionObserver' in window)) {
-      revealEls.forEach(function (el) { el.classList.add('th-revealed'); });
+      revealEls.forEach(function (el)  { el.classList.add('th-revealed'); });
       staggerEls.forEach(function (el) { el.classList.add('th-revealed'); });
+      sectionEls.forEach(function (el) { el.classList.add('th-revealed'); });
       return;
     }
 
-    var observer = new IntersectionObserver(function (entries) {
+    /* Element-level observer — tight margin so elements reveal just as they enter */
+    var elObserver = new IntersectionObserver(function (entries) {
       entries.forEach(function (entry) {
         if (entry.isIntersecting) {
           entry.target.classList.add('th-revealed');
-          observer.unobserve(entry.target);
+          elObserver.unobserve(entry.target);
         }
       });
-    }, { threshold: 0.08, rootMargin: '0px 0px -48px 0px' });
+    }, { threshold: 0.06, rootMargin: '0px 0px -40px 0px' });
 
-    revealEls.forEach(function (el) { observer.observe(el); });
-    staggerEls.forEach(function (el) { observer.observe(el); });
+    /* Section-level observer — triggers a little earlier for a sweeping feel */
+    var sectionObserver = new IntersectionObserver(function (entries) {
+      entries.forEach(function (entry) {
+        if (entry.isIntersecting) {
+          entry.target.classList.add('th-revealed');
+          sectionObserver.unobserve(entry.target);
+        }
+      });
+    }, { threshold: 0.04, rootMargin: '0px 0px -20px 0px' });
+
+    revealEls.forEach(function (el)  { elObserver.observe(el); });
+    staggerEls.forEach(function (el) { elObserver.observe(el); });
+    sectionEls.forEach(function (el) { sectionObserver.observe(el); });
   }
 
   /* ── Parallax on hero orbs ── */

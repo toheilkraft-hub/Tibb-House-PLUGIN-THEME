@@ -83,7 +83,7 @@ function tibbhouse_homepage_cards( $posts, $archive_link, $type_label, $single_l
 		return;
 	}
 	?>
-	<section class="th-homepage-section">
+	<section class="th-homepage-section th-section-fade">
 		<div style="max-width:1200px;margin:0 auto;padding:0 5%;">
 			<div class="th-reveal-init" data-reveal="up" style="display:flex;align-items:flex-end;justify-content:space-between;gap:16px;margin-bottom:44px;flex-wrap:wrap;">
 				<div>
@@ -139,36 +139,96 @@ function tibbhouse_render_homepage() {
 	?>
 
 	<!-- ── Hero ── -->
-	<section class="th-home-hero" style="background:linear-gradient(160deg,#f7f3ea 0%,#edf4e8 55%,#f5f0e4 100%);min-height:88vh;display:flex;align-items:center;position:relative;overflow:hidden;">
+	<section class="th-home-hero" style="background:linear-gradient(160deg,#f7f3ea 0%,#edf4e8 55%,#f5f0e4 100%);min-height:92vh;position:relative;overflow:hidden;display:flex;align-items:center;">
 		<!-- Soft gold orb — top right (parallax) -->
 		<div data-parallax="0.18" style="position:absolute;top:-180px;right:-180px;width:680px;height:680px;background:radial-gradient(circle,rgba(188,144,79,.12) 0%,transparent 70%);border-radius:50%;pointer-events:none;will-change:transform;"></div>
 		<!-- Soft green orb — bottom left (parallax) -->
 		<div data-parallax="-0.12" style="position:absolute;bottom:-200px;left:-160px;width:580px;height:580px;background:radial-gradient(circle,rgba(34,58,23,.08) 0%,transparent 70%);border-radius:50%;pointer-events:none;will-change:transform;"></div>
-		<!-- Subtle orb — centre right (parallax) -->
-		<div data-parallax="0.28" style="position:absolute;top:10%;right:8%;width:320px;height:320px;background:radial-gradient(circle,rgba(188,144,79,.08) 0%,transparent 70%);border-radius:50%;pointer-events:none;will-change:transform;"></div>
+		<!-- Subtle orb — centre -->
+		<div style="position:absolute;top:10%;right:8%;width:320px;height:320px;background:radial-gradient(circle,rgba(188,144,79,.08) 0%,transparent 70%);border-radius:50%;pointer-events:none;"></div>
 
-		<div style="max-width:1200px;margin:0 auto;padding:80px 5%;position:relative;z-index:2;text-align:left;">
-			<div class="th-reveal-init" data-reveal="up" data-delay="0" style="display:inline-flex;align-items:center;gap:8px;background:rgba(188,144,79,.12);border:1px solid rgba(188,144,79,.35);color:#8a6020;font-size:.7rem;font-weight:700;letter-spacing:.25em;text-transform:uppercase;padding:6px 16px;border-radius:9999px;margin-bottom:28px;">
-				<?php esc_html_e( 'Natural &amp; Islamic Medicine', 'tibbhouse' ); ?>
+		<!-- Hero two-column grid -->
+		<div class="th-home-hero-inner">
+
+			<!-- Left: text content -->
+			<div>
+				<div class="th-reveal-init" data-reveal="up" data-delay="0" style="display:inline-flex;align-items:center;gap:8px;background:rgba(188,144,79,.12);border:1px solid rgba(188,144,79,.35);color:#8a6020;font-size:.7rem;font-weight:700;letter-spacing:.25em;text-transform:uppercase;padding:6px 16px;border-radius:9999px;margin-bottom:28px;">
+					<?php esc_html_e( 'Natural &amp; Islamic Medicine', 'tibbhouse' ); ?>
+				</div>
+				<h1 class="th-reveal-init" data-reveal="up" data-delay="1" style="font-family:'Cormorant Garamond',Georgia,serif;font-size:clamp(2.5rem,6vw,4.6rem);font-weight:700;color:#0a3d2e;line-height:1.1;margin:0 0 24px;text-align:left;">
+					<?php echo esc_html( get_bloginfo( 'name' ) ); ?>
+				</h1>
+				<p class="th-reveal-init" data-reveal="up" data-delay="2" style="font-size:1.05rem;color:#3d4a35;max-width:500px;line-height:1.8;margin:0 0 40px;text-align:left;">
+					<?php echo esc_html( get_bloginfo( 'description' ) ?: __( 'Explore trusted treatments, understand conditions, and connect with qualified practitioners in natural and Islamic medicine.', 'tibbhouse' ) ); ?>
+				</p>
+				<div class="th-reveal-init" data-reveal="up" data-delay="3" style="display:flex;flex-wrap:wrap;gap:14px;">
+					<?php
+					$treatments_url    = get_post_type_archive_link( 'treatments' )    ?: home_url( '/' );
+					$practitioners_url = get_post_type_archive_link( 'practitioners' ) ?: home_url( '/' );
+					?>
+					<a href="<?php echo esc_url( $treatments_url ); ?>" style="background:#bc904f;color:#fff;padding:15px 36px;border-radius:9999px;font-weight:700;font-size:.95rem;text-decoration:none;letter-spacing:.03em;box-shadow:0 4px 16px rgba(188,144,79,.35);">
+						<?php esc_html_e( 'Explore Treatments', 'tibbhouse' ); ?>
+					</a>
+					<a href="<?php echo esc_url( $practitioners_url ); ?>" style="border:2px solid rgba(10,61,46,.3);color:#0a3d2e;padding:14px 36px;border-radius:9999px;font-weight:600;font-size:.95rem;text-decoration:none;background:rgba(10,61,46,.05);">
+						<?php esc_html_e( 'Find a Practitioner', 'tibbhouse' ); ?>
+					</a>
+				</div>
 			</div>
-			<h1 class="th-reveal-init" data-reveal="up" data-delay="1" style="font-family:'Cormorant Garamond',Georgia,serif;font-size:clamp(2.5rem,7vw,5rem);font-weight:700;color:#0a3d2e;line-height:1.1;margin:0 0 24px;max-width:780px;text-align:left;">
-				<?php echo esc_html( get_bloginfo( 'name' ) ); ?>
-			</h1>
-			<p class="th-reveal-init" data-reveal="up" data-delay="2" style="font-size:1.1rem;color:#3d4a35;max-width:560px;line-height:1.75;margin:0 0 40px;text-align:left;">
-				<?php echo esc_html( get_bloginfo( 'description' ) ?: __( 'Explore trusted treatments, understand conditions, and connect with qualified practitioners in natural and Islamic medicine.', 'tibbhouse' ) ); ?>
-			</p>
-			<div class="th-reveal-init" data-reveal="up" data-delay="3" style="display:flex;flex-wrap:wrap;gap:14px;">
-				<?php
-				$treatments_url    = get_post_type_archive_link( 'treatments' )    ?: home_url( '/' );
-				$practitioners_url = get_post_type_archive_link( 'practitioners' ) ?: home_url( '/' );
-				?>
-				<a href="<?php echo esc_url( $treatments_url ); ?>" style="background:#bc904f;color:#fff;padding:15px 36px;border-radius:9999px;font-weight:700;font-size:.95rem;text-decoration:none;letter-spacing:.03em;box-shadow:0 4px 16px rgba(188,144,79,.35);">
-					<?php esc_html_e( 'Explore Treatments', 'tibbhouse' ); ?>
-				</a>
-				<a href="<?php echo esc_url( $practitioners_url ); ?>" style="border:2px solid rgba(10,61,46,.3);color:#0a3d2e;padding:14px 36px;border-radius:9999px;font-weight:600;font-size:.95rem;text-decoration:none;background:rgba(10,61,46,.05);">
-					<?php esc_html_e( 'Find a Practitioner', 'tibbhouse' ); ?>
-				</a>
+
+			<!-- Right: animated golden decorative frame -->
+			<div class="th-hero-frame-wrap" aria-hidden="true">
+				<svg class="th-hero-frame-svg" viewBox="0 0 400 500" xmlns="http://www.w3.org/2000/svg">
+					<defs>
+						<linearGradient id="thGoldGrad" x1="0%" y1="0%" x2="100%" y2="100%">
+							<stop offset="0%"   stop-color="#e8cc96"/>
+							<stop offset="48%"  stop-color="#bc904f"/>
+							<stop offset="100%" stop-color="#8a5c1a"/>
+						</linearGradient>
+					</defs>
+					<!-- Outer border — draws in on load -->
+					<rect fill="none" class="th-gold-border-main" x="3" y="3" width="394" height="494" rx="20" ry="20"/>
+					<!-- Traveling wave highlight -->
+					<rect fill="none" class="th-gold-border-wave" x="3" y="3" width="394" height="494" rx="20" ry="20"/>
+					<!-- Inner accent border -->
+					<rect fill="none" class="th-gold-border-inner" x="16" y="16" width="368" height="468" rx="14" ry="14"/>
+					<!-- Corner jewel dots -->
+					<circle fill="#bc904f" class="th-gold-corner" cx="24"  cy="24"  r="4.5"/>
+					<circle fill="#bc904f" class="th-gold-corner" cx="376" cy="24"  r="4.5"/>
+					<circle fill="#bc904f" class="th-gold-corner" cx="376" cy="476" r="4.5"/>
+					<circle fill="#bc904f" class="th-gold-corner" cx="24"  cy="476" r="4.5"/>
+				</svg>
+
+				<!-- Frame interior -->
+				<div class="th-hero-frame-inner">
+					<!-- Islamic geometric ornament -->
+					<div class="th-hero-ornament">
+						<svg width="156" height="156" viewBox="0 0 160 160" fill="none">
+							<circle cx="80" cy="80" r="72" fill="none" stroke="#bc904f" stroke-width=".75" stroke-dasharray="5 9" opacity=".4" />
+							<circle cx="80" cy="80" r="60" fill="none" stroke="#bc904f" stroke-width=".5" opacity=".18"/>
+							<g transform="translate(80,80)">
+								<polygon points="0,-52 12,-12 52,0 12,12 0,52 -12,12 -52,0 -12,-12" fill="none" stroke="#bc904f" stroke-width="1.4" opacity=".55"/>
+								<polygon points="0,-52 12,-12 52,0 12,12 0,52 -12,12 -52,0 -12,-12" fill="none" stroke="#bc904f" stroke-width="1.4" opacity=".32" transform="rotate(22.5)"/>
+								<circle r="26" fill="none" stroke="#bc904f" stroke-width="1.4" opacity=".42"/>
+								<circle r="8" fill="#bc904f" opacity=".22"/>
+								<line x1="0" y1="-52" x2="0" y2="52" stroke="#bc904f" stroke-width=".6" opacity=".18"/>
+								<line x1="-52" y1="0" x2="52" y2="0" stroke="#bc904f" stroke-width=".6" opacity=".18"/>
+								<line x1="-37" y1="-37" x2="37" y2="37" stroke="#bc904f" stroke-width=".6" opacity=".18"/>
+								<line x1="37" y1="-37" x2="-37" y2="37" stroke="#bc904f" stroke-width=".6" opacity=".18"/>
+							</g>
+						</svg>
+					</div>
+					<!-- Brand label -->
+					<div style="position:relative;z-index:1;text-align:center;">
+						<div style="font-family:'Cormorant Garamond',Georgia,serif;font-size:1.05rem;font-weight:600;color:#bc904f;letter-spacing:.22em;text-transform:uppercase;opacity:.85;">
+							<?php esc_html_e( 'Tibb House', 'tibbhouse' ); ?>
+						</div>
+						<div style="font-size:.68rem;color:#7a7f72;letter-spacing:.18em;text-transform:uppercase;margin-top:7px;">
+							<?php esc_html_e( 'Natural &amp; Islamic Medicine', 'tibbhouse' ); ?>
+						</div>
+					</div>
+				</div>
 			</div>
+
 		</div>
 	</section>
 
@@ -177,7 +237,7 @@ function tibbhouse_render_homepage() {
 	<?php endif; ?>
 
 	<!-- divider band -->
-	<div class="th-reveal-init" data-reveal="fade" style="background:linear-gradient(135deg,#0a3d2e,#0f5c43);padding:60px 5%;text-align:center;">
+	<div class="th-reveal-init th-home-quote-band" data-reveal="fade" style="background:linear-gradient(135deg,#0a3d2e,#0f5c43);padding:60px 5%;text-align:center;">
 		<p class="th-reveal-init" data-reveal="scale" data-delay="1" style="font-family:'Cormorant Garamond',Georgia,serif;font-size:clamp(1.4rem,3vw,2rem);color:#f0d890;font-style:italic;max-width:640px;margin:0 auto;">
 			&ldquo;<?php esc_html_e( 'In every disease there is a cure — seek and you shall find.', 'tibbhouse' ); ?>&rdquo;
 		</p>

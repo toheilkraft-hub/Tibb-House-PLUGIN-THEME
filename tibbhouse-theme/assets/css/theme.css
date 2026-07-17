@@ -1212,3 +1212,441 @@ h1,h2,h3,h4,h5,h6 {
   justify-content: space-between;
   gap: 32px;
 }
+
+/* =====================================================
+   SECTION BREATHING ROOM
+   ===================================================== */
+
+/* Carousel sections — generous vertical padding */
+.th-homepage-section {
+  padding: 100px 0;
+}
+
+/* Standard pages — more room */
+.tibbhouse-page-hero {
+  padding: 96px 5% 88px;
+}
+
+.tibbhouse-main {
+  padding: 80px 5%;
+}
+
+/* About & CTA already have 90px — increase slightly */
+.th-home-about {
+  padding: 110px 5%;
+}
+
+.th-home-cta-band {
+  padding: 110px 5%;
+}
+
+/* Divider / quote band */
+.th-home-quote-band {
+  padding: 88px 5% !important;
+}
+
+/* =====================================================
+   HERO SPLIT GRID LAYOUT
+   ===================================================== */
+.th-home-hero-inner {
+  max-width: 1200px;
+  margin: 0 auto;
+  padding: 104px 5%;
+  position: relative;
+  z-index: 2;
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 72px;
+  align-items: center;
+  width: 100%;
+}
+
+/* =====================================================
+   HERO GOLDEN DECORATIVE FRAME
+   ===================================================== */
+.th-hero-frame-wrap {
+  position: relative;
+  width: 100%;
+  aspect-ratio: 4 / 5;
+  max-height: 540px;
+  min-height: 320px;
+  border-radius: 20px;
+  /* Background lives here so it's always visible regardless of child positioning */
+  background: linear-gradient(145deg, #f7f3ea 0%, #edf4e8 55%, #ede0cc 100%);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  overflow: hidden;
+}
+
+/* Subtle dot pattern overlay */
+.th-hero-frame-wrap::before {
+  content: '';
+  position: absolute;
+  inset: 0;
+  background-image: radial-gradient(rgba(188,144,79,.2) 1.2px, transparent 1.2px);
+  background-size: 20px 20px;
+  opacity: .45;
+  pointer-events: none;
+  z-index: 0;
+}
+
+/* SVG border sits on top, pointer-events off so it doesn't block inner content */
+.th-hero-frame-svg {
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+  pointer-events: none;
+  z-index: 2;
+}
+
+/* ── Outer border: draws in on page load ── */
+.th-gold-border-main {
+  fill: none;
+  stroke: url(#thGoldGrad);
+  stroke-width: 2.5;
+  stroke-linecap: round;
+  stroke-linejoin: round;
+  stroke-dasharray: 1760;
+  stroke-dashoffset: 1760;
+  animation: th-border-draw 2.6s cubic-bezier(.4,0,.2,1) .5s forwards;
+}
+
+/* ── Traveling wave highlight — appears after draw-in ── */
+.th-gold-border-wave {
+  fill: none;
+  stroke: rgba(232,204,150,.9);
+  stroke-width: 4;
+  stroke-linecap: round;
+  stroke-dasharray: 60 1700;
+  stroke-dashoffset: 0;
+  opacity: 0;
+  animation:
+    th-wave-appear .6s ease 3.4s forwards,
+    th-wave-travel 5.5s linear 3.4s infinite;
+}
+
+/* ── Inner accent border ── */
+.th-gold-border-inner {
+  fill: none;
+  stroke: rgba(188,144,79,.35);
+  stroke-width: 1;
+  stroke-linecap: round;
+  stroke-dasharray: 1672;
+  stroke-dashoffset: 1672;
+  animation: th-border-draw 2.9s cubic-bezier(.4,0,.2,1) 1s forwards;
+}
+
+/* ── Corner jewel dots ── */
+.th-gold-corner {
+  fill: var(--th-gold);
+  opacity: 0;
+  animation: th-corner-pop .5s cubic-bezier(.34,1.56,.64,1) 3.1s forwards;
+}
+.th-gold-corner:nth-child(2) { animation-delay: 3.2s; }
+.th-gold-corner:nth-child(3) { animation-delay: 3.3s; }
+.th-gold-corner:nth-child(4) { animation-delay: 3.4s; }
+
+/* ── Frame interior (normal flow, sits in the flex wrap) ── */
+.th-hero-frame-inner {
+  position: relative;
+  z-index: 1;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: 22px;
+  padding: 36px;
+  width: 100%;
+  height: 100%;
+}
+
+/* ── Islamic geometric ornament ── */
+.th-hero-ornament {
+  position: relative;
+  z-index: 1;
+  opacity: 0;
+  transform: scale(.78) translateY(10px);
+  animation:
+    th-ornament-in 1.4s cubic-bezier(.34,1.56,.64,1) 3.2s forwards,
+    th-ornament-float 6s ease-in-out 4.8s infinite;
+}
+
+/* ─────────────── Keyframes ─────────────── */
+@keyframes th-border-draw {
+  to { stroke-dashoffset: 0; }
+}
+
+@keyframes th-wave-appear {
+  to { opacity: 1; }
+}
+
+@keyframes th-wave-travel {
+  0%   { stroke-dashoffset: 0; }
+  100% { stroke-dashoffset: -1760; }
+}
+
+@keyframes th-corner-pop {
+  from { opacity: 0; transform: scale(0); }
+  to   { opacity: 1; transform: scale(1); }
+}
+
+@keyframes th-ornament-in {
+  from { opacity: 0; transform: scale(.78) translateY(10px); }
+  to   { opacity: 1; transform: scale(1)   translateY(0);    }
+}
+
+@keyframes th-ornament-float {
+  0%, 100% { transform: translateY(0); }
+  50%       { transform: translateY(-7px); }
+}
+
+/* ── Responsive ── */
+@media (max-width: 960px) {
+  .th-home-hero-inner {
+    grid-template-columns: 1fr;
+    gap: 44px;
+    padding: 80px 5% 64px;
+  }
+  .th-hero-frame-wrap {
+    max-height: 300px;
+    aspect-ratio: 16 / 9;
+  }
+}
+
+@media (max-width: 768px) {
+  .th-hero-frame-wrap { display: none; }
+  .th-homepage-section { padding: 72px 0 !important; }
+  .th-home-about       { padding: 72px 5%; }
+  .th-home-cta-band    { padding: 72px 5%; }
+}
+
+/* =====================================================
+   SECTION-LEVEL SCROLL FADE
+   ===================================================== */
+@media (prefers-reduced-motion: no-preference) {
+  .th-section-fade {
+    opacity: 0;
+    transform: translateY(28px);
+    transition:
+      opacity 1.2s cubic-bezier(.22,1,.36,1),
+      transform 1.2s cubic-bezier(.22,1,.36,1);
+  }
+  .th-section-fade.th-revealed {
+    opacity: 1;
+    transform: none;
+  }
+}
+
+/* Ensure th-reveal-init inside hero fires immediately (above the fold) */
+.th-home-hero .th-reveal-init {
+  /* Already handled by IntersectionObserver firing at load */
+}
+
+/* =====================================================
+   AMBIENT HERO ANIMATIONS (breathe / glow)
+   ===================================================== */
+
+/* Hero right-side golden glow — breathes slowly */
+@media (prefers-reduced-motion: no-preference) {
+  .th-home-hero::after {
+    content: '';
+    position: absolute;
+    top: -10%;
+    right: -5%;
+    width: 60%;
+    height: 120%;
+    background: radial-gradient(ellipse at 60% 45%,
+      rgba(188,144,79,.10) 0%,
+      rgba(188,144,79,.04) 40%,
+      transparent 70%);
+    pointer-events: none;
+    z-index: 0;
+    animation: th-hero-glow 9s ease-in-out infinite;
+    border-radius: 50%;
+  }
+
+  @keyframes th-hero-glow {
+    0%, 100% { opacity: .6;  transform: scale(1)    translateY(0); }
+    50%       { opacity: 1;  transform: scale(1.12) translateY(-20px); }
+  }
+
+  /* Hero left-side green glow — slower drift */
+  .th-home-hero::before {
+    content: '';
+    position: absolute;
+    bottom: -20%;
+    left: -5%;
+    width: 55%;
+    height: 110%;
+    background: radial-gradient(ellipse at 30% 60%,
+      rgba(34,58,23,.07) 0%,
+      transparent 65%);
+    pointer-events: none;
+    z-index: 0;
+    animation: th-hero-green-drift 13s ease-in-out infinite;
+    border-radius: 50%;
+  }
+
+  @keyframes th-hero-green-drift {
+    0%, 100% { opacity: .5;  transform: scale(1)    translateY(0); }
+    50%       { opacity: .9; transform: scale(1.08) translateY(24px); }
+  }
+}
+
+/* =====================================================
+   HERO FRAME — subtle inset shadow to distinguish from hero bg
+   ===================================================== */
+.th-hero-frame-wrap {
+  box-shadow:
+    inset 0 0 0 1px rgba(188,144,79,.15),
+    0 24px 80px rgba(34,58,23,.08),
+    0 4px 16px rgba(188,144,79,.08);
+}
+
+/* Slight inset that hints at the border area even before draw-in */
+.th-hero-frame-wrap::after {
+  content: '';
+  position: absolute;
+  inset: 8px;
+  border-radius: 16px;
+  border: 1px dashed rgba(188,144,79,.22);
+  pointer-events: none;
+  z-index: 1;
+}
+
+
+/* =====================================================
+   BUTTON HOVER & CLICK ANIMATIONS
+   All pill CTA buttons (border-radius:9999px in inline style)
+   ===================================================== */
+a[style*="9999px"] {
+  position: relative;
+  overflow: hidden;
+  transition:
+    transform   0.28s cubic-bezier(.34,1.56,.64,1),
+    box-shadow  0.25s ease,
+    filter      0.2s  ease;
+  cursor: pointer;
+  -webkit-tap-highlight-color: transparent;
+}
+
+/* Shimmer sweep — appears on hover, sweeps left-to-right */
+a[style*="9999px"]::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: -75%;
+  width: 55%;
+  height: 100%;
+  background: linear-gradient(
+    100deg,
+    transparent 0%,
+    rgba(255,255,255,0.24) 50%,
+    transparent 100%
+  );
+  transform: skewX(-18deg);
+  transition: left 0.55s cubic-bezier(.4,0,.2,1);
+  pointer-events: none;
+  border-radius: inherit;
+}
+
+/* Ripple ring — flashes on click */
+a[style*="9999px"]::after {
+  content: '';
+  position: absolute;
+  inset: 0;
+  border-radius: inherit;
+  box-shadow: 0 0 0 0 rgba(255,255,255,0.45);
+  transition: box-shadow 0.35s ease;
+  pointer-events: none;
+}
+
+/* ── Hover state ── */
+a[style*="9999px"]:hover::before {
+  left: 130%;
+}
+
+a[style*="9999px"]:hover {
+  transform: translateY(-4px) scale(1.025);
+  filter: brightness(1.08) saturate(1.1);
+  box-shadow:
+    0 10px 32px rgba(188,144,79,.28),
+    0 3px 8px  rgba(188,144,79,.15);
+}
+
+/* ── Active / click press ── */
+a[style*="9999px"]:active {
+  transform: translateY(1px) scale(0.96) !important;
+  filter: brightness(0.94) !important;
+  box-shadow: 0 2px 8px rgba(188,144,79,.18) !important;
+  transition:
+    transform  0.07s ease,
+    filter     0.07s ease,
+    box-shadow 0.07s ease;
+}
+
+a[style*="9999px"]:active::after {
+  box-shadow: 0 0 0 6px rgba(255,255,255,0.25);
+  transition: box-shadow 0.07s ease;
+}
+
+/* ── Also style theme-class buttons consistently ── */
+.th-btn {
+  transition:
+    transform   0.28s cubic-bezier(.34,1.56,.64,1),
+    box-shadow  0.25s ease,
+    filter      0.2s  ease !important;
+}
+.th-btn:hover {
+  transform: translateY(-4px) scale(1.025) !important;
+  filter: brightness(1.08) !important;
+}
+.th-btn:active {
+  transform: translateY(1px) scale(0.96) !important;
+  transition: transform 0.07s ease, box-shadow 0.07s ease !important;
+}
+
+/* =====================================================
+   HEADING HOVER — gentle grow + colour warmup
+   Targets headings in all major homepage sections
+   ===================================================== */
+.th-home-hero h1,
+.th-homepage-section h2,
+.th-home-about h2,
+.th-home-cta-band h2,
+.tibbhouse-page-hero h1,
+.entry-content h2,
+.entry-content h3 {
+  transition:
+    transform 0.32s cubic-bezier(.34,1.56,.64,1),
+    color     0.2s  ease;
+  cursor: default;
+  will-change: transform;
+}
+
+.th-home-hero h1:hover {
+  transform: scale(1.025) translateY(-2px);
+  transform-origin: left center;
+}
+
+.th-homepage-section h2:hover,
+.th-home-about h2:hover,
+.th-home-cta-band h2:hover {
+  transform: scale(1.03) translateY(-2px);
+  transform-origin: left center;
+  color: var(--th-gold);
+}
+
+.tibbhouse-page-hero h1:hover {
+  transform: scale(1.022) translateY(-2px);
+  transform-origin: left center;
+}
+
+.entry-content h2:hover,
+.entry-content h3:hover {
+  transform: scale(1.02) translateY(-1px);
+  transform-origin: left center;
+  color: var(--th-green);
+}
