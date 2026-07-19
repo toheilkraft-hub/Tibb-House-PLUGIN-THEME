@@ -57,18 +57,28 @@ class Tibbhouse_Starter_Content {
 			return;
 		}
 
-		$term_ids = $this->seed_taxonomies();
-
-		$practitioner_ids = $this->seed_practitioners();
-		$location_ids     = $this->seed_locations();
-		$treatment_ids    = $this->seed_treatments( $term_ids );
-		$condition_ids    = $this->seed_conditions( $term_ids, $treatment_ids );
-		$this->seed_knowledge( $term_ids, $practitioner_ids );
-
-		// Cross-link a couple of relationships now that both sides exist.
-		$this->link_practitioners_locations( $practitioner_ids, $location_ids );
-
+		// Mark as seeded first so that even if something below throws an
+		// exception or hits a server limit, re-loading the admin page does
+		// not retry (and potentially loop) the heavy image-import work.
 		update_option( self::SEEDED_OPTION, time() );
+
+		try {
+			$term_ids = $this->seed_taxonomies();
+
+			$practitioner_ids = $this->seed_practitioners();
+			$location_ids     = $this->seed_locations();
+			$treatment_ids    = $this->seed_treatments( $term_ids );
+			$condition_ids    = $this->seed_conditions( $term_ids, $treatment_ids );
+			$this->seed_knowledge( $term_ids, $practitioner_ids );
+
+			// Cross-link a couple of relationships now that both sides exist.
+			$this->link_practitioners_locations( $practitioner_ids, $location_ids );
+		} catch ( \Throwable $e ) {
+			// Log the error but never let seeder failures break the plugin.
+			if ( defined( 'WP_DEBUG_LOG' ) && WP_DEBUG_LOG ) {
+				error_log( 'Tibb House Core: starter content seeder error — ' . $e->getMessage() ); // phpcs:ignore WordPress.PHP.DevelopmentFunctions.error_log_error_log
+			}
+		}
 	}
 
 	/**
@@ -140,9 +150,20 @@ class Tibbhouse_Starter_Content {
 	 * @return int|null Post ID, or null on failure.
 	 */
 	private function insert_post( $post_type, $title, $excerpt, $content ) {
-		$existing = get_page_by_title( $title, OBJECT, $post_type );
-		if ( $existing ) {
-			return (int) $existing->ID;
+		// get_page_by_title() is deprecated since WP 6.2 — use WP_Query instead.
+		$existing_query = new WP_Query(
+			array(
+				'post_type'              => $post_type,
+				'title'                  => $title,
+				'post_status'            => 'any',
+				'posts_per_page'         => 1,
+				'no_found_rows'          => true,
+				'update_post_meta_cache' => false,
+				'update_post_term_cache' => false,
+			)
+		);
+		if ( $existing_query->have_posts() ) {
+			return (int) $existing_query->posts[0]->ID;
 		}
 
 		$post_id = wp_insert_post(

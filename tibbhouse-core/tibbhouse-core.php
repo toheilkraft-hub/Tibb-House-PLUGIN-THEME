@@ -105,11 +105,16 @@ final class Tibbhouse_Core {
 
 	/**
 	 * Activation callback: register CPTs/taxonomies then flush rewrite rules.
+	 *
+	 * Deliberately kept minimal — no seeding here. Heavy work (starter
+	 * content, image imports) runs on the first admin_init after activation
+	 * via maybe_seed_on_admin_init(). Doing it here risks PHP timeout /
+	 * memory exhaustion on shared hosts, which causes WordPress to
+	 * auto-deactivate the plugin immediately after "Plugin activated."
 	 */
 	public function activate() {
 		Tibbhouse_CPTs::instance()->register_post_types();
 		Tibbhouse_Taxonomies::instance()->register_taxonomies();
-		Tibbhouse_Starter_Content::instance()->maybe_seed();
 		flush_rewrite_rules();
 	}
 
