@@ -83,6 +83,7 @@ final class Tibbhouse_Core {
 		add_action( 'admin_init', array( $this, 'maybe_seed_on_admin_init' ) );
 		add_action( 'admin_init', array( $this, 'maybe_seed_v2_on_admin_init' ) );
 		add_action( 'admin_init', array( $this, 'maybe_seed_v3_on_admin_init' ) );
+		add_action( 'admin_init', array( $this, 'maybe_repair_on_admin_init' ) );
 
 		register_activation_hook( TIBBHOUSE_CORE_FILE, array( $this, 'activate' ) );
 		register_deactivation_hook( TIBBHOUSE_CORE_FILE, array( $this, 'deactivate' ) );
@@ -147,6 +148,13 @@ final class Tibbhouse_Core {
 	 */
 	public function maybe_seed_v3_on_admin_init() {
 		Tibbhouse_Starter_Content::instance()->maybe_seed_v3();
+	}
+
+	/**
+	 * Admin-init hook for the repair seeder (fills gaps from failed earlier runs).
+	 */
+	public function maybe_repair_on_admin_init() {
+		Tibbhouse_Starter_Content::instance()->maybe_repair();
 	}
 
 	/**

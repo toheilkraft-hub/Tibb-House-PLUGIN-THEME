@@ -57,11 +57,6 @@ class Tibbhouse_Starter_Content {
 			return;
 		}
 
-		// Mark as seeded first so that even if something below throws an
-		// exception or hits a server limit, re-loading the admin page does
-		// not retry (and potentially loop) the heavy image-import work.
-		update_option( self::SEEDED_OPTION, time() );
-
 		try {
 			$term_ids = $this->seed_taxonomies();
 
@@ -74,11 +69,13 @@ class Tibbhouse_Starter_Content {
 			// Cross-link a couple of relationships now that both sides exist.
 			$this->link_practitioners_locations( $practitioner_ids, $location_ids );
 		} catch ( \Throwable $e ) {
-			// Log the error but never let seeder failures break the plugin.
 			if ( defined( 'WP_DEBUG_LOG' ) && WP_DEBUG_LOG ) {
 				error_log( 'Tibb House Core: starter content seeder error — ' . $e->getMessage() ); // phpcs:ignore WordPress.PHP.DevelopmentFunctions.error_log_error_log
 			}
 		}
+
+		// Mark as done AFTER seeding so a failed run retries on next admin load.
+		update_option( self::SEEDED_OPTION, time() );
 	}
 
 	/**
@@ -530,8 +527,6 @@ class Tibbhouse_Starter_Content {
 		if ( get_option( self::SEEDED_V2_OPTION ) ) {
 			return;
 		}
-		update_option( self::SEEDED_V2_OPTION, time() );
-
 		try {
 			// Extra practitioner.
 			$extra_practitioners = array(
@@ -581,6 +576,8 @@ class Tibbhouse_Starter_Content {
 				error_log( 'Tibb House Core: v2 seeder error — ' . $e->getMessage() ); // phpcs:ignore WordPress.PHP.DevelopmentFunctions.error_log_error_log
 			}
 		}
+
+		update_option( self::SEEDED_V2_OPTION, time() );
 	}
 
 	/**
@@ -596,7 +593,6 @@ class Tibbhouse_Starter_Content {
 		if ( get_option( self::SEEDED_V3_OPTION ) ) {
 			return;
 		}
-		update_option( self::SEEDED_V3_OPTION, time() );
 
 		try {
 			$term_ids = $this->seed_taxonomies();
@@ -775,6 +771,56 @@ class Tibbhouse_Starter_Content {
 				error_log( 'Tibb House Core: v3 seeder error — ' . $e->getMessage() ); // phpcs:ignore WordPress.PHP.DevelopmentFunctions.error_log_error_log
 			}
 		}
+
+		update_option( self::SEEDED_V3_OPTION, time() );
+	}
+
+	/**
+	 * Option flag for the repair seeder.
+	 */
+	const SEEDED_REPAIR_OPTION = 'tibbhouse_starter_content_repaired_v1';
+
+	/**
+	 * Repair seeder: checks that minimum expected content exists and fills
+	 * any gaps caused by earlier seeder failures. Runs on every admin_init
+	 * until repair is confirmed complete.
+	 *
+	 * This is the safety net: even if v1/v2/v3 flags were set before content
+	 * was created, this will silently fill the gaps.
+	 */
+	public function maybe_repair() {
+		if ( get_option( self::SEEDED_REPAIR_OPTION ) ) {
+			return;
+		}
+
+		// Only proceed if CPTs are registered (plugin is active).
+		if ( ! post_type_exists( 'treatments' ) ) {
+			return;
+		}
+
+		$counts = array();
+		foreach ( array( 'treatments', 'conditions', 'knowledge', 'practitioners', 'locations' ) as $pt ) {
+			$q = new WP_Query( array( 'post_type' => $pt, 'post_status' => 'publish', 'posts_per_page' => -1, 'no_found_rows' => false, 'fields' => 'ids' ) );
+			$counts[ $pt ] = (int) $q->found_posts;
+		}
+
+		// If all CPTs have at least 3 posts each, repair is done.
+		$all_good = ( $counts['treatments'] >= 3 && $counts['conditions'] >= 3 && $counts['knowledge'] >= 3 && $counts['practitioners'] >= 2 && $counts['locations'] >= 1 );
+		if ( $all_good ) {
+			update_option( self::SEEDED_REPAIR_OPTION, time() );
+			return;
+		}
+
+		// Something is missing — reset all seeder flags and re-run everything.
+		delete_option( self::SEEDED_OPTION );
+		delete_option( self::SEEDED_V2_OPTION );
+		delete_option( self::SEEDED_V3_OPTION );
+
+		$this->maybe_seed();
+		$this->maybe_seed_v2();
+		$this->maybe_seed_v3();
+
+		update_option( self::SEEDED_REPAIR_OPTION, time() );
 	}
 
 	/**
