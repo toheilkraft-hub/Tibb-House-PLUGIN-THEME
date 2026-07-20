@@ -84,3 +84,30 @@
 .tibbhouse-gallery-item:hover .tibbhouse-gallery-remove {
   opacity: 1;
 }
+
+/* ── Featured image column in CPT list views ── */
+.column-th_featured_image {
+  width: 88px !important;
+}
+
+.th-admin-thumb-cell {
+  line-height: 1;
+}
+
+.th-admin-thumb-cell img {
+  transition: opacity .15s, transform .15s;
+}
+
+.th-admin-thumb-cell:hover img {
+  opacity: .85;
+  transform: scale(1.04);
+}
+
+.th-admin-thumb-remove {
+  opacity: 0;
+  transition: opacity .15s;
+}
+
+.th-admin-thumb-cell:hover .th-admin-thumb-remove {
+  opacity: 1;
+}

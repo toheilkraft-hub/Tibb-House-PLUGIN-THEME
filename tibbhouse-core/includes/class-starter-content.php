@@ -518,6 +518,72 @@ class Tibbhouse_Starter_Content {
 	}
 
 	/**
+	 * Option flag for the v2 seeder (adds 3rd practitioner + 2 extra locations).
+	 */
+	const SEEDED_V2_OPTION = 'tibbhouse_starter_content_seeded_v2';
+
+	/**
+	 * V2 seeder: top-ups to reach 3 entries for Practitioners and Locations.
+	 * Called from admin_init so it runs automatically after an in-place update.
+	 */
+	public function maybe_seed_v2() {
+		if ( get_option( self::SEEDED_V2_OPTION ) ) {
+			return;
+		}
+		update_option( self::SEEDED_V2_OPTION, time() );
+
+		try {
+			// Extra practitioner.
+			$extra_practitioners = array(
+				array(
+					'title'   => 'Sister Fatima Al-Rashid',
+					'excerpt' => 'Women\'s health specialist combining Prophetic dietary guidance with herbal protocols for hormonal balance and postnatal care.',
+					'sections' => array(
+						array( 'heading' => 'About', 'paragraphs' => array( 'Sister Fatima Al-Rashid brings a gentle, holistic approach to women\'s health, specialising in postnatal recovery, hormonal balance, and dietary therapy rooted in Islamic natural medicine.' ) ),
+						array( 'heading' => 'Specialisms', 'list' => array( 'Postnatal recovery protocols', 'Hormonal balance through diet', 'Herbal consultations for women\'s health' ) ),
+					),
+					'meta'  => array( 'th_role' => 'Women\'s Health Practitioner', 'th_qualifications' => 'Certified Islamic Natural Medicine Practitioner, Postnatal Care Diploma' ),
+					'image' => 'practitioner-3.jpg',
+				),
+			);
+
+			// Extra locations.
+			$extra_locations = array(
+				array(
+					'title'   => 'Tibb House Clinic — East End',
+					'excerpt' => 'Our East End satellite clinic offering consultations, cupping therapy, and herbal remedy dispensing.',
+					'sections' => array(
+						array( 'heading' => 'About This Location', 'paragraphs' => array( 'Conveniently located in the East End, this clinic serves local patients with the same quality treatments and consultations as our flagship location.' ) ),
+						array( 'heading' => 'Services Available', 'list' => array( 'Hijama cupping therapy', 'Herbal consultation', 'Dietary and lifestyle guidance' ) ),
+					),
+					'meta'  => array( 'th_address' => '47 Heritage Lane, East End', 'th_opening_hours' => 'Tue-Sat: 10am - 5pm', 'th_phone' => '+1 (555) 020-0200' ),
+					'image' => 'location-1.jpg',
+				),
+				array(
+					'title'   => 'Tibb House Online — Virtual Consultations',
+					'excerpt' => 'Book a secure video consultation with any of our practitioners from the comfort of your home.',
+					'sections' => array(
+						array( 'heading' => 'How It Works', 'paragraphs' => array( 'Our virtual consultation service connects you with qualified practitioners via secure video call. Receive personalised advice on treatments, diet, and lifestyle — wherever you are in the world.' ) ),
+						array( 'heading' => 'What Is Covered', 'list' => array( 'Initial assessment and health history review', 'Personalised treatment recommendations', 'Dietary and herbal protocol guidance', 'Written follow-up summary' ) ),
+					),
+					'meta'  => array( 'th_address' => 'Online — Worldwide', 'th_opening_hours' => 'Mon-Sun: 8am - 9pm', 'th_phone' => '+1 (555) 030-0300' ),
+					'image' => 'location-2.jpg',
+				),
+			);
+
+			// Use plugin's bundled images dir for the new images (theme has them too,
+			// but seeder looks in TIBBHOUSE_CORE_PATH/assets/img/starter/).
+			// We need to add location-2.jpg to that directory.
+			$this->seed_items( 'practitioners', $extra_practitioners, array() );
+			$this->seed_items( 'locations',     $extra_locations,     array() );
+		} catch ( \Throwable $e ) {
+			if ( defined( 'WP_DEBUG_LOG' ) && WP_DEBUG_LOG ) {
+				error_log( 'Tibb House Core: v2 seeder error — ' . $e->getMessage() ); // phpcs:ignore WordPress.PHP.DevelopmentFunctions.error_log_error_log
+			}
+		}
+	}
+
+	/**
 	 * Cross-link the seeded practitioners to the seeded location.
 	 *
 	 * @param int[] $practitioner_ids Practitioner post IDs.

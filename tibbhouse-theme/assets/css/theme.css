@@ -1225,6 +1225,17 @@ h1,h2,h3,h4,h5,h6 {
   background-image: radial-gradient(rgba(188,144,79,.4) 1.5px, transparent 1.5px);
   background-size: 22px 22px;
   opacity: .6;
+  pointer-events: none;
+  z-index: 0;
+}
+/* Hide the dot pattern when a real image is inside */
+.th-home-about-visual img {
+  position: relative;
+  z-index: 1;
+  border-radius: 20px;
+}
+.th-home-about-visual:has(img)::before {
+  display: none;
 }
 
 .th-home-cta-band {

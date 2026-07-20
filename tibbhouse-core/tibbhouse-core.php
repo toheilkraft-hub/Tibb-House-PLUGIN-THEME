@@ -72,6 +72,7 @@ final class Tibbhouse_Core {
 		require_once TIBBHOUSE_CORE_PATH . 'includes/class-template-loader.php';
 		require_once TIBBHOUSE_CORE_PATH . 'includes/class-frontend.php';
 		require_once TIBBHOUSE_CORE_PATH . 'includes/class-starter-content.php';
+		require_once TIBBHOUSE_CORE_PATH . 'includes/class-admin-thumbnails.php';
 	}
 
 	/**
@@ -80,6 +81,7 @@ final class Tibbhouse_Core {
 	private function init_hooks() {
 		add_action( 'init', array( $this, 'load_textdomain' ) );
 		add_action( 'admin_init', array( $this, 'maybe_seed_on_admin_init' ) );
+		add_action( 'admin_init', array( $this, 'maybe_seed_v2_on_admin_init' ) );
 
 		register_activation_hook( TIBBHOUSE_CORE_FILE, array( $this, 'activate' ) );
 		register_deactivation_hook( TIBBHOUSE_CORE_FILE, array( $this, 'deactivate' ) );
@@ -94,6 +96,7 @@ final class Tibbhouse_Core {
 		Tibbhouse_Blocks::instance();
 		Tibbhouse_Template_Loader::instance();
 		Tibbhouse_Frontend::instance();
+		Tibbhouse_Admin_Thumbnails::instance();
 	}
 
 	/**
@@ -129,6 +132,13 @@ final class Tibbhouse_Core {
 	 */
 	public function maybe_seed_on_admin_init() {
 		Tibbhouse_Starter_Content::instance()->maybe_seed();
+	}
+
+	/**
+	 * Admin-init hook for the v2 top-up seeder (extra practitioners/locations).
+	 */
+	public function maybe_seed_v2_on_admin_init() {
+		Tibbhouse_Starter_Content::instance()->maybe_seed_v2();
 	}
 
 	/**

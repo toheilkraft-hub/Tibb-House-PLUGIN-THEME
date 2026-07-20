@@ -4,3 +4,4 @@
 - [Tibb House theme/plugin CSS split](tibbhouse-theme-plugin-css-split.md) — light palette tokens live in TWO places (theme.css AND plugin's frontend.css); update both, and mirror edits to root tibbhouse-theme/tibbhouse-core source dirs.
 - [WP auto-setup pipeline](wp-auto-setup-pipeline.md) — self-configuring WP dev env; setup-wordpress.sh + symlinks; export-packages.sh for ZIPs.
 - [WordPress HTTPS proxy fix for Replit](wp-replit-https-proxy.md) — backfill $_SERVER[HTTPS] from X-Forwarded-Proto or CSS loads as http:// → mixed-content blocked.
+- [Tibb House v2 batch changes](tibbhouse-v2-batch.md) — permalink fix, admin thumb column, bundled images, v2 seeder, about-section image all completed July 2026.

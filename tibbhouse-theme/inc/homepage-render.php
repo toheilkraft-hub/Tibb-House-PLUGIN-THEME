@@ -134,8 +134,10 @@ function tibbhouse_render_homepage() {
 	$practitioners = tibbhouse_get_featured( 'practitioners', 6 );
 	$knowledge     = tibbhouse_get_featured( 'knowledge', 6 );
 
-	$about_page   = get_page_by_title( 'TIBB HOUSE – About Us', OBJECT, 'page' );
-	$contact_page = get_page_by_title( 'TIBB HOUSE – Contact Us', OBJECT, 'page' );
+	$about_q      = new WP_Query( array( 'post_type' => 'page', 'title' => 'TIBB HOUSE – About Us',   'posts_per_page' => 1, 'no_found_rows' => true, 'update_post_meta_cache' => false, 'update_post_term_cache' => false ) );
+	$contact_q    = new WP_Query( array( 'post_type' => 'page', 'title' => 'TIBB HOUSE – Contact Us', 'posts_per_page' => 1, 'no_found_rows' => true, 'update_post_meta_cache' => false, 'update_post_term_cache' => false ) );
+	$about_page   = $about_q->have_posts()   ? $about_q->posts[0]   : null;
+	$contact_page = $contact_q->have_posts() ? $contact_q->posts[0] : null;
 	?>
 
 	<!-- ── Hero ── -->
@@ -422,7 +424,12 @@ function tibbhouse_render_homepage() {
 					<?php esc_html_e( 'Learn More About Us', 'tibbhouse' ); ?> &rarr;
 				</a>
 			</div>
-			<div class="th-home-about-visual th-reveal-init" data-reveal="right"></div>
+			<div class="th-home-about-visual th-reveal-init" data-reveal="right">
+				<?php
+				$about_img = get_template_directory_uri() . '/assets/img/about-clinic.jpg';
+				?>
+				<img src="<?php echo esc_url( $about_img ); ?>" alt="<?php esc_attr_e( 'Tibb House Clinic', 'tibbhouse' ); ?>" style="width:100%;height:100%;object-fit:cover;border-radius:20px;display:block;">
+			</div>
 		</div>
 	</section>
 

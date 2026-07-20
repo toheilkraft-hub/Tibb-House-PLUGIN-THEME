@@ -27,7 +27,8 @@ define( 'TIBBHOUSE_REPLIT_PAGE_TITLE', 'TIBB FRONT PAGE REPLIT' );
  * post_content.
  */
 function tibbhouse_maybe_create_replit_front_page() {
-	$existing = get_page_by_title( TIBBHOUSE_REPLIT_PAGE_TITLE, OBJECT, 'page' );
+	$existing_q = new WP_Query( array( 'post_type' => 'page', 'title' => TIBBHOUSE_REPLIT_PAGE_TITLE, 'posts_per_page' => 1, 'no_found_rows' => true, 'update_post_meta_cache' => false, 'update_post_term_cache' => false ) );
+	$existing   = $existing_q->have_posts() ? $existing_q->posts[0] : null;
 	if ( $existing ) {
 		// Page already exists: make sure it still uses the homepage template
 		// (in case it was created before the template file existed).
