@@ -116,11 +116,11 @@ function tibbhouse_menu_terms_content() {
 }
 
 /**
- * Add a menu item to a nav menu, avoiding duplicate items with the same title.
+ * Add a custom-URL menu item to a nav menu, avoiding duplicate items by title.
  *
- * @param int    $menu_id Menu term ID.
- * @param string $title   Item label.
- * @param string $url     Item URL.
+ * @param int    $menu_id  Menu term ID.
+ * @param string $title    Item label.
+ * @param string $url      Item URL.
  * @param int    $position Menu order.
  */
 function tibbhouse_menu_add_item( $menu_id, $title, $url, $position ) {
@@ -141,11 +141,83 @@ function tibbhouse_menu_add_item( $menu_id, $title, $url, $position ) {
 		$menu_id,
 		0,
 		array(
-			'menu-item-title'     => $title,
-			'menu-item-url'       => $url,
+			'menu-item-title'    => $title,
+			'menu-item-url'      => $url,
+			'menu-item-status'   => 'publish',
+			'menu-item-position' => $position,
+			'menu-item-type'     => 'custom',
+		)
+	);
+}
+
+/**
+ * Add a post-type-archive menu item (URL resolved dynamically by WordPress).
+ *
+ * Using type=post_type_archive means WordPress calls get_post_type_archive_link()
+ * at render time, so the URL is always correct regardless of what domain
+ * was active when the menu was first created.
+ *
+ * @param int    $menu_id   Menu term ID.
+ * @param string $label     Visible label.
+ * @param string $post_type Post type slug.
+ * @param int    $position  Menu order.
+ */
+function tibbhouse_menu_add_archive_item( $menu_id, $label, $post_type, $position ) {
+	$existing_items = wp_get_nav_menu_items( $menu_id );
+	if ( $existing_items ) {
+		foreach ( $existing_items as $item ) {
+			if ( $item->title === $label ) {
+				return;
+			}
+		}
+	}
+
+	wp_update_nav_menu_item(
+		$menu_id,
+		0,
+		array(
+			'menu-item-title'    => $label,
+			'menu-item-type'     => 'post_type_archive',
+			'menu-item-object'   => $post_type,
+			'menu-item-status'   => 'publish',
+			'menu-item-position' => $position,
+		)
+	);
+}
+
+/**
+ * Add a page/post menu item (URL resolved dynamically from the object ID).
+ *
+ * @param int    $menu_id   Menu term ID.
+ * @param string $label     Visible label.
+ * @param int    $page_id   Page/post ID.
+ * @param string $obj_type  Post type (default 'page').
+ * @param int    $position  Menu order.
+ */
+function tibbhouse_menu_add_page_item( $menu_id, $label, $page_id, $obj_type, $position ) {
+	if ( ! $page_id ) {
+		return;
+	}
+
+	$existing_items = wp_get_nav_menu_items( $menu_id );
+	if ( $existing_items ) {
+		foreach ( $existing_items as $item ) {
+			if ( $item->title === $label ) {
+				return;
+			}
+		}
+	}
+
+	wp_update_nav_menu_item(
+		$menu_id,
+		0,
+		array(
+			'menu-item-title'     => $label,
+			'menu-item-type'      => 'post_type',
+			'menu-item-object'    => $obj_type,
+			'menu-item-object-id' => $page_id,
 			'menu-item-status'    => 'publish',
 			'menu-item-position'  => $position,
-			'menu-item-type'      => 'custom',
 		)
 	);
 }
@@ -186,6 +258,8 @@ function tibbhouse_maybe_setup_menu() {
 	}
 
 	// Populate menu items (skipped individually if already present).
+	// Use post_type_archive / post_type item types so WordPress resolves URLs
+	// dynamically at render time — avoids stale localhost URLs after migration.
 	$position = 1;
 	tibbhouse_menu_add_item( $menu_id, __( 'Home', 'tibbhouse' ), home_url( '/' ), $position++ );
 
@@ -198,18 +272,15 @@ function tibbhouse_maybe_setup_menu() {
 	);
 	foreach ( $sections as $post_type => $label ) {
 		if ( post_type_exists( $post_type ) ) {
-			$link = get_post_type_archive_link( $post_type );
-			if ( $link ) {
-				tibbhouse_menu_add_item( $menu_id, $label, $link, $position++ );
-			}
+			tibbhouse_menu_add_archive_item( $menu_id, $label, $post_type, $position++ );
 		}
 	}
 
 	if ( $about_id ) {
-		tibbhouse_menu_add_item( $menu_id, __( 'About Us', 'tibbhouse' ), get_permalink( $about_id ), $position++ );
+		tibbhouse_menu_add_page_item( $menu_id, __( 'About Us', 'tibbhouse' ), $about_id, 'page', $position++ );
 	}
 	if ( $contact_id ) {
-		tibbhouse_menu_add_item( $menu_id, __( 'Contact Us', 'tibbhouse' ), get_permalink( $contact_id ), $position++ );
+		tibbhouse_menu_add_page_item( $menu_id, __( 'Contact Us', 'tibbhouse' ), $contact_id, 'page', $position++ );
 	}
 
 	// Assign as Primary Navigation only if nothing is assigned there yet,

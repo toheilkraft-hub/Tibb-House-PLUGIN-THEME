@@ -23,8 +23,16 @@ export default defineConfig({
         changeOrigin: false,
         ws: true,
         configure: (proxy) => {
-          proxy.on('proxyReq', (proxyReq) => {
+          proxy.on('proxyReq', (proxyReq, req) => {
             proxyReq.setHeader('X-Forwarded-Proto', 'https');
+            // Forward the real public domain so WordPress builds correct URLs.
+            const fwdHost =
+              (req.headers['x-forwarded-host'] as string) ||
+              (req.headers['host'] as string) ||
+              '';
+            if (fwdHost) {
+              proxyReq.setHeader('X-Forwarded-Host', fwdHost.split(',')[0].trim());
+            }
           });
         },
       },

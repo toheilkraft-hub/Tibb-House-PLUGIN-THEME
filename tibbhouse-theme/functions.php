@@ -17,6 +17,34 @@ require_once get_template_directory() . '/inc/homepage-install.php';
 require_once get_template_directory() . '/inc/menu-install.php';
 require_once get_template_directory() . '/inc/image-import.php';
 
+/**
+ * Rewrite any nav-menu URL whose host differs from WP_HOME so stale
+ * localhost/wrong-domain URLs still work after a migration or dev-env move.
+ * Runs on wp_nav_menu_objects so it covers ALL menu items at once.
+ */
+add_filter( 'wp_nav_menu_objects', function ( $items ) {
+	$home      = home_url( '/' );
+	$home_host = wp_parse_url( $home, PHP_URL_HOST );
+	$home_sch  = wp_parse_url( $home, PHP_URL_SCHEME );
+
+	foreach ( $items as $item ) {
+		if ( empty( $item->url ) ) {
+			continue;
+		}
+		$parsed = wp_parse_url( $item->url );
+		if ( empty( $parsed['host'] ) ) {
+			continue; // Relative — leave as-is.
+		}
+		if ( $parsed['host'] !== $home_host ) {
+			// Replace scheme+host with current WP_HOME values.
+			$item->url = $home_sch . '://' . $home_host . ( $parsed['path'] ?? '/' ) .
+				( ! empty( $parsed['query'] )    ? '?' . $parsed['query']    : '' ) .
+				( ! empty( $parsed['fragment'] ) ? '#' . $parsed['fragment'] : '' );
+		}
+	}
+	return $items;
+} );
+
 /* -----------------------------------------------------------------------
    Theme Setup
 ----------------------------------------------------------------------- */
