@@ -135,10 +135,9 @@
     }, { passive: true });
   }
 
-  /* ── Featured content carousels: prev/next scroll buttons ── */
+  /* ── Featured content carousels: prev/next buttons + auto-scroll ── */
   function initCarousels() {
     var buttons = document.querySelectorAll('[data-carousel-prev], [data-carousel-next]');
-    if (!buttons.length) return;
 
     buttons.forEach(function (btn) {
       btn.addEventListener('click', function () {
@@ -152,6 +151,43 @@
 
         track.scrollBy({ left: dir * step, behavior: 'smooth' });
       });
+    });
+
+    /* Auto-scroll each carousel track every 4 s; pause on hover */
+    var tracks = document.querySelectorAll('.th-carousel-track');
+    tracks.forEach(function (track) {
+      var timer = null;
+
+      function step() {
+        var card = track.querySelector(':scope > *');
+        var cardW = card ? card.getBoundingClientRect().width + 28 : 320;
+        var maxScroll = track.scrollWidth - track.clientWidth;
+
+        /* If at the end, jump silently back to start then scroll */
+        if (track.scrollLeft >= maxScroll - 4) {
+          track.scrollLeft = 0;
+        } else {
+          track.scrollBy({ left: cardW, behavior: 'smooth' });
+        }
+      }
+
+      function start() {
+        if (timer) return;
+        timer = setInterval(step, 4000);
+      }
+
+      function pause() {
+        clearInterval(timer);
+        timer = null;
+      }
+
+      track.addEventListener('mouseenter', pause);
+      track.addEventListener('mouseleave', start);
+      track.addEventListener('touchstart', pause, { passive: true });
+      track.addEventListener('touchend',   start, { passive: true });
+
+      /* Start after a short delay so page load isn't jarring */
+      setTimeout(start, 2500);
     });
   }
 

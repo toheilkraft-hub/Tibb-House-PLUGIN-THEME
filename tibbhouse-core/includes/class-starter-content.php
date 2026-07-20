@@ -584,6 +584,236 @@ class Tibbhouse_Starter_Content {
 	}
 
 	/**
+	 * Option flag for the v3 seeder (adds 4th items per section + About/Contact pages).
+	 */
+	const SEEDED_V3_OPTION = 'tibbhouse_starter_content_seeded_v3';
+
+	/**
+	 * V3 seeder: adds a 4th entry for Treatments, Conditions and Knowledge, and
+	 * creates the About Us and Contact Us pages used by the homepage renderer.
+	 */
+	public function maybe_seed_v3() {
+		if ( get_option( self::SEEDED_V3_OPTION ) ) {
+			return;
+		}
+		update_option( self::SEEDED_V3_OPTION, time() );
+
+		try {
+			$term_ids = $this->seed_taxonomies();
+
+			// ── 4th Treatment ───────────────────────────────────────────────────
+			$this->seed_items( 'treatments', array(
+				array(
+					'title'   => 'Honey & Olive Oil Wellness Protocol',
+					'excerpt' => 'A nourishing multi-week protocol combining raw honey and cold-pressed olive oil — two of the most revered remedies in Prophetic medicine.',
+					'sections' => array(
+						array(
+							'heading'    => 'Overview',
+							'paragraphs' => array(
+								'Both honey and olive oil are explicitly praised in the Quran and Sunnah for their healing properties. This protocol combines them into a structured daily regimen to support immunity, skin health, and energy levels.',
+							),
+						),
+						array(
+							'heading' => 'Protocol Highlights',
+							'list'    => array(
+								'One teaspoon of raw Sidr honey each morning before breakfast',
+								'Cold-pressed olive oil consumed daily or applied topically',
+								'Weekly progress review with a practitioner',
+								'Dietary recommendations to complement the remedy',
+							),
+						),
+						array(
+							'heading'    => 'Expected Benefits',
+							'paragraphs' => array(
+								'Patients report improved energy, clearer skin, and better digestive comfort over the four-week programme.',
+							),
+						),
+					),
+					'meta'  => array( 'th_price' => 'From $55', 'th_duration' => '4-week protocol' ),
+					'terms' => array( 'remedies' => array( 'Honey', 'Olive Oil' ), 'vital_area' => array( 'Digestive System' ) ),
+					'image' => 'treatment-honey.jpg',
+				),
+			), $term_ids );
+
+			// ── 4th Condition ───────────────────────────────────────────────────
+			$this->seed_items( 'conditions', array(
+				array(
+					'title'   => 'Sleep Disturbance & Insomnia',
+					'excerpt' => 'Difficulty falling or staying asleep, often linked to stress, dietary imbalance, or an overactive nervous system.',
+					'sections' => array(
+						array(
+							'heading' => 'Symptoms',
+							'list'    => array(
+								'Difficulty falling asleep despite tiredness',
+								'Waking frequently during the night',
+								'Feeling unrefreshed in the morning',
+								'Low energy and difficulty concentrating during the day',
+							),
+						),
+						array(
+							'heading'    => 'Natural Approach',
+							'paragraphs' => array(
+								'Islamic medicine addresses sleep disturbance through a combination of dietary adjustments, herbal remedies, and lifestyle routines. Honey taken before bed, reduced stimulants, and gentle cupping therapy are all part of an integrated approach.',
+							),
+						),
+					),
+					'terms' => array( 'vital_area' => array( 'Nervous System' ), 'constitutional_type' => array( 'Hot Temperament' ) ),
+					'image' => 'condition-sleep.jpg',
+				),
+			), $term_ids );
+
+			// ── 4th Knowledge ───────────────────────────────────────────────────
+			$this->seed_items( 'knowledge', array(
+				array(
+					'title'   => 'Dietary Principles in Islamic Medicine',
+					'excerpt' => 'How what you eat shapes your health — a practical guide to food and eating habits drawn from Prophetic traditions.',
+					'sections' => array(
+						array(
+							'heading'    => 'Food as Medicine',
+							'paragraphs' => array(
+								'Islamic medicine has always emphasised that diet is the foundation of health. The Prophetic tradition advises eating in moderation, filling only a third of the stomach, and prioritising wholesome, natural foods.',
+							),
+						),
+						array(
+							'heading' => 'Key Dietary Principles',
+							'list'    => array(
+								'Eat only when genuinely hungry',
+								'Stop eating before feeling full',
+								'Begin meals with bismillah and eat mindfully',
+								'Favour dates, honey, figs, pomegranates, olives, and black seed',
+								'Avoid excess sugar, processed foods, and late-night eating',
+							),
+						),
+						array(
+							'heading'    => 'Putting It Into Practice',
+							'paragraphs' => array(
+								'A practitioner consultation can tailor these principles to your constitutional type, helping you build a sustainable eating plan that supports your specific health goals.',
+							),
+						),
+					),
+					'terms' => array( 'knowledge_type' => array( 'Guide' ), 'evidence_level' => array( 'Traditional Use' ) ),
+					'image' => 'knowledge-diet.jpg',
+				),
+			), $term_ids );
+
+			// ── About Us page ────────────────────────────────────────────────────
+			$this->create_page_if_missing(
+				'TIBB HOUSE – About Us',
+				'about-us',
+				$this->build_content( array(
+					array(
+						'heading'    => 'Our Story',
+						'paragraphs' => array(
+							'Tibb House was founded with a single vision: to make the timeless wisdom of natural and Islamic medicine accessible to everyone. We believe that true healing comes from addressing the root causes of illness — body, mind, and spirit — rather than simply managing symptoms.',
+							'Drawing from the rich tradition of Tibb an-Nabawi (Prophetic medicine) and centuries of Islamic natural healing, our practitioners offer treatments that are both evidence-informed and spiritually grounded.',
+						),
+					),
+					array(
+						'heading' => 'What We Offer',
+						'list'    => array(
+							'Hijama cupping therapy for pain relief and detoxification',
+							'Herbal and dietary protocols tailored to your constitutional type',
+							'Knowledge resources on Islamic medicine and Prophetic remedies',
+							'One-to-one consultations — in clinic and online',
+						),
+					),
+					array(
+						'heading'    => 'Our Approach',
+						'paragraphs' => array(
+							'Every patient is unique. We take time to understand your health history, lifestyle, and constitution before recommending a treatment path. Our practitioners blend traditional knowledge with a modern understanding of wellness to give you a personalised, compassionate experience.',
+						),
+					),
+					array(
+						'heading' => 'Our Values',
+						'list'    => array(
+							'Integrity — honest, transparent care',
+							'Compassion — a warm, welcoming environment for every patient',
+							'Tradition — rooted in authentic Islamic medicine',
+							'Accessibility — quality care available to all',
+						),
+					),
+				) )
+			);
+
+			// ── Contact Us page ──────────────────────────────────────────────────
+			$this->create_page_if_missing(
+				'TIBB HOUSE – Contact Us',
+				'contact-us',
+				$this->build_content( array(
+					array(
+						'heading'    => 'Get In Touch',
+						'paragraphs' => array(
+							'We would love to hear from you. Whether you have a question about a treatment, want to book an appointment, or simply want to learn more about what we offer, our friendly team is here to help.',
+						),
+					),
+					array(
+						'heading' => 'Clinic Details',
+						'list'    => array(
+							'Tibb House Clinic — Downtown, 123 Wellness Street',
+							'Phone: +1 (555) 010-0100',
+							'Email: hello@tibbhouse.com',
+							'Opening Hours: Mon–Sat, 9am–6pm',
+						),
+					),
+					array(
+						'heading'    => 'Book an Appointment',
+						'paragraphs' => array(
+							'To book a session, call us during clinic hours or send us an email with your preferred date and time. For virtual consultations, visit our Online Consultations page.',
+						),
+					),
+					array(
+						'heading'    => 'Virtual Consultations',
+						'paragraphs' => array(
+							'Can\'t make it to the clinic? Our practitioners are available for secure video consultations worldwide, Monday through Sunday, 8am–9pm.',
+						),
+					),
+				) )
+			);
+
+		} catch ( \Throwable $e ) {
+			if ( defined( 'WP_DEBUG_LOG' ) && WP_DEBUG_LOG ) {
+				error_log( 'Tibb House Core: v3 seeder error — ' . $e->getMessage() ); // phpcs:ignore WordPress.PHP.DevelopmentFunctions.error_log_error_log
+			}
+		}
+	}
+
+	/**
+	 * Create a WordPress page only if one with the given title doesn't exist.
+	 *
+	 * @param string $title    Page title.
+	 * @param string $slug     URL slug.
+	 * @param string $content  Post content (Gutenberg blocks).
+	 * @return int|null        Post ID or null on failure.
+	 */
+	private function create_page_if_missing( $title, $slug, $content ) {
+		$q = new WP_Query( array(
+			'post_type'              => 'page',
+			'title'                  => $title,
+			'post_status'            => 'any',
+			'posts_per_page'         => 1,
+			'no_found_rows'          => true,
+			'update_post_meta_cache' => false,
+			'update_post_term_cache' => false,
+		) );
+		if ( $q->have_posts() ) {
+			return (int) $q->posts[0]->ID;
+		}
+
+		$page_id = wp_insert_post( array(
+			'post_title'     => $title,
+			'post_name'      => $slug,
+			'post_status'    => 'publish',
+			'post_type'      => 'page',
+			'post_content'   => $content,
+			'post_author'    => get_current_user_id() ? get_current_user_id() : 1,
+			'comment_status' => 'closed',
+			'ping_status'    => 'closed',
+		), true );
+
+		return is_wp_error( $page_id ) ? null : (int) $page_id;
+	}
+
+	/**
 	 * Cross-link the seeded practitioners to the seeded location.
 	 *
 	 * @param int[] $practitioner_ids Practitioner post IDs.

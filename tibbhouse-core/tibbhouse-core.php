@@ -82,6 +82,7 @@ final class Tibbhouse_Core {
 		add_action( 'init', array( $this, 'load_textdomain' ) );
 		add_action( 'admin_init', array( $this, 'maybe_seed_on_admin_init' ) );
 		add_action( 'admin_init', array( $this, 'maybe_seed_v2_on_admin_init' ) );
+		add_action( 'admin_init', array( $this, 'maybe_seed_v3_on_admin_init' ) );
 
 		register_activation_hook( TIBBHOUSE_CORE_FILE, array( $this, 'activate' ) );
 		register_deactivation_hook( TIBBHOUSE_CORE_FILE, array( $this, 'deactivate' ) );
@@ -139,6 +140,13 @@ final class Tibbhouse_Core {
 	 */
 	public function maybe_seed_v2_on_admin_init() {
 		Tibbhouse_Starter_Content::instance()->maybe_seed_v2();
+	}
+
+	/**
+	 * Admin-init hook for the v3 seeder (4th items + About/Contact pages).
+	 */
+	public function maybe_seed_v3_on_admin_init() {
+		Tibbhouse_Starter_Content::instance()->maybe_seed_v3();
 	}
 
 	/**
