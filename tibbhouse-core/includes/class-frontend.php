@@ -45,6 +45,26 @@ class Tibbhouse_Frontend {
 
 		// Fallback for themes that don't call wp_body_open.
 		add_action( 'wp_footer', array( $this, 'maybe_render_preloader_fallback' ) );
+
+		// Ensure CPT archives always show all posts, not just the WP
+		// "Blog pages show at most N" reading setting (which defaults to 10
+		// and confuses users who expect to see every seeded entry).
+		add_action( 'pre_get_posts', array( $this, 'set_cpt_archive_posts_per_page' ) );
+	}
+
+	/**
+	 * Remove the reading-settings post limit on Tibb House CPT archives.
+	 *
+	 * @param WP_Query $query The current query.
+	 */
+	public function set_cpt_archive_posts_per_page( $query ) {
+		if ( is_admin() || ! $query->is_main_query() ) {
+			return;
+		}
+		$cpts = Tibbhouse_Helpers::post_types();
+		if ( $query->is_post_type_archive( $cpts ) ) {
+			$query->set( 'posts_per_page', -1 );
+		}
 	}
 
 	/**

@@ -57,8 +57,38 @@ function tibbhouse_maybe_create_replit_front_page() {
 	}
 
 	update_post_meta( $page_id, '_wp_page_template', 'template-front-replit.php' );
+
+	// Automatically set this page as the static front page so the user
+	// never has to touch Settings → Reading after installation.
+	update_option( 'show_on_front', 'page' );
+	update_option( 'page_on_front', $page_id );
 }
 add_action( 'after_switch_theme', 'tibbhouse_maybe_create_replit_front_page' );
+
+/**
+ * On every admin_init: if the front page exists but Reading settings still
+ * say "latest posts", fix them automatically (handles in-place re-uploads).
+ */
+function tibbhouse_ensure_front_page_reading_settings() {
+	if ( 'page' === get_option( 'show_on_front' ) ) {
+		return; // Already set to a static page — nothing to do.
+	}
+	$q = new WP_Query( array(
+		'post_type'              => 'page',
+		'title'                  => TIBBHOUSE_REPLIT_PAGE_TITLE,
+		'posts_per_page'         => 1,
+		'no_found_rows'          => true,
+		'update_post_meta_cache' => false,
+		'update_post_term_cache' => false,
+	) );
+	if ( ! $q->have_posts() ) {
+		return;
+	}
+	$page_id = (int) $q->posts[0]->ID;
+	update_option( 'show_on_front', 'page' );
+	update_option( 'page_on_front', $page_id );
+}
+add_action( 'admin_init', 'tibbhouse_ensure_front_page_reading_settings' );
 
 /**
  * Safety net: also run the check on admin_init.
