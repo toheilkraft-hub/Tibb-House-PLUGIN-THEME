@@ -18,6 +18,22 @@ require_once get_template_directory() . '/inc/menu-install.php';
 require_once get_template_directory() . '/inc/image-import.php';
 
 /**
+ * Remove the "Archives:" / "Archive" prefix WordPress prepends to CPT archive
+ * page titles — e.g. "Treatments Archives" → "Treatments".
+ */
+add_filter( 'get_the_archive_title', function ( $title ) {
+	if ( is_post_type_archive() ) {
+		$obj = get_queried_object();
+		if ( $obj && isset( $obj->labels->name ) ) {
+			return $obj->labels->name;
+		}
+		// Fallback: strip any "Archives:" / "Archive:" prefix WordPress added.
+		return preg_replace( '/^[^:]+:\s*/', '', $title );
+	}
+	return $title;
+} );
+
+/**
  * Rewrite any nav-menu URL whose host differs from WP_HOME so stale
  * localhost/wrong-domain URLs still work after a migration or dev-env move.
  * Runs on wp_nav_menu_objects so it covers ALL menu items at once.
