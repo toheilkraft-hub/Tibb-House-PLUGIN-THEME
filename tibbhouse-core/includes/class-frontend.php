@@ -61,7 +61,7 @@ class Tibbhouse_Frontend {
 		if ( is_admin() || ! $query->is_main_query() ) {
 			return;
 		}
-		$cpts = Tibbhouse_Helpers::post_types();
+		$cpts = array( 'treatments', 'conditions', 'knowledge', 'practitioners', 'locations' );
 		if ( $query->is_post_type_archive( $cpts ) ) {
 			$query->set( 'posts_per_page', -1 );
 		}

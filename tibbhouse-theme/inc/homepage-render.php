@@ -259,7 +259,7 @@ function tibbhouse_render_homepage() {
 					<?php esc_html_e( 'Natural &amp; Islamic Medicine', 'tibbhouse' ); ?>
 				</div>
 				<h1 class="th-reveal-init" data-reveal="up" data-delay="1" style="font-family:'Cormorant Garamond',Georgia,serif;font-size:clamp(2.5rem,6vw,4.6rem);font-weight:700;color:#0a3d2e;line-height:1.1;margin:0 0 24px;text-align:left;">
-					<?php echo esc_html( get_bloginfo( 'name' ) ); ?>
+					Tibb House
 				</h1>
 				<p class="th-reveal-init" data-reveal="up" data-delay="2" style="font-size:1.05rem;color:#3d4a35;max-width:500px;line-height:1.8;margin:0 0 40px;text-align:left;">
 					<?php echo esc_html( get_bloginfo( 'description' ) ?: __( 'Explore trusted treatments, understand conditions, and connect with qualified practitioners in natural and Islamic medicine.', 'tibbhouse' ) ); ?>
