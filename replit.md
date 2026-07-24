@@ -13,15 +13,26 @@ GitHub Repository
        ↓
 Open in Replit  (run button)
        ↓
-Auto-setup runs  (scripts/setup-wordpress.sh)
-  • Downloads WordPress core if missing
-  • Installs SQLite drop-in if missing
-  • Creates symlinks  tibbhouse-theme/ ↔ wp-content/themes/tibbhouse-theme
-                      tibbhouse-core/  ↔ wp-content/plugins/tibbhouse-core
-  • Runs WordPress installer if first time
-  • Activates theme & plugin
+Auto-setup runs  (scripts/setup-wordpress.sh)  ← fully automatic, no manual steps
+  1. Downloads WordPress core if missing
+  2. Installs SQLite drop-in if missing
+  3. Creates symlinks  tibbhouse-theme/ ↔ wp-content/themes/tibbhouse-theme
+                       tibbhouse-core/  ↔ wp-content/plugins/tibbhouse-core
+  4. Runs WordPress installer if first time
+  5. Activates theme & plugin
+  6. Seeds pages & menus  (scripts/seed-pages-menus.php)
+       • Home, About Us, Contact Us, Blog, Patient Forms, Secure Patient Intake
+       • Primary Navigation + Footer Navigation menus fully wired
+       • Front page set to Home, posts page set to Blog
+  7. Seeds all content  (scripts/seed-starter-content.php)
+       • 4 Treatments (Hijama, Black Seed, Herbal Steam, Honey & Olive Oil)
+       • 4 Conditions (Back Pain, Respiratory, Digestive, Sleep)
+       • 4 Knowledge articles
+       • 3 Practitioners (Dr. Amina, Imam Bilal, Sister Fatima)
+       • 3 Locations (Downtown, East End, Online)
+       • Featured images attached from tibbhouse-core/assets/img/starter/
        ↓
-Live preview opens automatically
+Live preview opens with the complete site — no half-baked state
        ↓
 Edit  tibbhouse-theme/  or  tibbhouse-core/  — changes appear instantly on reload
        ↓
@@ -31,6 +42,8 @@ Run:  bash scripts/export-packages.sh
   → tibbhouse-theme.zip   (Appearance › Themes)
   → tibbhouse-core.zip    (Plugins › Add New)
 ```
+
+> **All seed scripts are idempotent.** Running setup again on an existing install is fast — every step checks before creating and skips anything already present. The content seeders are flag-guarded in the database so they never duplicate posts.
 
 ---
 
@@ -85,7 +98,9 @@ Produces:
 | `wordpress/wp-content/plugins/tibbhouse-core` | Symlink → `tibbhouse-core/` |
 | `wordpress/wp-content/database/.ht.sqlite` | SQLite database (runtime, gitignored) |
 | `wordpress/wp-content/uploads/` | Media uploads (runtime, gitignored) |
-| `scripts/setup-wordpress.sh` | Idempotent environment bootstrap |
+| `scripts/setup-wordpress.sh` | Idempotent environment bootstrap (runs full pipeline) |
+| `scripts/seed-pages-menus.php` | Creates all pages and nav menus (called by setup) |
+| `scripts/seed-starter-content.php` | Seeds all CPT content + media (called by setup) |
 | `scripts/export-packages.sh` | Generates installable ZIPs |
 | `scripts/post-merge.sh` | Runs after every GitHub import / task merge |
 | `artifacts/api-server/` | Vite reverse-proxy artifact (exposes WP in preview) |
