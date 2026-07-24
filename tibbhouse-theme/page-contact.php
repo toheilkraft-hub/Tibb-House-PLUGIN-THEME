@@ -268,10 +268,10 @@ get_header();
 			<p><?php esc_html_e( 'For sensitive health information, we provide a secure private space — separate from this form and handled with full confidentiality.', 'tibbhouse' ); ?></p>
 		</div>
 
-		<a href="<?php echo esc_url( tibbhouse_hipaa_url() ); ?>"
-		   target="_blank"
-		   rel="noopener noreferrer"
+		<button
+		   type="button"
 		   class="th-private-btn"
+		   onclick="thOpenIntakeModal()"
 		   aria-label="<?php esc_attr_e( 'Open secure private medical data form', 'tibbhouse' ); ?>"
 		>
 			<span class="th-private-btn-shimmer" aria-hidden="true"></span>
@@ -283,9 +283,127 @@ get_header();
 			<svg class="th-private-btn-arrow" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
 				<line x1="7" y1="17" x2="17" y2="7"/><polyline points="7 7 17 7 17 17"/>
 			</svg>
-		</a>
+		</button>
 
 	</div>
 </div>
+
+<!-- ── Secure Intake Modal ── -->
+<div id="thIntakeModal" class="th-intake-modal" role="dialog" aria-modal="true" aria-label="<?php esc_attr_e( 'Secure Patient Intake', 'tibbhouse' ); ?>" style="display:none">
+	<div class="th-intake-modal-backdrop" onclick="thCloseIntakeModal()"></div>
+	<div class="th-intake-modal-frame">
+		<button class="th-intake-modal-close" type="button" onclick="thCloseIntakeModal()" aria-label="<?php esc_attr_e( 'Close secure intake form', 'tibbhouse' ); ?>">
+			<svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><line x1="18" y1="6" x2="6" y2="18"/><line x1="6" y1="6" x2="18" y2="18"/></svg>
+		</button>
+		<iframe
+			id="thIntakeFrame"
+			class="th-intake-modal-iframe"
+			src="about:blank"
+			data-src="<?php echo esc_url( tibbhouse_hipaa_url() ); ?>"
+			title="<?php esc_attr_e( 'Secure Patient Intake Form', 'tibbhouse' ); ?>"
+			allow="autoplay"
+		></iframe>
+	</div>
+</div>
+
+<style>
+.th-intake-modal {
+	position: fixed;
+	inset: 0;
+	z-index: 99999;
+	display: flex;
+	align-items: stretch;
+}
+.th-intake-modal-backdrop {
+	position: absolute;
+	inset: 0;
+	background: rgba(4, 10, 20, .82);
+	backdrop-filter: blur(6px);
+	-webkit-backdrop-filter: blur(6px);
+}
+.th-intake-modal-frame {
+	position: relative;
+	z-index: 1;
+	display: flex;
+	flex-direction: column;
+	width: 100%;
+	height: 100%;
+	max-width: 900px;
+	margin: 0 auto;
+	animation: th-modal-in .28s cubic-bezier(.4,0,.2,1);
+}
+@keyframes th-modal-in {
+	from { opacity: 0; transform: translateY(24px); }
+	to   { opacity: 1; transform: translateY(0); }
+}
+.th-intake-modal-close {
+	position: absolute;
+	top: 14px;
+	right: 14px;
+	z-index: 2;
+	width: 38px;
+	height: 38px;
+	border-radius: 50%;
+	border: 1px solid rgba(255,255,255,.15);
+	background: rgba(13,27,46,.9);
+	color: #7a8fa8;
+	cursor: pointer;
+	display: flex;
+	align-items: center;
+	justify-content: center;
+	transition: border-color .2s, color .2s, background .2s;
+}
+.th-intake-modal-close:hover {
+	border-color: rgba(188,144,79,.6);
+	color: #bc904f;
+	background: rgba(13,27,46,1);
+}
+.th-intake-modal-iframe {
+	width: 100%;
+	flex: 1;
+	border: none;
+	display: block;
+}
+</style>
+
+<script>
+(function () {
+	var modal    = document.getElementById('thIntakeModal');
+	var frame    = document.getElementById('thIntakeFrame');
+	var loaded   = false;
+
+	window.thOpenIntakeModal = function () {
+		/* Lazy-load the iframe on first open */
+		if (!loaded) {
+			frame.src = frame.dataset.src;
+			loaded = true;
+		}
+		modal.style.display = 'flex';
+		document.body.style.overflow = 'hidden';
+		frame.focus();
+	};
+
+	window.thCloseIntakeModal = function () {
+		modal.style.display = 'none';
+		document.body.style.overflow = '';
+	};
+
+	/* Close on Escape */
+	document.addEventListener('keydown', function (e) {
+		if (e.key === 'Escape' && modal.style.display === 'flex') {
+			thCloseIntakeModal();
+		}
+	});
+
+	/* Listen for a "close-modal" message posted from inside the iframe
+	   (e.g. after successful submission the HIPAA page can call
+	   window.parent.postMessage('th-intake-close','*') to dismiss). */
+	window.addEventListener('message', function (e) {
+		if (e.data === 'th-intake-close') {
+			thCloseIntakeModal();
+		}
+	});
+}());
+</script>
 
 <?php get_footer();
