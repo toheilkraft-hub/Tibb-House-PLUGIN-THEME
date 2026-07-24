@@ -246,6 +246,11 @@ echo "  ✓ Assigned footer menu to location 'footer'\n";
 
 // ── 6. Flush rewrite rules ────────────────────────────────────────────────
 echo "\n=== Flushing Rewrite Rules ===\n";
+// Ensure pretty permalinks are active (lost on fresh SQLite installs).
+if ( get_option( 'permalink_structure' ) !== '/%postname%/' ) {
+	update_option( 'permalink_structure', '/%postname%/' );
+	echo "  ✓ Set permalink structure to /%postname%/\n";
+}
 flush_rewrite_rules( true );
 echo "  ✓ Rewrite rules flushed\n";
 
