@@ -1,8 +1,4 @@
-import path from 'path';
-import react from '@vitejs/plugin-react';
-import tailwindcss from '@tailwindcss/vite';
 import { defineConfig } from 'vite';
-import runtimeErrorOverlay from '@replit/vite-plugin-runtime-error-modal';
 
 const rawPort = process.env.PORT;
 if (!rawPort) throw new Error('PORT environment variable is required.');
@@ -11,43 +7,25 @@ if (Number.isNaN(port) || port <= 0) throw new Error(`Invalid PORT: "${rawPort}"
 
 const basePath = process.env.BASE_PATH ?? '/';
 
-export default defineConfig(async () => ({
+export default defineConfig({
   base: basePath,
-  plugins: [
-    react(),
-    tailwindcss(),
-    runtimeErrorOverlay(),
-    ...(process.env.NODE_ENV !== 'production' && process.env.REPL_ID
-      ? [
-          await import('@replit/vite-plugin-cartographer').then((m) =>
-            m.cartographer({ root: path.resolve(import.meta.dirname, '..') })
-          ),
-          await import('@replit/vite-plugin-dev-banner').then((m) => m.devBanner()),
-        ]
-      : []),
-  ],
-  resolve: {
-    alias: {
-      '@': path.resolve(import.meta.dirname, 'src'),
-    },
-    dedupe: ['react', 'react-dom'],
-  },
-  root: path.resolve(import.meta.dirname),
-  build: {
-    outDir: path.resolve(import.meta.dirname, 'dist/public'),
-    emptyOutDir: true,
-  },
+
+  // 'custom' tells Vite not to serve its own index.html for any route.
+  // Every request falls through to the proxy → WordPress on port 6000.
+  appType: 'custom',
+
   server: {
     port,
     strictPort: true,
     host: '0.0.0.0',
     allowedHosts: true,
-    fs: { strict: true },
     proxy: {
       '^/.*': {
         target: 'http://127.0.0.1:6000',
         changeOrigin: false,
         configure: (proxy) => {
+          // Forward the original protocol and host so WordPress builds
+          // correct absolute URLs (CSS, images, links).
           proxy.on('proxyReq', (proxyReq, req) => {
             const forwardedProto = String(req.headers['x-forwarded-proto'] ?? '')
               .split(',')[0]
@@ -56,24 +34,27 @@ export default defineConfig(async () => ({
               .split(',')[0]
               .trim();
             const requestHost = forwardedHost || req.headers.host || '';
-            const isLocalHost = /^(127\.0\.0\.1|localhost)(:\d+)?$/.test(requestHost);
-            const protocol =
-              forwardedProto || (isLocalHost ? 'http' : 'https');
+            const isLocal = /^(127\.0\.0\.1|localhost)(:\d+)?$/.test(requestHost);
+            const protocol = forwardedProto || (isLocal ? 'http' : 'https');
 
             proxyReq.setHeader('X-Forwarded-Proto', protocol);
             if (requestHost) {
               proxyReq.setHeader('X-Forwarded-Host', requestHost);
             }
           });
+
+          // Strip absolute origin prefixes from HTML responses so that
+          // asset URLs are root-relative and work through the Replit proxy.
           proxy.on('proxyRes', (proxyRes, req, res) => {
             const forwardedHost = String(req.headers['x-forwarded-host'] ?? '')
               .split(',')[0]
               .trim();
             const requestHost = forwardedHost || req.headers.host || '';
-            const isLocalHost = /^(127\.0\.0\.1|localhost)(:\d+)?$/.test(requestHost);
+            const isLocal = /^(127\.0\.0\.1|localhost)(:\d+)?$/.test(requestHost);
             const contentType = String(proxyRes.headers['content-type'] ?? '');
 
-            if (!isLocalHost || !contentType.includes('text/html')) {
+            // Only rewrite HTML served to a local (dev) request.
+            if (!isLocal || !contentType.includes('text/html')) {
               return;
             }
 
@@ -95,9 +76,10 @@ export default defineConfig(async () => ({
       },
     },
   },
+
   preview: {
     port,
     host: '0.0.0.0',
     allowedHosts: true,
   },
-}));
+});
