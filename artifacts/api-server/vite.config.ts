@@ -1,4 +1,5 @@
 import { defineConfig } from 'vite';
+import path from 'path';
 
 const rawPort = process.env.PORT;
 if (!rawPort) throw new Error('PORT environment variable is required.');
@@ -12,6 +13,11 @@ if (Number.isNaN(port) || port <= 0) throw new Error(`Invalid PORT: "${rawPort}"
  * URLs to https:// in HTML output (fixes mixed-content blocking).
  */
 export default defineConfig({
+  resolve: {
+    alias: {
+      '@': path.resolve(__dirname, './src'),
+    },
+  },
   server: {
     port,
     strictPort: true,
