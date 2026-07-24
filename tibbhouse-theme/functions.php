@@ -396,9 +396,18 @@ function tibbhouse_create_hipaa_ghost_page() {
 add_action( 'admin_init', 'tibbhouse_create_hipaa_ghost_page' );
 
 /**
- * Helper: return the permalink of the HIPAA ghost page (or '#' as fallback).
+ * Helper: return the permalink of the dedicated private HIPAA page.
+ *
+ * The seeded page uses the stable `private-data-hipaa` slug and is titled
+ * "Secure Patient Intake". Keep the title lookup as a compatibility fallback
+ * for older installs that used the "PRIVATE DATA HIPAA" ghost-page title.
  */
 function tibbhouse_hipaa_url() {
-	$page = get_page_by_title( 'PRIVATE DATA HIPAA', OBJECT, 'page' );
-	return $page ? get_permalink( $page ) : '#';
+	$page = get_page_by_path( 'private-data-hipaa', OBJECT, 'page' );
+
+	if ( ! $page ) {
+		$page = get_page_by_title( 'PRIVATE DATA HIPAA', OBJECT, 'page' );
+	}
+
+	return $page ? get_permalink( $page ) : home_url( '/private-data-hipaa/' );
 }
