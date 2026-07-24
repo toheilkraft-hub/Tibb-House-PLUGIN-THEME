@@ -222,27 +222,22 @@ if (\$current !== \$theme) {
 \$db->close();
 " || die "Failed to activate theme/plugin via SQLite."
 
-# ── 8. Set Homepage to Front Page Template ────────────────────────────────────
-step "Homepage Settings"
-php -r "
-\$db = new SQLite3('$DB_FILE');
-\$prefix = 'wp_';
+# ── 8. Seed pages, menus & reading settings ───────────────────────────────────
+# Creates: Home, About Us, Contact Us, Blog, Patient Forms, Secure Patient Intake
+# Sets:    static front page → Home, posts page → Blog
+# Builds:  Primary Navigation & Footer Navigation menus
+# Safe to run multiple times — checks for existing pages/menus before creating.
+step "Pages, Menus & Front-Page Settings"
+php "$REPO_ROOT/scripts/seed-pages-menus.php" \
+  || die "seed-pages-menus.php failed — see output above."
 
-// Ensure 'show_on_front' is 'posts' (renders front-page.php automatically)
-\$current = \$db->querySingle(
-    \"SELECT option_value FROM {\$prefix}options WHERE option_name = 'show_on_front'\"
-);
-if (\$current !== 'posts') {
-    \$db->exec(\"
-        UPDATE {\$prefix}options SET option_value = 'posts'
-        WHERE option_name = 'show_on_front'
-    \");
-    echo '  ✓ Homepage set to front-page.php template' . PHP_EOL;
-} else {
-    echo '  ✓ Homepage already configured' . PHP_EOL;
-}
-\$db->close();
-" 2>/dev/null || warn "Could not verify homepage setting (non-fatal)"
+# ── 9. Seed starter CPT content ───────────────────────────────────────────────
+# Creates: Treatments, Conditions, Knowledge, Practitioners, Locations
+# Attaches bundled images as featured images.
+# Safe to run multiple times — flag-guarded so each seeder runs only once.
+step "Starter Content (Treatments, Conditions, Practitioners, etc.)"
+php "$REPO_ROOT/scripts/seed-starter-content.php" \
+  || die "seed-starter-content.php failed — see output above."
 
 # ── Done ──────────────────────────────────────────────────────────────────────
 echo ""
