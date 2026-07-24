@@ -336,3 +336,21 @@ function tibbhouse_customize_preview_js() {
 add_action( 'customize_preview_init', function() {
 	add_action( 'wp_footer', 'tibbhouse_customize_preview_js' );
 } );
+
+
+/**
+ * Auto-assign the Contact Page template to the "TIBB HOUSE – Contact Us" page.
+ * Runs on admin_init so it applies after the page is created by the menu installer.
+ * Idempotent — only writes the meta once.
+ */
+function tibbhouse_assign_contact_template() {
+	$contact = get_page_by_title( 'TIBB HOUSE – Contact Us', OBJECT, 'page' );
+	if ( ! $contact ) {
+		return;
+	}
+	$current = get_post_meta( $contact->ID, '_wp_page_template', true );
+	if ( 'page-contact.php' !== $current ) {
+		update_post_meta( $contact->ID, '_wp_page_template', 'page-contact.php' );
+	}
+}
+add_action( 'admin_init', 'tibbhouse_assign_contact_template' );
