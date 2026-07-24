@@ -43,6 +43,20 @@ export default defineConfig(async () => ({
     host: '0.0.0.0',
     allowedHosts: true,
     fs: { strict: true },
+    proxy: {
+      '^/.*': {
+        target: 'http://127.0.0.1:6000',
+        changeOrigin: false,
+        configure: (proxy) => {
+          proxy.on('proxyReq', (proxyReq, req) => {
+            proxyReq.setHeader('X-Forwarded-Proto', 'https');
+            if (req.headers.host) {
+              proxyReq.setHeader('X-Forwarded-Host', req.headers.host);
+            }
+          });
+        },
+      },
+    },
   },
   preview: {
     port,

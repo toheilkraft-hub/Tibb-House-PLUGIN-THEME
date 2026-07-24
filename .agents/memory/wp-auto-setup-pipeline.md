@@ -32,3 +32,11 @@ Project runs **sequential**: setup-wordpress.sh → WordPress Server → artifac
 ## post-merge.sh
 
 Runs `pnpm install --frozen-lockfile` then `bash scripts/setup-wordpress.sh` after every GitHub import.
+
+## Page and menu content seed
+
+The bootstrap script installs WordPress, activates the theme/plugin, and prepares the runtime, but it does not create the user-facing Home, About Us, Contact Us, Blog, Patient Forms, or navigation records. Those are maintained by the separate idempotent `scripts/seed-pages-menus.php` step.
+
+**Why:** A fresh runtime can be technically healthy while still showing only WordPress defaults and incomplete navigation.
+
+**How to apply:** Run the seeder after first install or import when the preview must contain the complete Tibb House page/menu set; it safely reuses existing pages and rebuilds the seeded menus.

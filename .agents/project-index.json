@@ -1,0 +1,75 @@
+{
+  "version": 1,
+  "purpose": "Incremental project scan index for the imported Tibb House WordPress site.",
+  "sourceOfTruth": {
+    "theme": "tibbhouse-theme",
+    "plugin": "tibbhouse-core",
+    "wordpressRuntime": "wordpress",
+    "previewProxy": "artifacts/api-server"
+  },
+  "scanPolicy": {
+    "initialScanCompleted": true,
+    "rescanOnlyChangedFiles": true,
+    "preserveExistingPages": true,
+    "preservedRoutes": [
+      "Home",
+      "About Us",
+      "Contact Us",
+      "Treatments",
+      "Conditions",
+      "Practitioners",
+      "Blog",
+      "Patient Forms"
+    ],
+    "lastReference": "attached_assets/screencapture-tibbhouse-2026-07-24-22_52_25_1784915737662.pdf"
+  },
+  "components": {
+    "themeTemplates": [
+      "404.php",
+      "footer.php",
+      "front-page.php",
+      "functions.php",
+      "header.php",
+      "index.php",
+      "page-contact.php",
+      "page-hipaa.php",
+      "page.php",
+      "search.php",
+      "sidebar.php",
+      "single.php",
+      "template-front-replit.php"
+    ],
+    "themeIncludes": [
+      "inc/homepage-install.php",
+      "inc/homepage-render.php",
+      "inc/image-import.php",
+      "inc/menu-install.php"
+    ],
+    "pluginTemplates": "tibbhouse-core/templates",
+    "pluginIncludes": "tibbhouse-core/includes",
+    "assets": [
+      "tibbhouse-theme/assets",
+      "tibbhouse-core/assets",
+      "wordpress/wp-content/uploads"
+    ]
+  },
+  "dependencies": {
+    "runtime": [
+      "WordPress",
+      "PHP",
+      "SQLite Database Integration"
+    ],
+    "workspace": [
+      "pnpm",
+      "artifacts/api-server"
+    ],
+    "externalServicesRequired": false,
+    "runtimeSeed": "scripts/seed-pages-menus.php"
+  },
+  "verification": {
+    "workflow": "Project",
+    "wordpressPort": 6000,
+    "proxyPort": 22729,
+    "referencePagesRendered": 3
+  }
+}
