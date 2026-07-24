@@ -73,6 +73,7 @@ final class Tibbhouse_Core {
 		require_once TIBBHOUSE_CORE_PATH . 'includes/class-frontend.php';
 		require_once TIBBHOUSE_CORE_PATH . 'includes/class-starter-content.php';
 		require_once TIBBHOUSE_CORE_PATH . 'includes/class-admin-thumbnails.php';
+require_once TIBBHOUSE_CORE_PATH . 'includes/class-intake-ajax.php';
 	}
 
 	/**
@@ -80,6 +81,8 @@ final class Tibbhouse_Core {
 	 */
 	private function init_hooks() {
 		add_action( 'init', array( $this, 'load_textdomain' ) );
+		add_action( 'init', array( 'Tibbhouse_Intake_Ajax', 'register' ) );
+		add_action( 'init', array( $this, 'register_intake_cpt' ) );
 		add_action( 'admin_init', array( $this, 'maybe_seed_on_admin_init' ) );
 		add_action( 'admin_init', array( $this, 'maybe_seed_v2_on_admin_init' ) );
 		add_action( 'admin_init', array( $this, 'maybe_seed_v3_on_admin_init' ) );
@@ -104,6 +107,21 @@ final class Tibbhouse_Core {
 	/**
 	 * Load the plugin translation files.
 	 */
+	public function register_intake_cpt() {
+		register_post_type( 'th_intake', array(
+			'label'               => 'Intake Records',
+			'public'              => false,
+			'show_ui'             => true,
+			'show_in_menu'        => true,
+			'capability_type'     => 'post',
+			'capabilities'        => array( 'create_posts' => 'do_not_allow' ),
+			'map_meta_cap'        => true,
+			'supports'            => array( 'title', 'editor' ),
+			'show_in_rest'        => false,
+			'menu_icon'           => 'dashicons-shield-alt',
+		) );
+	}
+
 	public function load_textdomain() {
 		load_plugin_textdomain( 'tibbhouse-core', false, dirname( TIBBHOUSE_CORE_BASENAME ) . '/languages' );
 	}
