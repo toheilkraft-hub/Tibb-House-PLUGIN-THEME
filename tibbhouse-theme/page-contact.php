@@ -251,4 +251,41 @@ get_header();
 
 </div><!-- /.tibbhouse-main -->
 
+<!-- ── Medical Concerns Ghost-Page Band ── -->
+<div class="th-medical-band th-reveal-init" data-reveal="up">
+	<div class="th-medical-band-inner">
+
+		<div class="th-medical-band-icon" aria-hidden="true">
+			<svg width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round">
+				<path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/>
+				<line x1="12" y1="8" x2="12" y2="12"/>
+				<line x1="12" y1="16" x2="12.01" y2="16"/>
+			</svg>
+		</div>
+
+		<div class="th-medical-band-copy">
+			<h3><?php esc_html_e( 'Want to share your medical concerns?', 'tibbhouse' ); ?></h3>
+			<p><?php esc_html_e( 'For sensitive health information, we provide a secure private space — separate from this form and handled with full confidentiality.', 'tibbhouse' ); ?></p>
+		</div>
+
+		<a href="<?php echo esc_url( tibbhouse_hipaa_url() ); ?>"
+		   target="_blank"
+		   rel="noopener noreferrer"
+		   class="th-private-btn"
+		   aria-label="<?php esc_attr_e( 'Open secure private medical data form', 'tibbhouse' ); ?>"
+		>
+			<span class="th-private-btn-shimmer" aria-hidden="true"></span>
+			<svg class="th-private-btn-icon" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+				<rect x="3" y="11" width="18" height="11" rx="2" ry="2"/>
+				<path d="M7 11V7a5 5 0 0 1 10 0v4"/>
+			</svg>
+			<span class="th-private-btn-label"><?php esc_html_e( 'Enter Secure Space', 'tibbhouse' ); ?></span>
+			<svg class="th-private-btn-arrow" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+				<line x1="7" y1="17" x2="17" y2="7"/><polyline points="7 7 17 7 17 17"/>
+			</svg>
+		</a>
+
+	</div>
+</div>
+
 <?php get_footer();

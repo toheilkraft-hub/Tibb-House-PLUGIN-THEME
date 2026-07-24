@@ -354,3 +354,51 @@ function tibbhouse_assign_contact_template() {
 	}
 }
 add_action( 'admin_init', 'tibbhouse_assign_contact_template' );
+
+
+/**
+ * Create the "PRIVATE DATA HIPAA" ghost page and assign the blank HIPAA template.
+ *
+ * The page is published (so it has a real URL) but is intentionally excluded from
+ * all nav menus and sitemaps — a ghost that only the direct link can reach.
+ * Idempotent: creates once, then only updates the template meta if missing.
+ */
+function tibbhouse_create_hipaa_ghost_page() {
+	$existing = get_page_by_title( 'PRIVATE DATA HIPAA', OBJECT, 'page' );
+
+	if ( ! $existing ) {
+		$page_id = wp_insert_post( array(
+			'post_title'   => 'PRIVATE DATA HIPAA',
+			'post_name'    => 'private-data-hipaa',
+			'post_status'  => 'publish',
+			'post_type'    => 'page',
+			'post_content' => '',
+			'post_author'  => 1,
+			'menu_order'   => 9999,
+			'comment_status' => 'closed',
+			'ping_status'    => 'closed',
+		), true );
+
+		if ( ! is_wp_error( $page_id ) ) {
+			update_post_meta( $page_id, '_wp_page_template', 'page-hipaa.php' );
+			// Exclude from sitemap plugins (Yoast, RankMath, etc.)
+			update_post_meta( $page_id, '_yoast_wpseo_meta-robots-noindex', '1' );
+			update_post_meta( $page_id, '_yoast_wpseo_meta-robots-nofollow', '1' );
+			update_post_meta( $page_id, 'rank_math_robots', array( 'noindex', 'nofollow' ) );
+		}
+	} else {
+		$tpl = get_post_meta( $existing->ID, '_wp_page_template', true );
+		if ( 'page-hipaa.php' !== $tpl ) {
+			update_post_meta( $existing->ID, '_wp_page_template', 'page-hipaa.php' );
+		}
+	}
+}
+add_action( 'admin_init', 'tibbhouse_create_hipaa_ghost_page' );
+
+/**
+ * Helper: return the permalink of the HIPAA ghost page (or '#' as fallback).
+ */
+function tibbhouse_hipaa_url() {
+	$page = get_page_by_title( 'PRIVATE DATA HIPAA', OBJECT, 'page' );
+	return $page ? get_permalink( $page ) : '#';
+}
