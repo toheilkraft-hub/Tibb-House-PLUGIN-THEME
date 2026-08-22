@@ -5,40 +5,61 @@ generated = []
 id = "0ySybj2JtYkdhKU4pVHSf"
 uri = "file://tibbhouse-core.zip"
 type = "unspecified"
-title = "tibbhouse-core.zip — Plugin (Plugins › Add New › Upload)"
+title = "Tibb House Core Plugin ZIP"
+description = "Upload in WordPress via Plugins → Add New → Upload Plugin."
+logical_id = "78049eaa-2b94-430b-a75d-c2c2d4208edb"
+content_hash = "sha256:849f29a882c89bff681e59758d20d2f04f584b4ff4b35c0f42459dc6dbcd73c4"
+size = 3422870
+mtime_ms = 1787415410367
+storage_uri = "gcs://replit-rams-assets-sisko/rams/assets/repl:9a53dc98-de25-412d-98a8-0114a263318b/78049eaa-2b94-430b-a75d-c2c2d4208edb/1b109c2c-6d2b-4709-90fe-1ddb3913492e"
+storage_version_token = "1787415418897298"
+content_type = "application/octet-stream"
 
 [[outputs]]
 id = "EciiWgNOjRQY4JZVhFpSr"
 uri = "file://tibbhouse-core-v2.zip"
 type = "unspecified"
 title = "tibbhouse-core-v2.zip — WordPress Plugin"
+logical_id = "e37ac7b7-0a49-4927-9075-1f264d74a5e5"
 
 [[outputs]]
 id = "_f16TAM35PywXFyysvOSW"
 uri = "file://tibbhouse-core-v3.zip"
 type = "unspecified"
 title = "Tibb House Core – WordPress Plugin (v3, Astra template override fix)"
+logical_id = "88023048-c3b4-4d69-ba2b-af089b78d98c"
 
 [[outputs]]
 id = "9PSzIJhGkvK1HbAwayODw"
 uri = "file://tibbhouse-complete.zip"
 type = "unspecified"
 title = "tibbhouse-complete.zip — Plugin + Theme (with Gallery & Video)"
+logical_id = "a33a65ee-ae9b-4ba8-bf81-52bcbb9bc3b6"
 
 [[outputs]]
 id = "uBz4ZqFB0heiygc7kwAHQ"
 uri = "file://tibbhouse-core-latest.zip"
 type = "unspecified"
 title = "Tibb House Core Plugin (updated)"
+logical_id = "c37a54d4-8411-421a-b250-fffc517773b0"
 
 [[outputs]]
 id = "3bDtMMyx21AgDeogzqlqN"
 uri = "file://tibbhouse-theme-latest.zip"
 type = "unspecified"
 title = "Tibb House Theme (updated)"
+logical_id = "c270f401-035b-4c3a-bd00-e02b846033c2"
 
 [[outputs]]
 id = "mhUfGwU0keUtW_aJYtbqy"
 uri = "file://tibbhouse-theme.zip"
 type = "unspecified"
-title = "tibbhouse-theme.zip — Theme (Appearance › Themes › Upload)"
+title = "Tibb House Theme ZIP"
+description = "Upload in WordPress via Appearance → Themes → Add New → Upload Theme."
+logical_id = "1807ba1a-ef02-4f29-8e25-c38cca43dbd7"
+content_hash = "sha256:532aee44154a75fb17b2c3da2420f4023a1f1c79cb51db374d59d9346d0e7e13"
+size = 4370003
+mtime_ms = 1787415410248
+storage_uri = "gcs://replit-rams-assets-sisko/rams/assets/repl:9a53dc98-de25-412d-98a8-0114a263318b/1807ba1a-ef02-4f29-8e25-c38cca43dbd7/5a1bd0d9-cf50-4da7-a422-aa3b59a16ef8"
+storage_version_token = "1787415417501127"
+content_type = "application/octet-stream"
