@@ -68,3 +68,10 @@ timeoutMs = 120000
 
 [nix]
 channel = "stable-25_05"
+
+[userenv]
+
+[userenv.shared]
+MEDPLUM_BASE_URL = "https://api.medplum.com"
+MEDPLUM_CLIENT_ID = "541b985f-8e9e-476d-808b-867d945b90e2"
+MEDPLUM_PROJECT_ID = "1bce5676-853c-43f3-ba0d-2b6338836006"

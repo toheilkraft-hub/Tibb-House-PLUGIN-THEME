@@ -1041,6 +1041,9 @@ async function submitForm() {
     fd.append('action', 'th_intake_submit');
     fd.append('nonce', nonce);
     fd.append('payload', JSON.stringify(payload));
+    uploadedFiles.forEach((file, index) => {
+      fd.append('intake_files[]', file, file.name || `medical-document-${index + 1}`);
+    });
 
     const res  = await fetch(AJAX_URL, { method:'POST', body: fd, credentials: 'same-origin' });
     const data = await res.json();
