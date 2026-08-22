@@ -12,6 +12,8 @@
 $th_form_sent    = false;
 $th_form_error   = '';
 $th_form_values  = array( 'first_name' => '', 'email' => '', 'phone' => '', 'message' => '' );
+$th_contact_email = 'noreply@tibbhouse.com';
+$th_contact_phone = '+44 7770 649765';
 
 if ( isset( $_POST['th_contact_nonce'] ) && wp_verify_nonce( sanitize_text_field( wp_unslash( $_POST['th_contact_nonce'] ) ), 'th_contact_form' ) ) {
 
@@ -30,7 +32,7 @@ if ( isset( $_POST['th_contact_nonce'] ) && wp_verify_nonce( sanitize_text_field
 	} elseif ( empty( $message ) ) {
 		$th_form_error = __( 'Please add a message before submitting.', 'tibbhouse' );
 	} else {
-		$to      = get_option( 'admin_email' );
+		$to      = $th_contact_email;
 		$subject = sprintf( __( 'New enquiry from %s — Tibb House', 'tibbhouse' ), $first_name );
 		$body    = sprintf(
 			"Name:    %s\nEmail:   %s\nPhone:   %s\n\nMessage:\n%s",
@@ -90,16 +92,16 @@ get_header();
 					</span>
 					<div>
 						<span class="th-contact-detail-label"><?php esc_html_e( 'Email', 'tibbhouse' ); ?></span>
-						<a href="mailto:<?php echo esc_attr( get_option( 'admin_email' ) ); ?>"><?php echo esc_html( get_option( 'admin_email' ) ); ?></a>
+						<a href="mailto:<?php echo esc_attr( $th_contact_email ); ?>"><?php echo esc_html( $th_contact_email ); ?></a>
 					</div>
 				</li>
 				<li>
 					<span class="th-contact-icon" aria-hidden="true">
-						<svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"/><polyline points="12 6 12 12 16 14"/></svg>
+						<svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M22 16.92v3a2 2 0 0 1-2.18 2 19.79 19.79 0 0 1-8.63-3.07A19.5 19.5 0 0 1 4.69 13a19.79 19.79 0 0 1-3.07-8.67A2 2 0 0 1 3.6 2.18h3a2 2 0 0 1 2 1.72c.127.96.361 1.903.7 2.81a2 2 0 0 1-.45 2.11L7.91 9.91a16 16 0 0 0 6.06 6.06l1.8-1.8a2 2 0 0 1 2.11-.45c.907.339 1.85.573 2.81.7A2 2 0 0 1 22 16.92z"/></svg>
 					</span>
 					<div>
-						<span class="th-contact-detail-label"><?php esc_html_e( 'Response time', 'tibbhouse' ); ?></span>
-						<span><?php esc_html_e( 'Within one business day', 'tibbhouse' ); ?></span>
+						<span class="th-contact-detail-label"><?php esc_html_e( 'Phone', 'tibbhouse' ); ?></span>
+						<a href="tel:<?php echo esc_attr( preg_replace( '/[^0-9+]/', '', $th_contact_phone ) ); ?>"><?php echo esc_html( $th_contact_phone ); ?></a>
 					</div>
 				</li>
 				<li>
