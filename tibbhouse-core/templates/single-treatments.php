@@ -16,6 +16,12 @@ while ( have_posts() ) :
 
 	$post_id             = get_the_ID();
 	$price               = get_post_meta( $post_id, 'th_price', true );
+	$what_it_is          = get_post_meta( $post_id, 'th_what_it_is', true );
+	$how_it_works        = get_post_meta( $post_id, 'th_how_it_works', true );
+	$benefits            = get_post_meta( $post_id, 'th_benefits', true );
+	$risks_side_effects  = get_post_meta( $post_id, 'th_risks_side_effects', true );
+	$who_should_not_use  = get_post_meta( $post_id, 'th_who_should_not_use', true );
+	$seek_care           = get_post_meta( $post_id, 'th_seek_care', true );
 	$duration            = get_post_meta( $post_id, 'th_duration', true );
 	$booking_url         = get_post_meta( $post_id, 'th_booking_url', true );
 	$cta_text            = get_post_meta( $post_id, 'th_cta_text', true );
@@ -134,6 +140,28 @@ while ( have_posts() ) :
 			<?php endif; ?>
 		</div>
 		<?php endif; ?>
+
+		<!-- Structured Treatment Information -->
+		<?php
+		$structured_sections = array(
+			__( 'What It Is', 'tibbhouse-core' )                 => $what_it_is,
+			__( 'How It Works', 'tibbhouse-core' )               => $how_it_works,
+			__( 'Benefits', 'tibbhouse-core' )                   => $benefits,
+			__( 'Risks and Side Effects', 'tibbhouse-core' )     => $risks_side_effects,
+			__( 'Who Should Not Use It', 'tibbhouse-core' )      => $who_should_not_use,
+			__( 'Cost', 'tibbhouse-core' )                       => $price,
+			__( 'When to Seek Professional Care', 'tibbhouse-core' ) => $seek_care,
+		);
+		foreach ( $structured_sections as $section_title => $section_content ) :
+			if ( ! $section_content ) {
+				continue;
+			}
+			?>
+			<section class="tibbhouse-section th-reveal th-treatment-structured-section">
+				<h2 class="tibbhouse-section-label th-treatment-section-title"><?php echo esc_html( $section_title ); ?></h2>
+				<div class="tibbhouse-section-body"><?php echo wp_kses_post( wpautop( $section_content ) ); ?></div>
+			</section>
+		<?php endforeach; ?>
 
 		<!-- Overview / Main Content -->
 		<?php $content = get_the_content(); if ( $content ) : ?>

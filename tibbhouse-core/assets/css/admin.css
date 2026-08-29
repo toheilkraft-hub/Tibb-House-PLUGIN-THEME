@@ -9,6 +9,13 @@
 	margin-bottom: 4px;
 }
 
+.tibbhouse-field-help {
+	display: block;
+	margin-top: 5px;
+	max-width: 780px;
+	color: #646970;
+}
+
 .tibbhouse-image-preview img {
 	max-width: 200px;
 	height: auto;

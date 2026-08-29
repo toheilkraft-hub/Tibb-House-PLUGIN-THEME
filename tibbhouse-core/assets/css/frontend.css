@@ -363,6 +363,33 @@
 .tibbhouse-section-body p { margin: 0 0 1em; }
 .tibbhouse-section-body p:last-child { margin-bottom: 0; }
 
+/* Structured Treatment information uses the existing section label treatment
+   while remaining a semantic subordinate heading for search and screen readers. */
+.tibbhouse-section h2.th-treatment-section-title {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  font-family: var(--th-font-body);
+  font-size: .7rem;
+  font-weight: 700;
+  letter-spacing: .25em;
+  text-transform: uppercase;
+  color: var(--th-gold);
+  margin: 0 0 16px;
+  line-height: 1.4;
+}
+
+.tibbhouse-section h2.th-treatment-section-title::after {
+  content: '';
+  flex: 1;
+  height: 1px;
+  background: var(--th-border);
+}
+
+.th-treatment-structured-section .tibbhouse-section-body {
+  max-width: 820px;
+}
+
 /* =====================================================
    TAXONOMY TAGS
    ===================================================== */

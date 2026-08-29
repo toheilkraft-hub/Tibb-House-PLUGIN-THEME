@@ -53,7 +53,7 @@ class Tibbhouse_Fields {
 	}
 
 	/**
-	 * The full field map: post_type => [ meta_key => [type, label, kind] ].
+	 * The full field map: post_type => [ meta_key => [type, label, kind, help] ].
 	 *
 	 * kind is one of: text, url, number, textarea, image, relationship, repeater, toggle.
 	 *
@@ -62,7 +62,13 @@ class Tibbhouse_Fields {
 	public function field_map() {
 		return array(
 			'treatments'    => array(
-				'th_price'              => array( 'string', __( 'Price', 'tibbhouse-core' ), 'text' ),
+				'th_what_it_is'         => array( 'string', __( 'What It Is', 'tibbhouse-core' ), 'textarea', __( 'Describe what this treatment is in clear, neutral language.', 'tibbhouse-core' ) ),
+				'th_how_it_works'       => array( 'string', __( 'How It Works', 'tibbhouse-core' ), 'textarea', __( 'Explain the proposed mechanism or process. Avoid unsupported claims or claims that the treatment cures diseases.', 'tibbhouse-core' ) ),
+				'th_benefits'           => array( 'string', __( 'Benefits', 'tibbhouse-core' ), 'textarea', __( 'List evidence-supported potential benefits. Avoid guaranteeing outcomes.', 'tibbhouse-core' ) ),
+				'th_risks_side_effects' => array( 'string', __( 'Risks and Side Effects', 'tibbhouse-core' ), 'textarea', __( 'Describe known risks, side effects, adverse effects, and important limitations.', 'tibbhouse-core' ) ),
+				'th_who_should_not_use' => array( 'string', __( 'Who Should Not Use It', 'tibbhouse-core' ), 'textarea', __( 'List contraindications, precautions, and situations where professional advice is required.', 'tibbhouse-core' ) ),
+				'th_price'              => array( 'string', __( 'Cost', 'tibbhouse-core' ), 'text', __( 'Enter a current price, price range, “Contact us for current pricing,” or leave blank if unavailable.', 'tibbhouse-core' ) ),
+				'th_seek_care'          => array( 'string', __( 'When to Seek Professional Care', 'tibbhouse-core' ), 'textarea', __( 'Explain when a person should seek assessment or medical care instead of relying on this treatment information.', 'tibbhouse-core' ) ),
 				'th_duration'           => array( 'string', __( 'Duration', 'tibbhouse-core' ), 'text' ),
 				'th_booking_url'        => array( 'string', __( 'Booking URL', 'tibbhouse-core' ), 'url' ),
 				'th_related_conditions' => array( 'array', __( 'Related Conditions', 'tibbhouse-core' ), 'relationship:conditions' ),
@@ -198,7 +204,8 @@ class Tibbhouse_Fields {
 		echo '<div class="tibbhouse-fields">';
 		foreach ( $fields[ $post->post_type ] as $meta_key => $config ) {
 			list( $type, $label, $kind ) = $config;
-			$this->render_field( $meta_key, $label, $kind, $post->ID );
+			$help = isset( $config[3] ) ? $config[3] : '';
+			$this->render_field( $meta_key, $label, $kind, $post->ID, $help );
 		}
 		echo '</div>';
 	}
@@ -210,8 +217,9 @@ class Tibbhouse_Fields {
 	 * @param string $label    Field label.
 	 * @param string $kind     Field kind (text|url|textarea|image|relationship:X|repeater|toggle).
 	 * @param int    $post_id  Current post ID.
+	 * @param string $help     Optional administrator help text.
 	 */
-	private function render_field( $meta_key, $label, $kind, $post_id ) {
+	private function render_field( $meta_key, $label, $kind, $post_id, $help = '' ) {
 		$value = get_post_meta( $post_id, $meta_key, true );
 
 		if ( 0 === strpos( $kind, 'relationship:' ) ) {
@@ -223,10 +231,11 @@ class Tibbhouse_Fields {
 		switch ( $kind ) {
 			case 'textarea':
 				printf(
-					'<p><label for="%1$s"><strong>%2$s</strong></label><br /><textarea id="%1$s" name="%1$s" rows="4" style="width:100%%;">%3$s</textarea></p>',
+					'<p><label for="%1$s"><strong>%2$s</strong></label><br /><textarea id="%1$s" name="%1$s" rows="6" style="width:100%%;">%3$s</textarea>%4$s</p>',
 					esc_attr( $meta_key ),
 					esc_html( $label ),
-					esc_textarea( $value )
+					esc_textarea( $value ),
+					$help ? '<span class="description tibbhouse-field-help">' . esc_html( $help ) . '</span>' : ''
 				);
 				break;
 
@@ -284,20 +293,22 @@ class Tibbhouse_Fields {
 
 			case 'url':
 				printf(
-					'<p><label for="%1$s"><strong>%2$s</strong></label><br /><input type="url" id="%1$s" name="%1$s" value="%3$s" style="width:100%%;" /></p>',
+					'<p><label for="%1$s"><strong>%2$s</strong></label><br /><input type="url" id="%1$s" name="%1$s" value="%3$s" style="width:100%%;" />%4$s</p>',
 					esc_attr( $meta_key ),
 					esc_html( $label ),
-					esc_attr( $value )
+					esc_attr( $value ),
+					$help ? '<span class="description tibbhouse-field-help">' . esc_html( $help ) . '</span>' : ''
 				);
 				break;
 
 			case 'text':
 			default:
 				printf(
-					'<p><label for="%1$s"><strong>%2$s</strong></label><br /><input type="text" id="%1$s" name="%1$s" value="%3$s" style="width:100%%;" /></p>',
+					'<p><label for="%1$s"><strong>%2$s</strong></label><br /><input type="text" id="%1$s" name="%1$s" value="%3$s" style="width:100%%;" />%4$s</p>',
 					esc_attr( $meta_key ),
 					esc_html( $label ),
-					esc_attr( $value )
+					esc_attr( $value ),
+					$help ? '<span class="description tibbhouse-field-help">' . esc_html( $help ) . '</span>' : ''
 				);
 				break;
 		}
