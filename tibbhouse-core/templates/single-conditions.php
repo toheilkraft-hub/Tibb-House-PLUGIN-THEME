@@ -15,8 +15,16 @@ while ( have_posts() ) :
 	the_post();
 
 	$post_id        = get_the_ID();
+	$definition     = get_post_meta( $post_id, 'th_definition', true );
 	$symptoms       = get_post_meta( $post_id, 'th_symptoms', true );
 	$causes         = get_post_meta( $post_id, 'th_causes', true );
+	$risk_factors   = get_post_meta( $post_id, 'th_risk_factors', true );
+	$diagnosis      = get_post_meta( $post_id, 'th_diagnosis', true );
+	$treatment_options = get_post_meta( $post_id, 'th_treatment_options', true );
+	$self_management = get_post_meta( $post_id, 'th_self_management', true );
+	$complications   = get_post_meta( $post_id, 'th_complications', true );
+	$uncertain       = get_post_meta( $post_id, 'th_uncertain', true );
+	$questions_for_clinician = get_post_meta( $post_id, 'th_questions_for_clinician', true );
 	$patient_profile= get_post_meta( $post_id, 'th_patient_profile', true );
 	$hero           = get_post_meta( $post_id, 'th_hero_image', true );
 	$faq            = get_post_meta( $post_id, 'th_faq', true );
@@ -114,25 +122,30 @@ while ( have_posts() ) :
 		</div>
 		<?php endif; ?>
 
-		<!-- Symptoms + Causes side-by-side or stacked -->
-		<?php if ( $symptoms || $causes ) : ?>
-		<div class="tibbhouse-section th-reveal">
-			<div class="th-info-grid">
-				<?php if ( $symptoms ) : ?>
-				<div>
-					<div class="tibbhouse-section-label"><?php esc_html_e( 'Symptoms', 'tibbhouse-core' ); ?></div>
-					<div class="tibbhouse-section-body"><?php echo wp_kses_post( wpautop( $symptoms ) ); ?></div>
-				</div>
-				<?php endif; ?>
-				<?php if ( $causes ) : ?>
-				<div>
-					<div class="tibbhouse-section-label"><?php esc_html_e( 'Causes', 'tibbhouse-core' ); ?></div>
-					<div class="tibbhouse-section-body"><?php echo wp_kses_post( wpautop( $causes ) ); ?></div>
-				</div>
-				<?php endif; ?>
-			</div>
-		</div>
-		<?php endif; ?>
+		<!-- Structured Condition Information -->
+		<?php
+		$structured_sections = array(
+			__( 'Definition', 'tibbhouse-core' )                    => $definition,
+			__( 'Causes', 'tibbhouse-core' )                       => $causes,
+			__( 'Risk Factors', 'tibbhouse-core' )                 => $risk_factors,
+			__( 'Symptoms', 'tibbhouse-core' )                     => $symptoms,
+			__( 'Diagnosis', 'tibbhouse-core' )                    => $diagnosis,
+			__( 'Treatment Options', 'tibbhouse-core' )            => $treatment_options,
+			__( 'Self-Management', 'tibbhouse-core' )              => $self_management,
+			__( 'Complications', 'tibbhouse-core' )                => $complications,
+			__( 'What Is Uncertain', 'tibbhouse-core' )             => $uncertain,
+			__( 'Questions to Ask Your Clinician', 'tibbhouse-core' ) => $questions_for_clinician,
+		);
+		foreach ( $structured_sections as $section_title => $section_content ) :
+			if ( ! $section_content ) {
+				continue;
+			}
+			?>
+			<section class="tibbhouse-section th-reveal th-condition-structured-section">
+				<h2 class="tibbhouse-section-label th-condition-section-title"><?php echo esc_html( $section_title ); ?></h2>
+				<div class="tibbhouse-section-body"><?php echo wp_kses_post( wpautop( $section_content ) ); ?></div>
+			</section>
+		<?php endforeach; ?>
 
 		<!-- Patient Profile (free text) -->
 		<?php if ( $patient_profile ) : ?>

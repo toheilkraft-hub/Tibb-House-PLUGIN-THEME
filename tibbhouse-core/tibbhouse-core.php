@@ -3,7 +3,7 @@
  * Plugin Name:       Tibb House Core
  * Plugin URI:        https://tibbhouse.example
  * Description:       Production-ready core plugin powering the Tibb House content platform: Treatments, Conditions, Knowledge, Practitioners and Locations, with native meta boxes, taxonomies, relationships, REST exposure and Gutenberg blocks. Built with native WordPress APIs only (no ACF, no third-party CPT plugins).
- * Version:           1.0.0
+ * Version:           1.1.0
  * Requires at least: 6.0
  * Requires PHP:      7.4
  * Author:            Tibb House
@@ -16,7 +16,7 @@ if ( ! defined( 'ABSPATH' ) ) {
 	exit; // No direct access.
 }
 
-define( 'TIBBHOUSE_CORE_VERSION', '1.0.0' );
+define( 'TIBBHOUSE_CORE_VERSION', '1.1.0' );
 define( 'TIBBHOUSE_CORE_FILE', __FILE__ );
 define( 'TIBBHOUSE_CORE_PATH', plugin_dir_path( __FILE__ ) );
 define( 'TIBBHOUSE_CORE_URL', plugin_dir_url( __FILE__ ) );

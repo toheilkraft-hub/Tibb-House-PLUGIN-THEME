@@ -23,6 +23,7 @@ export default defineConfig({
       '^/.*': {
         target: 'http://127.0.0.1:6000',
         changeOrigin: false,
+        selfHandleResponse: true,
         configure: (proxy) => {
           // Forward the original protocol and host so WordPress builds
           // correct absolute URLs (CSS, images, links).
@@ -55,6 +56,7 @@ export default defineConfig({
 
             // Only rewrite HTML served to a local (dev) request.
             if (!isLocal || !contentType.includes('text/html')) {
+              proxyRes.pipe(res);
               return;
             }
 

@@ -80,7 +80,7 @@ class Tibbhouse_Taxonomies {
 			'patient_profile',
 			__( 'Patient Profiles', 'tibbhouse-core' ),
 			__( 'Patient Profile', 'tibbhouse-core' ),
-			array( 'conditions', 'knowledge' ),
+			array( 'treatments', 'conditions', 'knowledge' ),
 			'patient-profile'
 		);
 

@@ -58,6 +58,54 @@ class Tibbhouse_Helpers {
 	}
 
 	/**
+	 * Extract the first numeric amount from a human-readable price field.
+	 *
+	 * Supports values such as "$60", "From $60" and "$60–$90". For ranges,
+	 * the starting amount is used for filtering.
+	 *
+	 * @param mixed $price Human-readable price.
+	 * @return float|null
+	 */
+	public static function price_value( $price ) {
+		if ( ! is_scalar( $price ) || '' === trim( (string) $price ) ) {
+			return null;
+		}
+
+		$price = str_replace( ',', '', (string) $price );
+		if ( preg_match( '/\d+(?:\.\d+)?/', $price, $matches ) ) {
+			return (float) $matches[0];
+		}
+
+		return null;
+	}
+
+	/**
+	 * Check a treatment price against the archive's lightweight price bands.
+	 *
+	 * @param mixed  $price Human-readable price.
+	 * @param string $range Range key.
+	 * @return bool
+	 */
+	public static function price_matches_range( $price, $range ) {
+		$value = self::price_value( $price );
+
+		if ( null === $value || ! $range ) {
+			return ! $range;
+		}
+
+		switch ( $range ) {
+			case 'under-50':
+				return $value < 50;
+			case '50-100':
+				return $value >= 50 && $value <= 100;
+			case '100-plus':
+				return $value > 100;
+			default:
+				return true;
+		}
+	}
+
+	/**
 	 * Render a `<select multiple>` populated with related posts of a given type.
 	 *
 	 * @param string $meta_key    Meta key storing the array of related post IDs.

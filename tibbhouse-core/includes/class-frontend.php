@@ -64,6 +64,132 @@ class Tibbhouse_Frontend {
 		$cpts = array( 'treatments', 'conditions', 'knowledge', 'practitioners', 'locations' );
 		if ( $query->is_post_type_archive( $cpts ) ) {
 			$query->set( 'posts_per_page', -1 );
+
+			$post_type = $query->get( 'post_type' );
+			if ( is_array( $post_type ) ) {
+				$post_type = reset( $post_type );
+			}
+
+			if ( in_array( $post_type, array( 'treatments', 'knowledge' ), true ) ) {
+				$this->apply_archive_filters( $query, $post_type );
+			}
+		}
+	}
+
+	/**
+	 * Apply the public Treatments / Knowledge archive controls to the main
+	 * query. Filters are intentionally GET-based so they remain bookmarkable
+	 * and work without an extra AJAX endpoint.
+	 *
+	 * @param WP_Query $query     The main archive query.
+	 * @param string   $post_type Archive post type.
+	 */
+	private function apply_archive_filters( $query, $post_type ) {
+		$tax_query  = (array) $query->get( 'tax_query' );
+		$meta_query = (array) $query->get( 'meta_query' );
+		$age        = isset( $_GET['th_age'] ) ? sanitize_title( wp_unslash( $_GET['th_age'] ) ) : '';
+		$sort       = isset( $_GET['th_sort'] ) ? sanitize_key( wp_unslash( $_GET['th_sort'] ) ) : '';
+
+		if ( $age && term_exists( $age, 'patient_profile' ) ) {
+			$tax_query[] = array(
+				'taxonomy' => 'patient_profile',
+				'field'    => 'slug',
+				'terms'    => $age,
+			);
+		}
+
+		if ( 'treatments' === $post_type ) {
+			$category = isset( $_GET['th_category'] ) ? sanitize_title( wp_unslash( $_GET['th_category'] ) ) : '';
+			if ( $category && term_exists( $category, 'vital_area' ) ) {
+				$tax_query[] = array(
+					'taxonomy' => 'vital_area',
+					'field'    => 'slug',
+					'terms'    => $category,
+				);
+			}
+		}
+
+		if ( 'knowledge' === $post_type ) {
+			$type = isset( $_GET['th_type'] ) ? sanitize_title( wp_unslash( $_GET['th_type'] ) ) : '';
+			if ( $type && term_exists( $type, 'knowledge_type' ) ) {
+				$tax_query[] = array(
+					'taxonomy' => 'knowledge_type',
+					'field'    => 'slug',
+					'terms'    => $type,
+				);
+			}
+		}
+
+		if ( count( $tax_query ) > 1 ) {
+			$tax_query['relation'] = 'AND';
+			$query->set( 'tax_query', $tax_query );
+		} elseif ( ! empty( $tax_query ) ) {
+			$query->set( 'tax_query', $tax_query );
+		}
+
+		if ( 'knowledge' === $post_type ) {
+			$related_treatment = isset( $_GET['th_related_treatment'] ) ? absint( $_GET['th_related_treatment'] ) : 0;
+			$related_condition = isset( $_GET['th_related_condition'] ) ? absint( $_GET['th_related_condition'] ) : 0;
+
+			if ( $related_treatment ) {
+				$meta_query[] = array(
+					'key'     => 'th_related_treatments',
+					'value'   => sprintf( ':%d;', $related_treatment ),
+					'compare' => 'LIKE',
+				);
+			}
+
+			if ( $related_condition ) {
+				$knowledge_ids = get_posts(
+					array(
+						'post_type'      => 'knowledge',
+						'post_status'    => 'publish',
+						'posts_per_page' => -1,
+						'fields'         => 'ids',
+						'meta_query'     => array(
+							array(
+								'key'     => 'th_related_conditions',
+								'value'   => sprintf( ':%d;', $related_condition ),
+								'compare' => 'LIKE',
+							),
+						),
+					)
+				);
+
+				// Include the pre-existing Condition → Knowledge relationship
+				// while new articles use the direct Knowledge field above.
+				$legacy_ids = get_post_meta( $related_condition, 'th_knowledge_relationships', true );
+				if ( is_array( $legacy_ids ) ) {
+					$knowledge_ids = array_merge( $knowledge_ids, array_map( 'absint', $legacy_ids ) );
+				}
+
+				$query->set( 'post__in', array_values( array_unique( array_filter( array_map( 'absint', $knowledge_ids ) ) ) ) ?: array( 0 ) );
+			}
+		}
+
+		if ( ! empty( $meta_query ) ) {
+			$query->set( 'meta_query', $meta_query );
+		}
+
+		switch ( $sort ) {
+			case 'oldest':
+				$query->set( 'orderby', 'date' );
+				$query->set( 'order', 'ASC' );
+				break;
+			case 'title':
+				$query->set( 'orderby', 'title' );
+				$query->set( 'order', 'ASC' );
+				break;
+			case 'recommended':
+				$query->set( 'meta_key', 'th_priority' );
+				$query->set( 'orderby', 'meta_value_num' );
+				$query->set( 'order', 'DESC' );
+				break;
+			case 'newest':
+			default:
+				$query->set( 'orderby', 'date' );
+				$query->set( 'order', 'DESC' );
+				break;
 		}
 	}
 

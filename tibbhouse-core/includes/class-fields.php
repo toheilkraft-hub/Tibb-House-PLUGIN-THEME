@@ -80,10 +80,19 @@ class Tibbhouse_Fields {
 				'th_outcome_measurement'=> array( 'string', __( 'Outcome Measurement', 'tibbhouse-core' ), 'textarea' ),
 				'th_gallery'            => array( 'array',  __( 'Photo Gallery', 'tibbhouse-core' ), 'gallery' ),
 				'th_video_url'          => array( 'string', __( 'Video URL (YouTube / Vimeo / MP4)', 'tibbhouse-core' ), 'url' ),
+				'th_priority'           => array( 'integer', __( 'Recommended Priority', 'tibbhouse-core' ), 'number', __( 'Higher numbers appear first when visitors choose Recommended.', 'tibbhouse-core' ) ),
 			),
 			'conditions'    => array(
+				'th_definition'              => array( 'string', __( 'Definition', 'tibbhouse-core' ), 'textarea' ),
 				'th_symptoms'                => array( 'string', __( 'Symptoms', 'tibbhouse-core' ), 'textarea' ),
 				'th_causes'                  => array( 'string', __( 'Causes', 'tibbhouse-core' ), 'textarea' ),
+				'th_risk_factors'            => array( 'string', __( 'Risk Factors', 'tibbhouse-core' ), 'textarea' ),
+				'th_diagnosis'               => array( 'string', __( 'Diagnosis', 'tibbhouse-core' ), 'textarea' ),
+				'th_treatment_options'       => array( 'string', __( 'Treatment Options', 'tibbhouse-core' ), 'textarea' ),
+				'th_self_management'         => array( 'string', __( 'Self-Management', 'tibbhouse-core' ), 'textarea' ),
+				'th_complications'           => array( 'string', __( 'Complications', 'tibbhouse-core' ), 'textarea' ),
+				'th_uncertain'               => array( 'string', __( 'What Is Uncertain', 'tibbhouse-core' ), 'textarea' ),
+				'th_questions_for_clinician' => array( 'string', __( 'Questions to Ask Your Clinician', 'tibbhouse-core' ), 'textarea' ),
 				'th_treatment_relationships' => array( 'array', __( 'Related Treatments', 'tibbhouse-core' ), 'relationship:treatments' ),
 				'th_knowledge_relationships' => array( 'array', __( 'Related Knowledge', 'tibbhouse-core' ), 'relationship:knowledge' ),
 				'th_patient_profile'         => array( 'string', __( 'Patient Profile (free text)', 'tibbhouse-core' ), 'text' ),
@@ -95,6 +104,11 @@ class Tibbhouse_Fields {
 				'th_practitioner_relationship' => array( 'array', __( 'Practitioner', 'tibbhouse-core' ), 'relationship:practitioners' ),
 				'th_knowledge_type'            => array( 'string', __( 'Knowledge Type (free text)', 'tibbhouse-core' ), 'text' ),
 				'th_evidence_level'            => array( 'string', __( 'Evidence Level (free text)', 'tibbhouse-core' ), 'text' ),
+				'th_related_treatments'        => array( 'array', __( 'Related Treatments', 'tibbhouse-core' ), 'relationship:treatments' ),
+				'th_related_conditions'        => array( 'array', __( 'Related Conditions', 'tibbhouse-core' ), 'relationship:conditions' ),
+				'th_last_reviewed'             => array( 'string', __( 'Last Reviewed Date', 'tibbhouse-core' ), 'date' ),
+				'th_medical_reviewer'          => array( 'string', __( 'Medical Reviewer', 'tibbhouse-core' ), 'text' ),
+				'th_priority'                  => array( 'integer', __( 'Recommended Priority', 'tibbhouse-core' ), 'number', __( 'Higher numbers appear first when visitors choose Recommended.', 'tibbhouse-core' ) ),
 				'th_references'                => array( 'string', __( 'References', 'tibbhouse-core' ), 'textarea' ),
 				'th_disclaimer'                => array( 'string', __( 'Disclaimer', 'tibbhouse-core' ), 'textarea' ),
 				'th_patient_experience_toggle' => array( 'boolean', __( 'Contains Patient Experience', 'tibbhouse-core' ), 'toggle' ),
@@ -301,6 +315,26 @@ class Tibbhouse_Fields {
 				);
 				break;
 
+			case 'date':
+				printf(
+					'<p><label for="%1$s"><strong>%2$s</strong></label><br /><input type="date" id="%1$s" name="%1$s" value="%3$s" />%4$s</p>',
+					esc_attr( $meta_key ),
+					esc_html( $label ),
+					esc_attr( $value ),
+					$help ? '<span class="description tibbhouse-field-help">' . esc_html( $help ) . '</span>' : ''
+				);
+				break;
+
+			case 'number':
+				printf(
+					'<p><label for="%1$s"><strong>%2$s</strong></label><br /><input type="number" min="0" step="1" id="%1$s" name="%1$s" value="%3$s" />%4$s</p>',
+					esc_attr( $meta_key ),
+					esc_html( $label ),
+					esc_attr( $value ),
+					$help ? '<span class="description tibbhouse-field-help">' . esc_html( $help ) . '</span>' : ''
+				);
+				break;
+
 			case 'text':
 			default:
 				printf(
@@ -449,6 +483,14 @@ class Tibbhouse_Fields {
 
 			case 'image':
 				update_post_meta( $post_id, $meta_key, absint( $raw ) );
+				break;
+
+			case 'number':
+				update_post_meta( $post_id, $meta_key, absint( $raw ) );
+				break;
+
+			case 'date':
+				update_post_meta( $post_id, $meta_key, sanitize_text_field( $raw ) );
 				break;
 
 			case 'gallery':

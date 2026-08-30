@@ -172,7 +172,10 @@ class Tibbhouse_Relationships {
 				break;
 
 			case 'knowledge':
-				$groups[ __( 'Related Conditions', 'tibbhouse-core' ) ] = $this->get_reverse_related( $post_id, 'conditions', 'th_knowledge_relationships' );
+				$related_conditions = $this->get_related_by_meta( $post_id, 'th_related_conditions' );
+				$legacy_conditions  = $this->get_reverse_related( $post_id, 'conditions', 'th_knowledge_relationships' );
+				$groups[ __( 'Related Conditions', 'tibbhouse-core' ) ] = $this->merge_related_posts( $related_conditions, $legacy_conditions );
+				$groups[ __( 'Related Treatments', 'tibbhouse-core' ) ] = $this->get_related_by_meta( $post_id, 'th_related_treatments' );
 				$groups[ __( 'Related Remedies', 'tibbhouse-core' ) ]   = $this->get_related_by_taxonomy( $post_id, 'remedies', 'treatments' );
 				break;
 
@@ -188,6 +191,29 @@ class Tibbhouse_Relationships {
 		}
 
 		return array_filter( $groups );
+	}
+
+	/**
+	 * Merge relationship results while preserving the explicit order and
+	 * avoiding duplicate cards when legacy and direct fields overlap.
+	 *
+	 * @param WP_Post[] $primary Primary relationship results.
+	 * @param WP_Post[] $legacy  Legacy relationship results.
+	 * @return WP_Post[]
+	 */
+	private function merge_related_posts( array $primary, array $legacy ) {
+		$merged = array();
+		$seen   = array();
+
+		foreach ( array_merge( $primary, $legacy ) as $related_post ) {
+			if ( ! $related_post instanceof WP_Post || isset( $seen[ $related_post->ID ] ) ) {
+				continue;
+			}
+			$seen[ $related_post->ID ] = true;
+			$merged[] = $related_post;
+		}
+
+		return $merged;
 	}
 
 	/**

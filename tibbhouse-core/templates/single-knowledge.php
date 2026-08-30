@@ -16,6 +16,8 @@ while ( have_posts() ) :
 
 	$post_id        = get_the_ID();
 	$author         = get_post_meta( $post_id, 'th_author', true );
+	$medical_reviewer = get_post_meta( $post_id, 'th_medical_reviewer', true );
+	$last_reviewed  = get_post_meta( $post_id, 'th_last_reviewed', true );
 	$knowledge_type = get_post_meta( $post_id, 'th_knowledge_type', true );
 	$evidence_level = get_post_meta( $post_id, 'th_evidence_level', true );
 	$references     = get_post_meta( $post_id, 'th_references', true );
@@ -64,12 +66,20 @@ while ( have_posts() ) :
 
 			<h1><?php the_title(); ?></h1>
 
-			<?php if ( $author ) : ?>
+			<?php if ( $author || $medical_reviewer || $last_reviewed ) : ?>
 			<div class="tibbhouse-hero-meta">
-				<span class="th-meta-chip">
+				<?php if ( $author ) : ?><span class="th-meta-chip">
 					<svg viewBox="0 0 16 16"><circle cx="8" cy="5" r="3"/><path d="M2 14c0-3.31 2.69-6 6-6s6 2.69 6 6"/></svg>
 					<?php echo esc_html( $author ); ?>
-				</span>
+				</span><?php endif; ?>
+				<?php if ( $medical_reviewer ) : ?><span class="th-meta-chip">
+					<svg viewBox="0 0 16 16"><circle cx="8" cy="5" r="3"/><path d="M2 14c0-3.31 2.69-6 6-6s6 2.69 6 6"/></svg>
+					<?php echo esc_html( sprintf( __( 'Reviewed by %s', 'tibbhouse-core' ), $medical_reviewer ) ); ?>
+				</span><?php endif; ?>
+				<?php if ( $last_reviewed ) : ?><span class="th-meta-chip">
+					<svg viewBox="0 0 16 16"><rect x="2" y="3" width="12" height="11" rx="1"/><path d="M5 1v4M11 1v4M2 7h12"/></svg>
+					<?php echo esc_html( sprintf( __( 'Last reviewed %s', 'tibbhouse-core' ), $last_reviewed ) ); ?>
+				</span><?php endif; ?>
 			</div>
 			<?php endif; ?>
 		</div>
