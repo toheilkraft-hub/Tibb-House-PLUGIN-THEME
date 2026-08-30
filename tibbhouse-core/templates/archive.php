@@ -194,6 +194,7 @@ $related_conditions = 'knowledge' === $post_type ? get_posts( array( 'post_type'
 				$card_author = get_post_meta( get_the_ID(), 'th_author', true );
 				$card_reviewer = get_post_meta( get_the_ID(), 'th_medical_reviewer', true );
 				$card_reviewed = get_post_meta( get_the_ID(), 'th_last_reviewed', true );
+				$card_published = get_the_date();
 				$card_related_treatment_ids = get_post_meta( get_the_ID(), 'th_related_treatments', true );
 				$card_related_condition_ids = get_post_meta( get_the_ID(), 'th_related_conditions', true );
 				$card_related_treatment_ids = is_array( $card_related_treatment_ids ) ? array_filter( array_map( 'absint', $card_related_treatment_ids ) ) : array();
@@ -213,6 +214,9 @@ $related_conditions = 'knowledge' === $post_type ? get_posts( array( 'post_type'
 				}
 				if ( $card_reviewed ) {
 					$card_meta[] = sprintf( __( 'Reviewed %s', 'tibbhouse-core' ), $card_reviewed );
+				}
+				if ( $card_published ) {
+					$card_meta[] = sprintf( __( 'Published %s', 'tibbhouse-core' ), $card_published );
 				}
 				if ( $card_author || $card_reviewer ) {
 					$card_meta[] = trim( $card_author . ( $card_author && $card_reviewer ? ' · ' : '' ) . $card_reviewer );
