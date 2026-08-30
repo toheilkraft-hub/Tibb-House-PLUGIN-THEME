@@ -47,12 +47,21 @@ export default defineConfig({
           // Strip absolute origin prefixes from HTML responses so that
           // asset URLs are root-relative and work through the Replit proxy.
           proxy.on('proxyRes', (proxyRes, req, res) => {
+            const requestPath = String(req.url ?? '').split('?')[0];
             const forwardedHost = String(req.headers['x-forwarded-host'] ?? '')
               .split(',')[0]
               .trim();
             const requestHost = forwardedHost || req.headers.host || '';
             const isLocal = /^(127\.0\.0\.1|localhost)(:\d+)?$/.test(requestHost);
             const contentType = String(proxyRes.headers['content-type'] ?? '');
+
+            // PHP's built-in server can label static CSS/JS as text/plain.
+            // Normalize these types so browsers accept the theme/plugin assets.
+            if (requestPath.endsWith('.css')) {
+              res.setHeader('Content-Type', 'text/css; charset=utf-8');
+            } else if (requestPath.endsWith('.js')) {
+              res.setHeader('Content-Type', 'application/javascript; charset=utf-8');
+            }
 
             // Only rewrite HTML served to a local (dev) request.
             if (!isLocal || !contentType.includes('text/html')) {
