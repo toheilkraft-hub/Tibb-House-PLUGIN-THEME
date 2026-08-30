@@ -29,9 +29,10 @@ $type_labels = array(
 	'locations'    => esc_html__( 'Locations', 'tibbhouse-core' ),
 );
 
-$is_filterable = is_post_type_archive( array( 'treatments', 'knowledge' ) );
+$is_filterable = is_post_type_archive( array( 'treatments', 'conditions', 'knowledge' ) );
 $age           = isset( $_GET['th_age'] ) ? sanitize_title( wp_unslash( $_GET['th_age'] ) ) : '';
 $price_filter  = isset( $_GET['th_price'] ) ? sanitize_key( wp_unslash( $_GET['th_price'] ) ) : '';
+$remedy_filter = isset( $_GET['th_remedy'] ) ? sanitize_title( wp_unslash( $_GET['th_remedy'] ) ) : '';
 $archive_posts = isset( $GLOBALS['wp_query']->posts ) && is_array( $GLOBALS['wp_query']->posts ) ? $GLOBALS['wp_query']->posts : array();
 
 // Price is stored as an intentionally flexible human-readable field
@@ -49,7 +50,8 @@ if ( 'treatments' === $post_type && $price_filter ) {
 }
 
 $age_terms      = get_terms( array( 'taxonomy' => 'patient_profile', 'hide_empty' => false ) );
-$category_terms = 'treatments' === $post_type ? get_terms( array( 'taxonomy' => 'vital_area', 'hide_empty' => true ) ) : array();
+$category_terms = in_array( $post_type, array( 'treatments', 'conditions' ), true ) ? get_terms( array( 'taxonomy' => 'vital_area', 'hide_empty' => true ) ) : array();
+$remedy_terms = 'conditions' === $post_type ? get_terms( array( 'taxonomy' => 'remedies', 'hide_empty' => true ) ) : array();
 $knowledge_types = 'knowledge' === $post_type ? get_terms( array( 'taxonomy' => 'knowledge_type', 'hide_empty' => true ) ) : array();
 $related_treatments = 'knowledge' === $post_type ? get_posts( array( 'post_type' => 'treatments', 'post_status' => 'publish', 'posts_per_page' => -1, 'orderby' => 'title', 'order' => 'ASC' ) ) : array();
 $related_conditions = 'knowledge' === $post_type ? get_posts( array( 'post_type' => 'conditions', 'post_status' => 'publish', 'posts_per_page' => -1, 'orderby' => 'title', 'order' => 'ASC' ) ) : array();
@@ -76,7 +78,15 @@ $related_conditions = 'knowledge' === $post_type ? get_posts( array( 'post_type'
 			<div class="th-filter-intro">
 				<div>
 					<span class="th-filter-kicker"><?php esc_html_e( 'Refine your view', 'tibbhouse-core' ); ?></span>
-					<h2 id="th-filter-title"><?php echo 'treatments' === $post_type ? esc_html__( 'Find the right treatment', 'tibbhouse-core' ) : esc_html__( 'Explore our knowledge', 'tibbhouse-core' ); ?></h2>
+					<h2 id="th-filter-title"><?php
+					if ( 'treatments' === $post_type ) {
+						esc_html_e( 'Find the right treatment', 'tibbhouse-core' );
+					} elseif ( 'conditions' === $post_type ) {
+						esc_html_e( 'Explore conditions', 'tibbhouse-core' );
+					} else {
+						esc_html_e( 'Explore our knowledge', 'tibbhouse-core' );
+					}
+					?></h2>
 				</div>
 				<span class="th-filter-count"><?php echo esc_html( sprintf( _n( '%d result', '%d results', count( $archive_posts ), 'tibbhouse-core' ), count( $archive_posts ) ) ); ?></span>
 			</div>
@@ -93,7 +103,7 @@ $related_conditions = 'knowledge' === $post_type ? get_posts( array( 'post_type'
 						</select>
 					</label>
 
-					<?php if ( 'treatments' === $post_type ) : ?>
+					<?php if ( in_array( $post_type, array( 'treatments', 'conditions' ), true ) ) : ?>
 					<label>
 						<span><?php esc_html_e( 'Category / discipline', 'tibbhouse-core' ); ?></span>
 						<select name="th_category">
@@ -103,6 +113,7 @@ $related_conditions = 'knowledge' === $post_type ? get_posts( array( 'post_type'
 							<?php endforeach; ?>
 						</select>
 					</label>
+					<?php if ( 'treatments' === $post_type ) : ?>
 					<label>
 						<span><?php esc_html_e( 'Price range', 'tibbhouse-core' ); ?></span>
 						<select name="th_price">
@@ -112,6 +123,17 @@ $related_conditions = 'knowledge' === $post_type ? get_posts( array( 'post_type'
 							<option value="100-plus" <?php selected( $price_filter, '100-plus' ); ?>><?php esc_html_e( 'Over $100', 'tibbhouse-core' ); ?></option>
 						</select>
 					</label>
+					<?php else : ?>
+					<label>
+						<span><?php esc_html_e( 'Remedy', 'tibbhouse-core' ); ?></span>
+						<select name="th_remedy">
+							<option value=""><?php esc_html_e( 'All remedies', 'tibbhouse-core' ); ?></option>
+							<?php foreach ( $remedy_terms as $term ) : ?>
+								<option value="<?php echo esc_attr( $term->slug ); ?>" <?php selected( $remedy_filter, $term->slug ); ?>><?php echo esc_html( $term->name ); ?></option>
+							<?php endforeach; ?>
+						</select>
+					</label>
+					<?php endif; ?>
 					<?php else : ?>
 					<label>
 						<span><?php esc_html_e( 'Related treatment', 'tibbhouse-core' ); ?></span>
@@ -180,6 +202,15 @@ $related_conditions = 'knowledge' === $post_type ? get_posts( array( 'post_type'
 			$label = isset( $single_labels[ $card_post_type ] ) ? $single_labels[ $card_post_type ] : $card_post_type;
 			$card_meta = array();
 			if ( 'treatments' === $card_post_type ) {
+				$card_age_terms = get_the_terms( get_the_ID(), 'patient_profile' );
+				$card_category_terms = get_the_terms( get_the_ID(), 'vital_area' );
+				if ( $card_age_terms && ! is_wp_error( $card_age_terms ) ) {
+					$card_meta[] = implode( ', ', wp_list_pluck( $card_age_terms, 'name' ) );
+				}
+				if ( $card_category_terms && ! is_wp_error( $card_category_terms ) ) {
+					$card_meta[] = implode( ', ', wp_list_pluck( $card_category_terms, 'name' ) );
+				}
+			} elseif ( 'conditions' === $card_post_type ) {
 				$card_age_terms = get_the_terms( get_the_ID(), 'patient_profile' );
 				$card_category_terms = get_the_terms( get_the_ID(), 'vital_area' );
 				if ( $card_age_terms && ! is_wp_error( $card_age_terms ) ) {

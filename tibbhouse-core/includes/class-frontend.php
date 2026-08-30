@@ -70,14 +70,14 @@ class Tibbhouse_Frontend {
 				$post_type = reset( $post_type );
 			}
 
-			if ( in_array( $post_type, array( 'treatments', 'knowledge' ), true ) ) {
+			if ( in_array( $post_type, array( 'treatments', 'conditions', 'knowledge' ), true ) ) {
 				$this->apply_archive_filters( $query, $post_type );
 			}
 		}
 	}
 
 	/**
-	 * Apply the public Treatments / Knowledge archive controls to the main
+	 * Apply the public Treatments / Conditions / Knowledge archive controls to the main
 	 * query. Filters are intentionally GET-based so they remain bookmarkable
 	 * and work without an extra AJAX endpoint.
 	 *
@@ -98,13 +98,24 @@ class Tibbhouse_Frontend {
 			);
 		}
 
-		if ( 'treatments' === $post_type ) {
+		if ( in_array( $post_type, array( 'treatments', 'conditions' ), true ) ) {
 			$category = isset( $_GET['th_category'] ) ? sanitize_title( wp_unslash( $_GET['th_category'] ) ) : '';
 			if ( $category && term_exists( $category, 'vital_area' ) ) {
 				$tax_query[] = array(
 					'taxonomy' => 'vital_area',
 					'field'    => 'slug',
 					'terms'    => $category,
+				);
+			}
+		}
+
+		if ( 'conditions' === $post_type ) {
+			$remedy = isset( $_GET['th_remedy'] ) ? sanitize_title( wp_unslash( $_GET['th_remedy'] ) ) : '';
+			if ( $remedy && term_exists( $remedy, 'remedies' ) ) {
+				$tax_query[] = array(
+					'taxonomy' => 'remedies',
+					'field'    => 'slug',
+					'terms'    => $remedy,
 				);
 			}
 		}
