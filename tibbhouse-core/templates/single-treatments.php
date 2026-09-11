@@ -28,6 +28,12 @@ while ( have_posts() ) :
 	$cta_link            = get_post_meta( $post_id, 'th_cta_link', true );
 	$hero_image          = get_post_meta( $post_id, 'th_hero_image', true );
 	$faq                 = get_post_meta( $post_id, 'th_faq', true );
+	$faq                 = is_array( $faq ) ? array_filter(
+		$faq,
+		static function ( $item ) {
+			return is_array( $item ) && ! empty( trim( (string) ( $item['label'] ?? '' ) ) ) && ! empty( trim( (string) ( $item['value'] ?? '' ) ) );
+		}
+	) : array();
 	$evidence_level      = get_post_meta( $post_id, 'th_evidence_level', true );
 	$outcome_measurement = get_post_meta( $post_id, 'th_outcome_measurement', true );
 	$gallery             = get_post_meta( $post_id, 'th_gallery', true );

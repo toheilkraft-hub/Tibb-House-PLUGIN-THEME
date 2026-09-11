@@ -82,6 +82,22 @@
     });
   }
 
+  /* ── Related-content carousels ── */
+  function initRelatedCarousels() {
+    var buttons = document.querySelectorAll('[data-carousel-target]');
+    buttons.forEach(function (button) {
+      button.addEventListener('click', function () {
+        var track = document.getElementById(button.getAttribute('data-carousel-target'));
+        if (!track) return;
+        var amount = Math.max(track.clientWidth * 0.82, 280);
+        track.scrollBy({
+          left: button.classList.contains('th-related-prev') ? -amount : amount,
+          behavior: 'smooth'
+        });
+      });
+    });
+  }
+
   /* ── Init ── */
 
   /* ── Lightbox ── */
@@ -206,6 +222,7 @@
     initFAQ();
     initScrollReveal();
     initStagger();
+    initRelatedCarousels();
     initLightbox();
   }
 

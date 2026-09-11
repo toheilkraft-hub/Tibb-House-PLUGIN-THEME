@@ -49,7 +49,6 @@ class Tibbhouse_Relationships {
 	 * Hook the automatic content injection.
 	 */
 	private function __construct() {
-		add_filter( 'the_content', array( $this, 'maybe_append_related_content' ) );
 	}
 
 	/**
@@ -257,8 +256,28 @@ class Tibbhouse_Relationships {
 	<div class="tibbhouse-related-inner">
 		<?php foreach ( $groups as $label => $posts ) : ?>
 			<?php if ( empty( $posts ) ) { continue; } ?>
-			<h2><?php echo esc_html( $label ); ?></h2>
-			<div class="th-related-grid">
+			<?php
+			$carousel_id = wp_unique_id( 'th-related-carousel-' );
+			$use_carousel = count( $posts ) > 3;
+			?>
+			<div class="th-related-group">
+				<div class="th-related-heading">
+					<h2><?php echo esc_html( $label ); ?></h2>
+					<?php if ( $use_carousel ) : ?>
+					<div class="th-carousel-nav" aria-label="<?php echo esc_attr( sprintf( __( 'Browse %s', 'tibbhouse-core' ), $label ) ); ?>">
+						<button class="th-carousel-btn th-related-prev" type="button" data-carousel-target="<?php echo esc_attr( $carousel_id ); ?>" aria-label="<?php esc_attr_e( 'Previous related items', 'tibbhouse-core' ); ?>">
+							<svg viewBox="0 0 16 16" aria-hidden="true"><path d="M10 3 5 8l5 5" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/></svg>
+						</button>
+						<button class="th-carousel-btn th-related-next" type="button" data-carousel-target="<?php echo esc_attr( $carousel_id ); ?>" aria-label="<?php esc_attr_e( 'Next related items', 'tibbhouse-core' ); ?>">
+							<svg viewBox="0 0 16 16" aria-hidden="true"><path d="m6 3 5 5-5 5" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/></svg>
+						</button>
+					</div>
+					<?php endif; ?>
+				</div>
+			<div
+				id="<?php echo esc_attr( $carousel_id ); ?>"
+				class="<?php echo esc_attr( $use_carousel ? 'th-carousel-track' : 'th-related-grid' ); ?>"
+			>
 				<?php foreach ( $posts as $related_post ) : ?>
 				<?php
 				$rtype  = get_post_type( $related_post );
@@ -281,6 +300,7 @@ class Tibbhouse_Relationships {
 					</div>
 				</a>
 				<?php endforeach; ?>
+			</div>
 			</div>
 		<?php endforeach; ?>
 	</div>

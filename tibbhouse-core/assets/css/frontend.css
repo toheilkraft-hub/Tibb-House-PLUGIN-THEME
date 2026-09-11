@@ -309,7 +309,7 @@
 }
 
 .tibbhouse-inner.narrow {
-  max-width: 800px;
+  max-width: 1040px;
 }
 
 /* =====================================================
@@ -666,12 +666,28 @@
   padding: 0 5%;
 }
 
+.th-related-group {
+  margin-bottom: 52px;
+}
+
+.th-related-group:last-child {
+  margin-bottom: 0;
+}
+
+.th-related-heading {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 24px;
+  margin-bottom: 28px;
+}
+
 .tibbhouse-related h2 {
   font-family: var(--th-font-heading);
   font-size: 1.9rem;
   font-weight: 600;
   color: var(--th-green);
-  margin: 0 0 32px;
+  margin: 0;
   display: flex;
   align-items: center;
   gap: 12px;
@@ -688,7 +704,7 @@
 
 .th-related-grid {
   display: grid;
-  grid-template-columns: repeat(auto-fill, minmax(240px, 1fr));
+  grid-template-columns: repeat(4, minmax(0, 1fr));
   gap: 20px;
 }
 
@@ -763,6 +779,10 @@
   font-weight: 600;
   color: var(--th-dark);
   line-height: 1.3;
+}
+
+.th-carousel-track .th-related-card {
+  width: min(320px, 84vw);
 }
 
 /* =====================================================
@@ -1310,7 +1330,20 @@
   .th-filter-actions { align-items: flex-start; flex-direction: column; gap: 12px; }
   .tibbhouse-archive-grid { grid-template-columns: 1fr; }
   .th-info-grid { grid-template-columns: 1fr; }
-  .th-related-grid { grid-template-columns: 1fr; }
+  .th-related-grid {
+    display: flex;
+    gap: 14px;
+    overflow-x: auto;
+    padding-bottom: 8px;
+    scroll-snap-type: x proximity;
+    -webkit-overflow-scrolling: touch;
+  }
+  .th-related-grid > .th-related-card {
+    flex: 0 0 min(290px, 82vw);
+    scroll-snap-align: start;
+  }
+  .th-related-heading { align-items: flex-start; }
+  .th-related-heading .th-carousel-nav { display: none; }
   .th-btn-actions { flex-direction: column; }
   .tibbhouse-cta-band { padding: 40px 5%; }
 }

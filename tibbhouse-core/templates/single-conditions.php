@@ -28,6 +28,12 @@ while ( have_posts() ) :
 	$patient_profile= get_post_meta( $post_id, 'th_patient_profile', true );
 	$hero           = get_post_meta( $post_id, 'th_hero_image', true );
 	$faq            = get_post_meta( $post_id, 'th_faq', true );
+	$faq            = is_array( $faq ) ? array_filter(
+		$faq,
+		static function ( $item ) {
+			return is_array( $item ) && ! empty( trim( (string) ( $item['label'] ?? '' ) ) ) && ! empty( trim( (string) ( $item['value'] ?? '' ) ) );
+		}
+	) : array();
 
 	$constitutional_types = get_the_terms( $post_id, 'constitutional_type' );
 	$patient_profiles     = get_the_terms( $post_id, 'patient_profile' );

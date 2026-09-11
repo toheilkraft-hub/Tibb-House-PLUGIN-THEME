@@ -23,6 +23,12 @@ while ( have_posts() ) :
 	$references     = get_post_meta( $post_id, 'th_references', true );
 	$disclaimer     = get_post_meta( $post_id, 'th_disclaimer', true );
 	$faq            = get_post_meta( $post_id, 'th_faq', true );
+	$faq            = is_array( $faq ) ? array_filter(
+		$faq,
+		static function ( $item ) {
+			return is_array( $item ) && ! empty( trim( (string) ( $item['label'] ?? '' ) ) ) && ! empty( trim( (string) ( $item['value'] ?? '' ) ) );
+		}
+	) : array();
 
 	$knowledge_types  = get_the_terms( $post_id, 'knowledge_type' );
 	$evidence_terms   = get_the_terms( $post_id, 'evidence_level' );

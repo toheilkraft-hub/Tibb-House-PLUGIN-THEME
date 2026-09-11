@@ -54,6 +54,12 @@ export default defineConfig({
             const isLocal = /^(127\.0\.0\.1|localhost)(:\d+)?$/.test(requestHost);
             const contentType = String(proxyRes.headers['content-type'] ?? '');
 
+            Object.entries(proxyRes.headers).forEach(([header, value]) => {
+              if (header.toLowerCase() !== 'content-length' && value !== undefined) {
+                res.setHeader(header, value);
+              }
+            });
+
             // Only rewrite HTML served to a local (dev) request.
             if (!isLocal || !contentType.includes('text/html')) {
               proxyRes.pipe(res);
