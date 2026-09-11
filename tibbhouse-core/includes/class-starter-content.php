@@ -776,6 +776,444 @@ class Tibbhouse_Starter_Content {
 	}
 
 	/**
+	 * Option flag for the final cleanup and content-population pass.
+	 */
+	const SEEDED_V4_OPTION = 'tibbhouse_starter_content_seeded_v4';
+
+	/**
+	 * Final cleanup pass: hide obvious demo records and add a small set of
+	 * practitioner-led educational entries to the existing content system.
+	 */
+	public function maybe_seed_v4() {
+		if ( get_option( self::SEEDED_V4_OPTION ) ) {
+			return;
+		}
+
+		if ( ! post_type_exists( 'treatments' ) ) {
+			return;
+		}
+
+		try {
+			$this->hide_demo_content();
+			$term_ids = $this->seed_taxonomies();
+
+			$treatment_ids = $this->seed_items(
+				'treatments',
+				array(
+					array(
+						'title'    => 'Guided Dietary Assessment',
+						'excerpt'  => 'A practitioner-led consultation exploring eating patterns, constitution, lifestyle, and practical ways to support wellbeing without a one-size-fits-all plan.',
+						'sections' => array(
+							array(
+								'heading'    => 'Overview',
+								'paragraphs' => array(
+									'A guided dietary assessment looks at food patterns alongside sleep, activity, health history, medicines, and the individual’s constitutional context. It is an educational consultation, not an automatic treatment prescription.',
+								),
+							),
+							array(
+								'heading' => 'What the Consultation Covers',
+								'list'    => array(
+									'A review of usual meals, hydration, timing, and food preferences',
+									'Discussion of relevant health history and goals',
+									'Consideration of cultural, religious, practical, and financial factors',
+									'Shared next steps that can be reviewed with a qualified practitioner',
+								),
+							),
+							array(
+								'heading'    => 'Professional Guidance',
+								'paragraphs' => array(
+									'Suitability, frequency, and duration of any dietary change should be determined following an individual assessment by a qualified practitioner. People managing a diagnosed condition should also follow advice from their clinician.',
+								),
+							),
+							array(
+								'heading'    => 'References and Further Reading',
+								'paragraphs' => array(
+									'The consultation draws on established nutrition guidance, patient-reported context, and the Tibb House educational framework. References are discussed transparently during the appointment where relevant.',
+								),
+							),
+						),
+						'meta'     => array(
+							'th_what_it_is'         => 'A structured practitioner consultation about food habits and lifestyle context. It does not provide a universal meal plan or diagnose a health condition.',
+							'th_how_it_works'       => 'The practitioner reviews the person’s history, current habits, priorities, and relevant safety considerations before discussing general educational options.',
+							'th_benefits'           => 'Potential benefits include clearer understanding of eating patterns, practical questions to take to a clinician, and a more realistic basis for future lifestyle discussions.',
+							'th_risks_side_effects' => 'Dietary changes can affect energy, digestion, medicines, blood glucose, and other health measures. Changes should be discussed with a qualified professional when a condition or medication is involved.',
+							'th_who_should_not_use' => 'Anyone with a complex medical condition, disordered eating history, pregnancy-related concern, or medication-related dietary restriction should seek appropriate clinical advice before making changes.',
+							'th_price'              => 'From $75',
+							'th_duration'           => '60-minute practitioner consultation + follow-up',
+							'th_seek_care'          => 'Urgent or persistent symptoms should be assessed by an appropriate healthcare professional rather than managed through general dietary education.',
+							'th_cta_text'           => 'Book a Dietary Assessment',
+							'th_cta_link'           => home_url( '/contact-us/' ),
+							'th_evidence_level'     => 'Educational consultation informed by nutrition guidance and practitioner assessment.',
+							'th_priority'           => 80,
+							'th_faq'               => array(
+								array(
+									'label' => 'Will I receive a fixed meal plan?',
+									'value' => 'No. The consultation is designed to support an informed discussion. Any recommendations depend on the person’s circumstances and should be agreed with a qualified practitioner.',
+								),
+								array(
+									'label' => 'Can this replace medical advice?',
+									'value' => 'No. It is educational and complementary. A clinician should remain involved where symptoms, diagnoses, medicines, or specialist dietary needs are present.',
+								),
+							),
+						),
+						'terms'    => array(
+							'remedies'       => array( 'Dietary Therapy' ),
+							'vital_area'     => array( 'Digestive System' ),
+							'patient_profile'=> array( 'Adults' ),
+						),
+						'image'    => 'treatment-honey.jpg',
+					),
+					array(
+						'title'    => 'Personalised Herbal Consultation',
+						'excerpt'  => 'A careful review of traditional herbal approaches, safety considerations, and the questions a practitioner should explore before any remedy is considered.',
+						'sections' => array(
+							array(
+								'heading'    => 'Overview',
+								'paragraphs' => array(
+									'Herbal consultations at Tibb House are centred on assessment, safety, and informed choice. Traditional use can be discussed alongside current evidence, health history, medicines, allergies, and the person’s priorities.',
+								),
+							),
+							array(
+								'heading' => 'How Practitioners May Use the Consultation',
+								'list'    => array(
+									'Reviewing current medicines, supplements, and allergies',
+									'Discussing the traditional purpose and evidence for a remedy',
+									'Identifying situations where a remedy should be avoided or referred for clinical review',
+									'Agreeing how any follow-up or monitoring would be handled',
+								),
+							),
+							array(
+								'heading'    => 'Safe, Individualised Care',
+								'paragraphs' => array(
+									'Traditional remedies are not automatically suitable for every person. Frequency, duration, preparation, and suitability should be determined following assessment by a qualified practitioner, with referral to medical care where appropriate.',
+								),
+							),
+							array(
+								'heading'    => 'References and Further Reading',
+								'paragraphs' => array(
+									'The practitioner can explain the distinction between traditional use, observational evidence, and stronger clinical evidence for any remedy discussed.',
+								),
+							),
+						),
+						'meta'     => array(
+							'th_what_it_is'         => 'A consultation for discussing herbal and natural remedies in the context of a person’s history, medicines, allergies, and goals.',
+							'th_how_it_works'       => 'The practitioner takes a history, checks safety factors, explains the available evidence, and decides whether further assessment or referral is appropriate.',
+							'th_benefits'           => 'Potential benefits include a safer understanding of traditional remedies, clearer questions for a clinician, and a documented basis for follow-up.',
+							'th_risks_side_effects' => 'Herbs can cause side effects, allergies, interactions, contamination risks, or delayed care if used in place of appropriate treatment.',
+							'th_who_should_not_use' => 'People who are pregnant, breastfeeding, taking prescription medicines, preparing for surgery, or managing a significant condition should seek qualified advice before using a remedy.',
+							'th_price'              => 'From $85',
+							'th_duration'           => '60-minute practitioner consultation',
+							'th_seek_care'          => 'Seek clinical care for severe, sudden, worsening, or unexplained symptoms. A consultation should not delay urgent assessment.',
+							'th_cta_text'           => 'Speak to a Practitioner',
+							'th_cta_link'           => home_url( '/contact-us/' ),
+							'th_evidence_level'     => 'Traditional-use education with evidence and safety reviewed case by case.',
+							'th_priority'           => 75,
+							'th_faq'               => array(
+								array(
+									'label' => 'Are herbal remedies automatically safe because they are natural?',
+									'value' => 'No. Natural products can have active effects, side effects, and interactions. Suitability should be assessed by a qualified practitioner.',
+								),
+								array(
+									'label' => 'What should I bring to the consultation?',
+									'value' => 'A current medicines and supplements list, relevant diagnoses, known allergies, and any questions about a remedy can help the practitioner assess the context.',
+								),
+							),
+						),
+						'terms'    => array(
+							'remedies'       => array( 'Black Seed (Nigella Sativa)', 'Herbal Steam' ),
+							'vital_area'     => array( 'Respiratory System' ),
+							'patient_profile'=> array( 'Adults' ),
+						),
+						'image'    => 'treatment-herbal.jpg',
+					),
+				),
+				$term_ids
+			);
+
+			$condition_ids = $this->seed_items(
+				'conditions',
+				array(
+					array(
+						'title'    => 'Functional Digestive Discomfort',
+						'excerpt'  => 'Digestive symptoms such as bloating, fullness, or irregular bowel habits that may have several possible causes and deserve careful assessment.',
+						'sections' => array(
+							array( 'heading' => 'Overview', 'paragraphs' => array( 'Digestive discomfort can describe a range of symptoms rather than one single diagnosis. A qualified practitioner considers timing, food patterns, stress, medicines, and warning signs before discussing general support.' ) ),
+							array( 'heading' => 'Safety and Uncertainty', 'paragraphs' => array( 'Persistent, severe, or changing symptoms need appropriate clinical assessment. General educational information cannot establish the cause of digestive symptoms.' ) ),
+							array( 'heading' => 'References and Further Reading', 'paragraphs' => array( 'Digestive symptoms are interpreted in context and may require assessment by a clinician, dietitian, or other suitably qualified professional.' ) ),
+						),
+						'meta'     => array(
+							'th_definition'              => 'A descriptive term for digestive symptoms such as bloating, early fullness, abdominal discomfort, or irregular bowel habits when the underlying cause has not been established.',
+							'th_symptoms'                => 'Possible symptoms include bloating, discomfort after meals, changes in bowel habits, nausea, or a feeling of fullness. Symptoms vary and are not specific to one condition.',
+							'th_causes'                  => 'Possible contributors include diet, stress, infection, medication effects, food intolerance, functional gut disorders, and other medical conditions.',
+							'th_risk_factors'            => 'Recent illness, major dietary change, prolonged stress, low activity, dehydration, and some medicines may influence digestive symptoms.',
+							'th_diagnosis'               => 'A qualified clinician may review the symptom pattern, medical history, medicines, diet, and warning signs before deciding whether examination or tests are needed.',
+							'th_treatment_options'       => 'General approaches may include reviewing diet and routines, addressing contributing factors, and using appropriate clinical or practitioner-led support after assessment.',
+							'th_self_management'         => 'Keeping a symptom and food diary, maintaining practical hydration and movement habits, and seeking advice when symptoms persist can support a useful assessment.',
+							'th_complications'           => 'Unassessed symptoms can sometimes reflect a condition requiring treatment. Delayed care is a concern when symptoms are persistent, severe, or associated with bleeding, weight loss, fever, or repeated vomiting.',
+							'th_uncertain'               => 'Symptoms alone cannot identify the cause. Different digestive conditions can overlap, and an individual assessment is needed.',
+							'th_questions_for_clinician' => 'What symptoms or warning signs should I record? Could my medicines or another condition contribute? Do I need an examination or tests?',
+							'th_patient_profile'         => 'Adults seeking general education about digestive symptoms; not a diagnosis or personal treatment plan.',
+							'th_faq'                     => array(
+								array( 'label' => 'Does bloating identify a specific condition?', 'value' => 'No. Bloating has many possible causes. A clinician can help interpret persistent or concerning symptoms.' ),
+								array( 'label' => 'When should I seek prompt care?', 'value' => 'Seek prompt medical advice for severe pain, bleeding, persistent vomiting, unexplained weight loss, fever, or rapidly worsening symptoms.' ),
+							),
+						),
+						'terms'    => array( 'vital_area' => array( 'Digestive System' ), 'constitutional_type' => array( 'Cold Temperament' ), 'patient_profile' => array( 'Adults' ) ),
+						'image'    => 'condition-digestive.jpg',
+					),
+					array(
+						'title'    => 'Tension-Related Headache',
+						'excerpt'  => 'A common headache pattern that may be associated with muscle tension, stress, sleep disruption, or prolonged screen use.',
+						'sections' => array(
+							array( 'heading' => 'Overview', 'paragraphs' => array( 'Tension-type headache is commonly described as pressure or tightness around the head. Similar symptoms can occur for different reasons, so recurrent or unusual headaches should be clinically assessed.' ) ),
+							array( 'heading' => 'Safety and Uncertainty', 'paragraphs' => array( 'A sudden severe headache, new neurological symptom, head injury, fever with neck stiffness, or significant change in pattern requires urgent medical attention.' ) ),
+							array( 'heading' => 'References and Further Reading', 'paragraphs' => array( 'Practitioner-led wellbeing support can sit alongside, but should not replace, appropriate headache assessment and clinical care.' ) ),
+						),
+						'meta'     => array(
+							'th_definition'              => 'A common headache pattern often described as mild to moderate pressure or tightness, sometimes related to muscle tension or stress.',
+							'th_symptoms'                => 'People may describe pressure on both sides of the head, scalp or neck tenderness, and discomfort that is not usually worsened by ordinary activity.',
+							'th_causes'                  => 'Possible contributors include stress, poor sleep, prolonged screen use, muscle tension, dehydration, and other health factors.',
+							'th_risk_factors'            => 'Irregular sleep, sustained desk work, jaw or neck tension, stress, and frequent use of pain medicines may be relevant factors.',
+							'th_diagnosis'               => 'A clinician may ask about timing, frequency, associated symptoms, medicines, neurological signs, and triggers before deciding whether further assessment is needed.',
+							'th_treatment_options'       => 'General approaches can include reviewing triggers, sleep and movement habits, appropriate clinical advice, and practitioner-led relaxation or bodywork where suitable.',
+							'th_self_management'         => 'A headache diary, regular breaks from screens, hydration, sleep routines, and gentle movement may help identify patterns while awaiting professional advice.',
+							'th_complications'           => 'Frequent headaches can affect daily life and may be associated with medication overuse or an underlying condition requiring review.',
+							'th_uncertain'               => 'A headache description alone cannot confirm the cause. New, severe, or changing symptoms need clinical assessment.',
+							'th_questions_for_clinician' => 'What pattern should I record? Could medicines, sleep, vision, or neck tension be contributing? What warning signs require urgent care?',
+							'th_patient_profile'         => 'Adults seeking general education about recurrent tension-like headaches; not a diagnosis.',
+							'th_faq'                     => array(
+								array( 'label' => 'Can stress contribute to headaches?', 'value' => 'Stress can be one contributing factor, but recurrent headaches should still be assessed in context.' ),
+								array( 'label' => 'What is an urgent warning sign?', 'value' => 'A sudden severe headache, weakness, confusion, vision loss, fever with neck stiffness, or headache after injury needs urgent medical assessment.' ),
+							),
+						),
+						'terms'    => array( 'vital_area' => array( 'Nervous System' ), 'constitutional_type' => array( 'Hot Temperament' ), 'patient_profile' => array( 'Adults' ) ),
+						'image'    => 'condition-joint.jpg',
+					),
+					array(
+						'title'    => 'Seasonal Skin Irritation',
+						'excerpt'  => 'Dryness, itching, or irritation that may change with weather, products, allergies, or an underlying skin condition.',
+						'sections' => array(
+							array( 'heading' => 'Overview', 'paragraphs' => array( 'Seasonal skin irritation can have several causes, from dry air and contact exposure to eczema, allergy, infection, or another dermatological condition.' ) ),
+							array( 'heading' => 'Safety and Uncertainty', 'paragraphs' => array( 'Educational information cannot determine the cause of a rash. Widespread, painful, infected-looking, rapidly changing, or persistent skin changes should be reviewed by an appropriate clinician.' ) ),
+							array( 'heading' => 'References and Further Reading', 'paragraphs' => array( 'A practitioner can discuss gentle care and traditional approaches only after considering the skin presentation and any need for medical referral.' ) ),
+						),
+						'meta'     => array(
+							'th_definition'              => 'A descriptive term for skin dryness, itching, redness, or irritation that appears or changes with seasonal conditions.',
+							'th_symptoms'                => 'Possible symptoms include dryness, itch, scaling, redness, sensitivity, or discomfort. These features can occur in many skin conditions.',
+							'th_causes'                  => 'Possible contributors include dry air, temperature change, soaps, cosmetics, contact allergy, eczema, infection, and other dermatological conditions.',
+							'th_risk_factors'            => 'Sensitive skin, occupational exposure, frequent washing, new products, allergies, and low humidity may increase irritation risk.',
+							'th_diagnosis'               => 'A clinician may examine the skin, ask about timing and exposures, and consider medical history before deciding whether tests or specialist review are needed.',
+							'th_treatment_options'       => 'General approaches may include avoiding known irritants, using suitable skin care, and receiving clinical treatment when a specific condition is identified.',
+							'th_self_management'         => 'Record new products and exposures, use gentle fragrance-free care, and avoid scratching or applying unreviewed remedies to broken skin.',
+							'th_complications'           => 'Scratching can damage the skin and increase infection risk. Persistent irritation may indicate a condition needing assessment.',
+							'th_uncertain'               => 'The appearance of a rash is not enough to identify its cause. Advice should be tailored after assessment.',
+							'th_questions_for_clinician' => 'Could a product or exposure be contributing? What signs suggest infection or allergy? Should I stop any current product?',
+							'th_patient_profile'         => 'Adults seeking general education about seasonal skin irritation; not a diagnosis or personal treatment plan.',
+							'th_faq'                     => array(
+								array( 'label' => 'Should I try a new remedy on irritated skin?', 'value' => 'Ask a qualified practitioner or clinician first, especially if the skin is broken, painful, infected-looking, or affected by allergies.' ),
+								array( 'label' => 'When should a rash be assessed?', 'value' => 'Seek advice for persistent, spreading, painful, blistering, infected-looking, or rapidly changing skin symptoms.' ),
+							),
+						),
+						'terms'    => array( 'vital_area' => array( 'Circulatory System' ), 'constitutional_type' => array( 'Dry Temperament' ), 'patient_profile' => array( 'Adults' ) ),
+						'image'    => 'condition-stress.jpg',
+					),
+				),
+				$term_ids
+			);
+
+			$knowledge_ids = $this->seed_items(
+				'knowledge',
+				array(
+					array(
+						'title'    => 'How Practitioners Assess Constitutional Patterns',
+						'excerpt'  => 'An educational introduction to constitutional language in Tibb practice and the role of careful, individual assessment.',
+						'sections' => array(
+							array( 'heading' => 'Why Assessment Matters', 'paragraphs' => array( 'Constitutional language is used in some traditional health systems to describe patterns of balance and imbalance. It should be treated as a framework for discussion rather than a substitute for clinical diagnosis.' ) ),
+							array( 'heading' => 'What a Practitioner May Explore', 'list' => array( 'Health history and current concerns', 'Sleep, activity, appetite, and digestion', 'Environmental, cultural, and lifestyle context', 'Current medicines, allergies, and safety considerations' ) ),
+							array( 'heading' => 'From Education to Individual Care', 'paragraphs' => array( 'A practitioner may use the conversation to decide what further assessment, referral, or general wellbeing support is appropriate. Individual treatment planning belongs in a qualified consultation.' ) ),
+							array( 'heading' => 'Limits of the Framework', 'paragraphs' => array( 'Constitutional descriptions do not diagnose disease and should not be used to delay medical care. Evidence and uncertainty should be explained clearly.' ) ),
+						),
+						'meta'     => array(
+							'th_author'                    => 'Tibb House Editorial Team',
+							'th_medical_reviewer'          => 'Dr. Amina Yusuf — Certified Hijama Practitioner, Diploma in Traditional Herbal Medicine',
+							'th_last_reviewed'             => '2026-09-01',
+							'th_knowledge_type'            => 'Educational Guide',
+							'th_evidence_level'            => 'Traditional framework with practitioner-led contextual assessment.',
+							'th_references'                => 'Tibb House practitioner notes; World Health Organization resources on traditional medicine and safe, person-centred care.',
+							'th_disclaimer'                => 'This article is educational information, not a diagnosis or personalised treatment plan. Speak with a qualified practitioner or clinician about individual concerns.',
+							'th_priority'                  => 70,
+							'th_faq'                       => array(
+								array( 'label' => 'Does a constitutional pattern diagnose illness?', 'value' => 'No. It is a traditional framework for discussion and cannot replace clinical assessment or diagnosis.' ),
+								array( 'label' => 'Why are medicines and allergies discussed?', 'value' => 'Safety depends on the whole context. Medicines, allergies, pregnancy, and existing conditions can affect whether an approach is appropriate.' ),
+							),
+							'th_patient_experience_toggle' => false,
+						),
+						'terms'    => array( 'knowledge_type' => array( 'Guide' ), 'evidence_level' => array( 'Traditional Use' ), 'patient_profile' => array( 'Adults' ), 'vital_area' => array( 'Nervous System' ) ),
+						'image'    => 'knowledge-herbs.jpg',
+					),
+					array(
+						'title'    => 'Understanding Safety in Traditional Herbal Care',
+						'excerpt'  => 'How to ask better questions about herbal products, evidence, interactions, preparation, and when professional review is needed.',
+						'sections' => array(
+							array( 'heading' => 'Natural Does Not Mean Risk-Free', 'paragraphs' => array( 'Herbal products can contain active compounds and may affect the body in meaningful ways. Quality, preparation, dose, interactions, and the person using them all matter.' ) ),
+							array( 'heading' => 'Questions to Ask', 'list' => array( 'What is the traditional purpose of the remedy?', 'What evidence supports the proposed use?', 'Could it interact with medicines or another product?', 'How is quality and preparation controlled?', 'What symptoms would mean I should stop and seek care?' ) ),
+							array( 'heading' => 'Who Needs Extra Caution', 'paragraphs' => array( 'Pregnancy, breastfeeding, childhood, older age, liver or kidney disease, surgery, allergies, and prescription medicines can change the safety assessment.' ) ),
+							array( 'heading' => 'A Practitioner-Led Approach', 'paragraphs' => array( 'A qualified practitioner can help distinguish education from a personal recommendation and can refer to medical care when symptoms or risks require it.' ) ),
+						),
+						'meta'     => array(
+							'th_author'                    => 'Tibb House Editorial Team',
+							'th_medical_reviewer'          => 'Dr. Amina Yusuf — Certified Hijama Practitioner, Diploma in Traditional Herbal Medicine',
+							'th_last_reviewed'             => '2026-09-01',
+							'th_knowledge_type'            => 'Safety Guide',
+							'th_evidence_level'            => 'Safety education informed by traditional use, pharmacology principles, and clinical referral guidance.',
+							'th_references'                => 'World Health Organization traditional medicine safety resources; NHS guidance on herbal medicines and interactions; practitioner review.',
+							'th_disclaimer'                => 'This article does not recommend a product or dose for any individual. A qualified professional should assess suitability and potential interactions.',
+							'th_priority'                  => 68,
+							'th_faq'                       => array(
+								array( 'label' => 'Can herbal products interact with prescriptions?', 'value' => 'Yes. Some products can alter the effects or absorption of medicines. Ask a pharmacist, clinician, or qualified practitioner before use.' ),
+								array( 'label' => 'Should I stop prescribed medicine before using a remedy?', 'value' => 'Do not stop or change prescribed medicine without speaking with the prescribing clinician.' ),
+							),
+							'th_patient_experience_toggle' => false,
+						),
+						'terms'    => array( 'knowledge_type' => array( 'Guide' ), 'evidence_level' => array( 'Observational Evidence' ), 'patient_profile' => array( 'Adults' ), 'vital_area' => array( 'Respiratory System' ), 'remedies' => array( 'Black Seed (Nigella Sativa)', 'Herbal Steam' ) ),
+						'image'    => 'knowledge-nutrition.jpg',
+					),
+					array(
+						'title'    => 'When Educational Health Information Needs Professional Assessment',
+						'excerpt'  => 'A practical guide to recognising uncertainty, warning signs, and the point where online education should give way to qualified care.',
+						'sections' => array(
+							array( 'heading' => 'Education Has Limits', 'paragraphs' => array( 'Health articles can help people prepare questions and understand general concepts, but they cannot examine a person, review every risk, or determine a diagnosis.' ) ),
+							array( 'heading' => 'Reasons to Seek Assessment', 'list' => array( 'Symptoms are severe, persistent, or getting worse', 'There is unexplained bleeding, fainting, weakness, fever, or rapid weight loss', 'A new symptom appears during pregnancy or after starting medicine', 'A condition has already been diagnosed and is changing', 'You are unsure whether a traditional remedy is safe' ) ),
+							array( 'heading' => 'Preparing for a Consultation', 'paragraphs' => array( 'A short record of symptoms, timing, medicines, supplements, allergies, and questions can help a clinician or practitioner understand the situation and explain the next step.' ) ),
+							array( 'heading' => 'The Tibb House Journey', 'paragraphs' => array( 'The intended path is education, practitioner discussion, assessment, and then an individual plan where appropriate. The website should never replace that process.' ) ),
+						),
+						'meta'     => array(
+							'th_author'                    => 'Tibb House Editorial Team',
+							'th_medical_reviewer'          => 'Dr. Amina Yusuf — Certified Hijama Practitioner, Diploma in Traditional Herbal Medicine',
+							'th_last_reviewed'             => '2026-09-01',
+							'th_knowledge_type'            => 'Patient Guide',
+							'th_evidence_level'            => 'General safety and referral education.',
+							'th_references'                => 'NHS urgent care guidance; World Health Organization patient safety principles; Tibb House practitioner review.',
+							'th_disclaimer'                => 'This article is general education and cannot diagnose, treat, or rule out a medical condition. Seek appropriate care for personal concerns.',
+							'th_priority'                  => 66,
+							'th_faq'                       => array(
+								array( 'label' => 'Can I use an article to decide what treatment I need?', 'value' => 'No. Articles can support questions and general understanding, but suitability and treatment planning require qualified assessment.' ),
+								array( 'label' => 'What should I do if symptoms feel urgent?', 'value' => 'Use appropriate urgent or emergency medical services in your area rather than waiting for an online response.' ),
+							),
+							'th_patient_experience_toggle' => false,
+						),
+						'terms'    => array( 'knowledge_type' => array( 'Guide' ), 'evidence_level' => array( 'Systematic Review' ), 'patient_profile' => array( 'Adults' ), 'vital_area' => array( 'Nervous System' ) ),
+						'image'    => 'knowledge-book.jpg',
+					),
+				),
+				$term_ids
+			);
+
+			$this->link_final_content( $treatment_ids, $condition_ids, $knowledge_ids );
+		} catch ( \Throwable $e ) {
+			if ( defined( 'WP_DEBUG_LOG' ) && WP_DEBUG_LOG ) {
+				error_log( 'Tibb House Core: v4 seeder error — ' . $e->getMessage() ); // phpcs:ignore WordPress.PHP.DevelopmentFunctions.error_log_error_log
+			}
+		}
+
+		update_option( self::SEEDED_V4_OPTION, time() );
+	}
+
+	/**
+	 * Move named demo records out of the public site without deleting them.
+	 */
+	private function hide_demo_content() {
+		$demo_records = array(
+			array( 'post_type' => 'treatments', 'slug' => 'honey-olive-oil-wellness-protocol' ),
+			array( 'post_type' => 'conditions', 'slug' => 'digestive-sluggishness' ),
+			array( 'post_type' => 'knowledge', 'slug' => 'a-practical-guide-to-mindful-eating' ),
+			array( 'post_type' => 'practitioners', 'slug' => 'dr-maryam-rahman' ),
+			array( 'post_type' => 'practitioners', 'title' => 'Dr. Maryam Rahman' ),
+		);
+
+		foreach ( $demo_records as $record ) {
+			$args = array(
+				'post_type'      => $record['post_type'],
+				'post_status'    => 'any',
+				'posts_per_page' => -1,
+				'no_found_rows'  => true,
+			);
+			if ( ! empty( $record['slug'] ) ) {
+				$args['name'] = $record['slug'];
+			}
+			if ( ! empty( $record['title'] ) ) {
+				$args['title'] = $record['title'];
+			}
+
+			$posts = get_posts( $args );
+			foreach ( $posts as $post ) {
+				if ( 'publish' === $post->post_status ) {
+					wp_update_post( array( 'ID' => $post->ID, 'post_status' => 'draft' ) );
+				}
+			}
+		}
+
+		$placeholder = 'food cells niceas 24 age';
+		$posts       = get_posts(
+			array(
+				'post_type'      => 'any',
+				'post_status'    => 'publish',
+				'posts_per_page' => -1,
+				'no_found_rows'  => true,
+			)
+		);
+		foreach ( $posts as $post ) {
+			if ( false !== stripos( $post->post_title . ' ' . $post->post_content, $placeholder ) ) {
+				wp_update_post( array( 'ID' => $post->ID, 'post_status' => 'draft' ) );
+			}
+		}
+	}
+
+	/**
+	 * Connect the new entries through the existing relationship meta keys.
+	 */
+	private function link_final_content( array $treatment_ids, array $condition_ids, array $knowledge_ids ) {
+		$treatment_ids = array_values( array_filter( $treatment_ids ) );
+		$condition_ids = array_values( array_filter( $condition_ids ) );
+		$knowledge_ids = array_values( array_filter( $knowledge_ids ) );
+
+		if ( ! empty( $treatment_ids[0] ) && ! empty( $condition_ids[0] ) ) {
+			$this->append_relationship( $treatment_ids[0], 'th_related_conditions', array( $condition_ids[0] ) );
+			$this->append_relationship( $condition_ids[0], 'th_treatment_relationships', array( $treatment_ids[0] ) );
+		}
+		if ( ! empty( $treatment_ids[1] ) && ! empty( $condition_ids[2] ) ) {
+			$this->append_relationship( $treatment_ids[1], 'th_related_conditions', array( $condition_ids[2] ) );
+			$this->append_relationship( $condition_ids[2], 'th_treatment_relationships', array( $treatment_ids[1] ) );
+		}
+
+		if ( ! empty( $condition_ids[0] ) && ! empty( $knowledge_ids[0] ) ) {
+			$this->append_relationship( $condition_ids[0], 'th_knowledge_relationships', array( $knowledge_ids[0] ) );
+			$this->append_relationship( $knowledge_ids[0], 'th_related_conditions', array( $condition_ids[0] ) );
+			$this->append_relationship( $knowledge_ids[0], 'th_related_treatments', array( $treatment_ids[0] ?? 0 ) );
+		}
+		if ( ! empty( $condition_ids[1] ) && ! empty( $knowledge_ids[1] ) ) {
+			$this->append_relationship( $condition_ids[1], 'th_knowledge_relationships', array( $knowledge_ids[1] ) );
+			$this->append_relationship( $knowledge_ids[1], 'th_related_conditions', array( $condition_ids[1] ) );
+			$this->append_relationship( $knowledge_ids[1], 'th_related_treatments', array( $treatment_ids[1] ?? 0 ) );
+		}
+		if ( ! empty( $condition_ids[2] ) && ! empty( $knowledge_ids[2] ) ) {
+			$this->append_relationship( $condition_ids[2], 'th_knowledge_relationships', array( $knowledge_ids[2] ) );
+			$this->append_relationship( $knowledge_ids[2], 'th_related_conditions', array( $condition_ids[2] ) );
+			$this->append_relationship( $knowledge_ids[2], 'th_related_treatments', array( $treatment_ids[1] ?? 0 ) );
+		}
+	}
+
+	/**
+	 * Append IDs to an existing relationship field without duplicates.
+	 */
+	private function append_relationship( $post_id, $meta_key, array $related_ids ) {
+		$current = get_post_meta( $post_id, $meta_key, true );
+		$current = is_array( $current ) ? array_map( 'absint', $current ) : array();
+		$merged  = array_values( array_filter( array_unique( array_merge( $current, $related_ids ) ) ) );
+		update_post_meta( $post_id, $meta_key, $merged );
+	}
+
+	/**
 	 * Option flag for the repair seeder.
 	 */
 	const SEEDED_REPAIR_OPTION = 'tibbhouse_starter_content_repaired_v1';

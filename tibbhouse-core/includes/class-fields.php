@@ -182,7 +182,12 @@ class Tibbhouse_Fields {
 	 */
 	public function sanitize_by_kind_wrapper( $value ) {
 		if ( is_array( $value ) ) {
-			return array_map( 'sanitize_text_field', $value );
+			return array_map(
+				function ( $item ) {
+					return is_array( $item ) ? $this->sanitize_by_kind_wrapper( $item ) : sanitize_text_field( $item );
+				},
+				$value
+			);
 		}
 		return sanitize_text_field( $value );
 	}

@@ -56,6 +56,10 @@ echo "\n=== v3: 4th Items + About/Contact Page Content ===\n";
 $seeder->maybe_seed_v3();
 echo "  ✓ v3 seeder complete\n";
 
+echo "\n=== v4: Final Cleanup + Educational Content Population ===\n";
+$seeder->maybe_seed_v4();
+echo "  ✓ v4 seeder complete\n";
+
 echo "\n=== Repair: Gap-filler (re-seeds any missing content) ===\n";
 $seeder->maybe_repair();
 echo "  ✓ repair seeder complete\n";

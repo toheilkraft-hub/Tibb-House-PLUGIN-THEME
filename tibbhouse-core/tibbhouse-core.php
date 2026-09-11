@@ -3,7 +3,7 @@
  * Plugin Name:       Tibb House Core
  * Plugin URI:        https://tibbhouse.example
  * Description:       Production-ready core plugin powering the Tibb House content platform: Treatments, Conditions, Knowledge, Practitioners and Locations, with native meta boxes, taxonomies, relationships, REST exposure and Gutenberg blocks. Built with native WordPress APIs only (no ACF, no third-party CPT plugins).
- * Version:           1.1.1
+ * Version:           1.2.0
  * Requires at least: 6.0
  * Requires PHP:      7.4
  * Author:            Tibb House
@@ -16,7 +16,7 @@ if ( ! defined( 'ABSPATH' ) ) {
 	exit; // No direct access.
 }
 
-define( 'TIBBHOUSE_CORE_VERSION', '1.1.1' );
+define( 'TIBBHOUSE_CORE_VERSION', '1.2.0' );
 define( 'TIBBHOUSE_CORE_FILE', __FILE__ );
 define( 'TIBBHOUSE_CORE_PATH', plugin_dir_path( __FILE__ ) );
 define( 'TIBBHOUSE_CORE_URL', plugin_dir_url( __FILE__ ) );
@@ -86,6 +86,7 @@ require_once TIBBHOUSE_CORE_PATH . 'includes/class-intake-ajax.php';
 		add_action( 'admin_init', array( $this, 'maybe_seed_on_admin_init' ) );
 		add_action( 'admin_init', array( $this, 'maybe_seed_v2_on_admin_init' ) );
 		add_action( 'admin_init', array( $this, 'maybe_seed_v3_on_admin_init' ) );
+add_action( 'admin_init', array( $this, 'maybe_seed_v4_on_admin_init' ) );
 		add_action( 'admin_init', array( $this, 'maybe_repair_on_admin_init' ) );
 
 		register_activation_hook( TIBBHOUSE_CORE_FILE, array( $this, 'activate' ) );
@@ -167,6 +168,13 @@ require_once TIBBHOUSE_CORE_PATH . 'includes/class-intake-ajax.php';
 	public function maybe_seed_v3_on_admin_init() {
 		Tibbhouse_Starter_Content::instance()->maybe_seed_v3();
 	}
+
+/**
+ * Admin-init hook for the final cleanup/content population pass.
+ */
+public function maybe_seed_v4_on_admin_init() {
+Tibbhouse_Starter_Content::instance()->maybe_seed_v4();
+}
 
 	/**
 	 * Admin-init hook for the repair seeder (fills gaps from failed earlier runs).
