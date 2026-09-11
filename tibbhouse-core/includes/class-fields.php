@@ -98,6 +98,7 @@ class Tibbhouse_Fields {
 				'th_patient_profile'         => array( 'string', __( 'Patient Profile (free text)', 'tibbhouse-core' ), 'text' ),
 				'th_faq'                     => array( 'array', __( 'FAQ', 'tibbhouse-core' ), 'repeater' ),
 				'th_hero_image'              => array( 'integer', __( 'Hero Image', 'tibbhouse-core' ), 'image' ),
+				'th_priority'                => array( 'integer', __( 'Recommended Priority', 'tibbhouse-core' ), 'number', __( 'Higher numbers appear first when visitors choose Recommended.', 'tibbhouse-core' ) ),
 			),
 			'knowledge'     => array(
 				'th_author'                    => array( 'string', __( 'Author', 'tibbhouse-core' ), 'text' ),

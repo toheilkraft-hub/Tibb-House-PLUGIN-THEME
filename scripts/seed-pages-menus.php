@@ -194,9 +194,9 @@ function th_add_menu_custom( $menu_id, $url, $title, $order, $classes = '' ) {
 
 th_add_menu_page(   $menu_id, $home_id,    'Home',           1 );
 th_add_menu_page(   $menu_id, $about_id,   'About Us',       2 );
-th_add_menu_custom( $menu_id, home_url( '/?post_type=treatments' ),  'Treatments',  3 );
-th_add_menu_custom( $menu_id, home_url( '/?post_type=conditions' ),  'Conditions',  4 );
-th_add_menu_custom( $menu_id, home_url( '/?post_type=practitioners' ), 'Practitioners', 5 );
+th_add_menu_custom( $menu_id, home_url( '/treatments/' ),  'Treatments',  3 );
+th_add_menu_custom( $menu_id, home_url( '/conditions/' ),  'Conditions',  4 );
+th_add_menu_custom( $menu_id, home_url( '/practitioners/' ), 'Practitioners', 5 );
 th_add_menu_page(   $menu_id, $blog_id,    'Blog',           6 );
 th_add_menu_page(   $menu_id, $contact_id, 'Contact Us',     7 );
 th_add_menu_page(   $menu_id, $forms_id,   'Patient Forms',  8 );
