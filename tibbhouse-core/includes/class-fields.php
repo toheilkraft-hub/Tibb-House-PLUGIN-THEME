@@ -73,7 +73,6 @@ class Tibbhouse_Fields {
 				'th_booking_url'        => array( 'string', __( 'Booking URL', 'tibbhouse-core' ), 'url' ),
 				'th_related_conditions' => array( 'array', __( 'Related Conditions', 'tibbhouse-core' ), 'relationship:conditions' ),
 				'th_evidence_level'     => array( 'string', __( 'Evidence Level (free text)', 'tibbhouse-core' ), 'text' ),
-				'th_faq'                => array( 'array', __( 'FAQ', 'tibbhouse-core' ), 'repeater' ),
 				'th_cta_text'           => array( 'string', __( 'CTA Text', 'tibbhouse-core' ), 'text' ),
 				'th_cta_link'           => array( 'string', __( 'CTA Link', 'tibbhouse-core' ), 'url' ),
 				'th_hero_image'         => array( 'integer', __( 'Hero Image', 'tibbhouse-core' ), 'image' ),
@@ -96,7 +95,6 @@ class Tibbhouse_Fields {
 				'th_treatment_relationships' => array( 'array', __( 'Related Treatments', 'tibbhouse-core' ), 'relationship:treatments' ),
 				'th_knowledge_relationships' => array( 'array', __( 'Related Knowledge', 'tibbhouse-core' ), 'relationship:knowledge' ),
 				'th_patient_profile'         => array( 'string', __( 'Patient Profile (free text)', 'tibbhouse-core' ), 'text' ),
-				'th_faq'                     => array( 'array', __( 'FAQ', 'tibbhouse-core' ), 'repeater' ),
 				'th_hero_image'              => array( 'integer', __( 'Hero Image', 'tibbhouse-core' ), 'image' ),
 				'th_priority'                => array( 'integer', __( 'Recommended Priority', 'tibbhouse-core' ), 'number', __( 'Higher numbers appear first when visitors choose Recommended.', 'tibbhouse-core' ) ),
 			),
@@ -114,7 +112,6 @@ class Tibbhouse_Fields {
 				'th_disclaimer'                => array( 'string', __( 'Disclaimer', 'tibbhouse-core' ), 'textarea' ),
 				'th_patient_experience_toggle' => array( 'boolean', __( 'Contains Patient Experience', 'tibbhouse-core' ), 'toggle' ),
 				'th_related_remedies'          => array( 'string', __( 'Related Remedies (free text)', 'tibbhouse-core' ), 'text' ),
-				'th_faq'                       => array( 'array', __( 'FAQ', 'tibbhouse-core' ), 'repeater' ),
 			),
 			'practitioners' => array(
 				'th_role'            => array( 'string', __( 'Role', 'tibbhouse-core' ), 'text' ),
@@ -222,7 +219,6 @@ class Tibbhouse_Fields {
 		}
 
 		echo '<div class="tibbhouse-fields">';
-		echo '<p class="description tibbhouse-field-help">' . esc_html__( 'Edit the FAQ accordion here. This panel is separate from the optional Gutenberg FAQ block in the page content.', 'tibbhouse-core' ) . '</p>';
 		foreach ( $fields[ $post->post_type ] as $meta_key => $config ) {
 			list( $type, $label, $kind ) = $config;
 			$help = isset( $config[3] ) ? $config[3] : '';

@@ -53,7 +53,6 @@ class Tibbhouse_Blocks {
 		return array(
 			'hero'            => array( $this, 'render_hero' ),
 			'cta'             => array( $this, 'render_cta' ),
-			'faq'             => array( $this, 'render_faq' ),
 			'testimonials'    => array( $this, 'render_testimonials' ),
 			'booking-form'    => array( $this, 'render_booking_form' ),
 			'card-grid'       => array( $this, 'render_card_grid' ),
@@ -125,14 +124,6 @@ class Tibbhouse_Blocks {
 				return array(
 					'text' => array( 'type' => 'string', 'default' => __( 'Book a Consultation', 'tibbhouse-core' ) ),
 					'link' => array( 'type' => 'string', 'default' => '' ),
-				);
-
-			case 'faq':
-				return array(
-					'items' => array(
-						'type'    => 'array',
-						'default' => array(),
-					),
 				);
 
 			case 'testimonials':
@@ -229,37 +220,6 @@ class Tibbhouse_Blocks {
 			esc_url( $link ),
 			esc_html( $text )
 		);
-	}
-
-	/**
-	 * FAQ block: accordion of question/answer pairs.
-	 *
-	 * @param array $attrs Block attributes.
-	 * @return string
-	 */
-	public function render_faq( $attrs ) {
-		$items = isset( $attrs['items'] ) && is_array( $attrs['items'] ) ? $attrs['items'] : array();
-
-		if ( empty( $items ) ) {
-			return '';
-		}
-
-		ob_start();
-		echo '<div class="tibbhouse-block tibbhouse-faq">';
-		foreach ( $items as $item ) {
-			$question = isset( $item['label'] ) ? $item['label'] : ( isset( $item['question'] ) ? $item['question'] : '' );
-			$answer   = isset( $item['value'] ) ? $item['value'] : ( isset( $item['answer'] ) ? $item['answer'] : '' );
-			if ( ! $question ) {
-				continue;
-			}
-			printf(
-				'<details class="tibbhouse-faq-item"><summary>%s</summary><div class="tibbhouse-faq-answer">%s</div></details>',
-				esc_html( $question ),
-				wp_kses_post( $answer )
-			);
-		}
-		echo '</div>';
-		return ob_get_clean();
 	}
 
 	/**

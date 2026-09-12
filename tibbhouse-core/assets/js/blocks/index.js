@@ -146,7 +146,7 @@
 	} );
 
 	/**
-	 * Repeater-based blocks (FAQ, Testimonials) use a simple textarea that
+	 * Repeater-based blocks (Testimonials) use a simple textarea that
 	 * accepts one entry per line in "Label | Value" format for a fast,
 	 * dependency-free authoring UX inside the block editor.
 	 */
@@ -193,6 +193,5 @@
 		} );
 	}
 
-	registerRepeaterBlock( 'faq', __( 'Tibb House: FAQ', 'tibbhouse-core' ), __( 'Question | Answer', 'tibbhouse-core' ) );
 	registerRepeaterBlock( 'testimonials', __( 'Tibb House: Testimonials', 'tibbhouse-core' ), __( 'Author | Quote', 'tibbhouse-core' ) );
 } )( window.wp.blocks, window.wp.element, window.wp.blockEditor, window.wp.components, window.wp.i18n );

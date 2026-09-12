@@ -22,14 +22,6 @@ while ( have_posts() ) :
 	$evidence_level = get_post_meta( $post_id, 'th_evidence_level', true );
 	$references     = get_post_meta( $post_id, 'th_references', true );
 	$disclaimer     = get_post_meta( $post_id, 'th_disclaimer', true );
-	$faq            = get_post_meta( $post_id, 'th_faq', true );
-	$faq            = is_array( $faq ) ? array_filter(
-		$faq,
-		static function ( $item ) {
-			return is_array( $item ) && ! empty( trim( (string) ( $item['label'] ?? '' ) ) ) && ! empty( trim( (string) ( $item['value'] ?? '' ) ) );
-		}
-	) : array();
-
 	$knowledge_types  = get_the_terms( $post_id, 'knowledge_type' );
 	$evidence_terms   = get_the_terms( $post_id, 'evidence_level' );
 	$patient_profiles = get_the_terms( $post_id, 'patient_profile' );
@@ -143,29 +135,6 @@ while ( have_posts() ) :
 		<div class="tibbhouse-section th-reveal">
 			<div class="tibbhouse-section-label"><?php esc_html_e( 'Evidence Level', 'tibbhouse-core' ); ?></div>
 			<div class="th-highlight-band"><?php echo wp_kses_post( wpautop( $evidence_level ) ); ?></div>
-		</div>
-		<?php endif; ?>
-
-		<!-- FAQ -->
-		<?php if ( ! empty( $faq ) && is_array( $faq ) ) : ?>
-		<div class="tibbhouse-section th-reveal">
-			<div class="tibbhouse-section-label"><?php esc_html_e( 'Frequently Asked Questions', 'tibbhouse-core' ); ?></div>
-			<div class="tibbhouse-faq-wrap">
-				<?php foreach ( $faq as $item ) : ?>
-					<?php if ( empty( $item['label'] ) ) { continue; } ?>
-					<div class="th-faq-item">
-						<button class="th-faq-trigger" type="button">
-							<?php echo esc_html( $item['label'] ); ?>
-							<span class="th-faq-icon" aria-hidden="true">
-								<svg viewBox="0 0 16 16" width="16" height="16"><path d="M8 3v10M3 8h10" stroke="currentColor" stroke-width="2" stroke-linecap="round" fill="none"/></svg>
-							</span>
-						</button>
-						<div class="th-faq-body">
-							<div class="th-faq-body-inner"><?php echo wp_kses_post( $item['value'] ); ?></div>
-						</div>
-					</div>
-				<?php endforeach; ?>
-			</div>
 		</div>
 		<?php endif; ?>
 

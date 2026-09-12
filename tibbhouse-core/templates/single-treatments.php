@@ -27,13 +27,6 @@ while ( have_posts() ) :
 	$cta_text            = get_post_meta( $post_id, 'th_cta_text', true );
 	$cta_link            = get_post_meta( $post_id, 'th_cta_link', true );
 	$hero_image          = get_post_meta( $post_id, 'th_hero_image', true );
-	$faq                 = get_post_meta( $post_id, 'th_faq', true );
-	$faq                 = is_array( $faq ) ? array_filter(
-		$faq,
-		static function ( $item ) {
-			return is_array( $item ) && ! empty( trim( (string) ( $item['label'] ?? '' ) ) ) && ! empty( trim( (string) ( $item['value'] ?? '' ) ) );
-		}
-	) : array();
 	$evidence_level      = get_post_meta( $post_id, 'th_evidence_level', true );
 	$outcome_measurement = get_post_meta( $post_id, 'th_outcome_measurement', true );
 	$gallery             = get_post_meta( $post_id, 'th_gallery', true );
@@ -251,29 +244,6 @@ while ( have_posts() ) :
 						</video>
 					</div>
 				<?php endif; ?>
-			</div>
-		</div>
-		<?php endif; ?>
-
-		<!-- FAQ -->
-		<?php if ( ! empty( $faq ) && is_array( $faq ) ) : ?>
-		<div class="tibbhouse-section th-reveal">
-			<div class="tibbhouse-section-label"><?php esc_html_e( 'Frequently Asked Questions', 'tibbhouse-core' ); ?></div>
-			<div class="tibbhouse-faq-wrap">
-				<?php foreach ( $faq as $item ) : ?>
-					<?php if ( empty( $item['label'] ) ) { continue; } ?>
-					<div class="th-faq-item">
-						<button class="th-faq-trigger" type="button">
-							<?php echo esc_html( $item['label'] ); ?>
-							<span class="th-faq-icon" aria-hidden="true">
-								<svg viewBox="0 0 16 16" width="16" height="16" fill="currentColor"><path d="M8 3v10M3 8h10" stroke="currentColor" stroke-width="2" stroke-linecap="round" fill="none"/></svg>
-							</span>
-						</button>
-						<div class="th-faq-body">
-							<div class="th-faq-body-inner"><?php echo wp_kses_post( $item['value'] ); ?></div>
-						</div>
-					</div>
-				<?php endforeach; ?>
 			</div>
 		</div>
 		<?php endif; ?>
