@@ -222,6 +222,7 @@ class Tibbhouse_Fields {
 		}
 
 		echo '<div class="tibbhouse-fields">';
+		echo '<p class="description tibbhouse-field-help">' . esc_html__( 'Edit the FAQ accordion here. This panel is separate from the optional Gutenberg FAQ block in the page content.', 'tibbhouse-core' ) . '</p>';
 		foreach ( $fields[ $post->post_type ] as $meta_key => $config ) {
 			list( $type, $label, $kind ) = $config;
 			$help = isset( $config[3] ) ? $config[3] : '';

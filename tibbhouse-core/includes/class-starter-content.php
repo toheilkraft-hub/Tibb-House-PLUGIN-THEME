@@ -778,7 +778,7 @@ class Tibbhouse_Starter_Content {
 	/**
 	 * Option flag for the final cleanup and content-population pass.
 	 */
-	const SEEDED_V4_OPTION = 'tibbhouse_starter_content_seeded_v4_2';
+	const SEEDED_V4_OPTION = 'tibbhouse_starter_content_seeded_v4_3';
 
 	/**
 	 * Final cleanup pass: hide obvious demo records and add a small set of
@@ -796,6 +796,8 @@ class Tibbhouse_Starter_Content {
 		try {
 			$this->hide_demo_content();
 			$term_ids = $this->seed_taxonomies();
+			$practitioner_ids = $this->seed_final_practitioners();
+			$this->link_final_practitioners_locations( $practitioner_ids );
 
 			$treatment_ids = $this->seed_items(
 				'treatments',
@@ -1180,6 +1182,136 @@ class Tibbhouse_Starter_Content {
 		}
 
 		update_option( self::SEEDED_V4_OPTION, time() );
+	}
+
+	/**
+	 * Add three complete practitioner profiles using the existing CPT fields.
+	 *
+	 * These are educational profiles; they do not make individualized health
+	 * claims or prescribe treatment.
+	 *
+	 * @return int[] Practitioner IDs.
+	 */
+	private function seed_final_practitioners() {
+		return $this->seed_items(
+			'practitioners',
+			array(
+				array(
+					'title'    => 'Dr. Sara Malik',
+					'excerpt'  => 'Integrative health practitioner helping visitors understand traditional wellbeing approaches alongside appropriate clinical care.',
+					'sections' => array(
+						array(
+							'heading'    => 'About',
+							'paragraphs' => array(
+								'Dr. Sara Malik takes a careful, person-centred approach to consultations, beginning with health history, current concerns, medicines, and the questions a visitor wants to explore.',
+							),
+						),
+						array(
+							'heading' => 'Areas of Interest',
+							'list'    => array(
+								'General wellbeing education',
+								'Practitioner-led lifestyle discussions',
+								'Traditional remedies and safety questions',
+								'Referral and follow-up planning',
+							),
+						),
+					),
+					'meta'     => array(
+						'th_role'           => 'Integrative Health Practitioner',
+						'th_qualifications' => 'MBBS, Certificate in Traditional Herbal Practice',
+						'th_specializations' => 'Wellbeing education, practitioner assessment, traditional herbal safety',
+						'th_booking_link'   => home_url( '/contact-us/' ),
+					),
+					'image'    => 'practitioner-1.jpg',
+				),
+				array(
+					'title'    => 'Ustadh Hamza Qureshi',
+					'excerpt'  => 'Prophetic nutrition educator offering practical, culturally aware conversations about food, routine, and balanced wellbeing.',
+					'sections' => array(
+						array(
+							'heading'    => 'About',
+							'paragraphs' => array(
+								'Ustadh Hamza Qureshi helps visitors explore Prophetic dietary traditions in a practical and balanced way. His consultations focus on education and context rather than fixed meal plans or promises of a particular outcome.',
+							),
+						),
+						array(
+							'heading' => 'Areas of Interest',
+							'list'    => array(
+								'Prophetic dietary traditions',
+								'Food and lifestyle education',
+								'Culturally appropriate wellbeing conversations',
+								'Questions to take to a qualified clinician',
+							),
+						),
+					),
+					'meta'     => array(
+						'th_role'           => 'Prophetic Nutrition Educator',
+						'th_qualifications' => 'Diploma in Islamic Nutrition Education, Certificate in Health Coaching',
+						'th_specializations' => 'Prophetic nutrition, lifestyle education, culturally aware consultation',
+						'th_booking_link'   => home_url( '/contact-us/' ),
+					),
+					'image'    => 'practitioner-2.jpg',
+				),
+				array(
+					'title'    => 'Layla Siddiqui',
+					'excerpt'  => 'Hijama and wellness practitioner focused on informed consent, hygiene, suitability checks, and clear aftercare education.',
+					'sections' => array(
+						array(
+							'heading'    => 'About',
+							'paragraphs' => array(
+								'Layla Siddiqui approaches hijama consultations with a strong focus on safety, informed consent, hygiene, and knowing when a visitor should be referred for medical assessment.',
+							),
+						),
+						array(
+							'heading' => 'Areas of Interest',
+							'list'    => array(
+								'Traditional cupping education',
+								'Suitability and safety conversations',
+								'Aftercare and follow-up education',
+								'Practitioner-led wellbeing support',
+							),
+						),
+					),
+					'meta'     => array(
+						'th_role'           => 'Hijama & Wellness Practitioner',
+						'th_qualifications' => 'Certified Hijama Practitioner, First Aid & Infection Prevention Training',
+						'th_specializations' => 'Hijama education, informed consent, hygiene and aftercare',
+						'th_booking_link'   => home_url( '/contact-us/' ),
+					),
+					'image'    => 'practitioner-3.jpg',
+				),
+			),
+			array()
+		);
+	}
+
+	/**
+	 * Connect new practitioner profiles to existing locations.
+	 *
+	 * @param int[] $practitioner_ids Practitioner IDs.
+	 */
+	private function link_final_practitioners_locations( array $practitioner_ids ) {
+		$locations = get_posts(
+			array(
+				'post_type'      => 'locations',
+				'post_status'    => 'publish',
+				'posts_per_page' => 3,
+				'orderby'        => 'ID',
+				'order'          => 'ASC',
+				'no_found_rows'  => true,
+			)
+		);
+
+		if ( empty( $locations ) ) {
+			return;
+		}
+
+		$location_ids = wp_list_pluck( $locations, 'ID' );
+		foreach ( array_values( array_filter( $practitioner_ids ) ) as $index => $practitioner_id ) {
+			$location_id = (int) $location_ids[ $index % count( $location_ids ) ];
+			update_post_meta( $practitioner_id, 'th_clinic_location', array( $location_id ) );
+			$this->append_relationship( $location_id, 'th_practitioners', array( $practitioner_id ) );
+		}
 	}
 
 	/**
