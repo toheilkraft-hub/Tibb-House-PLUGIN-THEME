@@ -778,7 +778,7 @@ class Tibbhouse_Starter_Content {
 	/**
 	 * Option flag for the final cleanup and content-population pass.
 	 */
-	const SEEDED_V4_OPTION = 'tibbhouse_starter_content_seeded_v4';
+	const SEEDED_V4_OPTION = 'tibbhouse_starter_content_seeded_v4_2';
 
 	/**
 	 * Final cleanup pass: hide obvious demo records and add a small set of
@@ -925,6 +925,69 @@ class Tibbhouse_Starter_Content {
 							'patient_profile'=> array( 'Adults' ),
 						),
 						'image'    => 'treatment-herbal.jpg',
+					),
+					array(
+						'title'    => 'Traditional Cupping Assessment',
+						'excerpt'  => 'A practitioner-led cupping consultation focused on history, suitability, informed consent, and safe follow-up rather than a fixed protocol.',
+						'sections' => array(
+							array(
+								'heading'    => 'Overview',
+								'paragraphs' => array(
+									'A traditional cupping assessment begins with a conversation about the person’s health history, current concerns, medicines, skin condition, and expectations. The practitioner then explains whether a session is appropriate and what alternatives or referrals may be needed.',
+								),
+							),
+							array(
+								'heading' => 'What the Assessment Includes',
+								'list'    => array(
+									'Review of relevant health history, medicines, allergies, and previous procedures',
+									'Discussion of the intended purpose, possible benefits, limitations, and risks',
+									'Consent and suitability checks before any procedure is considered',
+									'Aftercare education and a clear follow-up or referral plan',
+								),
+							),
+							array(
+								'heading'    => 'Safety and Professional Care',
+								'paragraphs' => array(
+									'Cupping is not appropriate for every person or every symptom. A qualified practitioner should assess suitability, hygiene, skin integrity, bleeding risk, and the need for medical care before proceeding.',
+								),
+							),
+							array(
+								'heading'    => 'References and Further Reading',
+								'paragraphs' => array(
+									'The practitioner can explain what is supported by traditional use, what remains uncertain, and when current clinical guidance takes priority.',
+								),
+							),
+						),
+						'meta'     => array(
+							'th_what_it_is'         => 'A consultation and suitability assessment for traditional cupping. It is not a guarantee of benefit and does not replace medical diagnosis or treatment.',
+							'th_how_it_works'       => 'The practitioner reviews history and safety factors, explains the procedure and alternatives, obtains informed consent, and agrees appropriate follow-up or referral.',
+							'th_benefits'           => 'Potential benefits include informed decision-making, a safety review, and practitioner-led aftercare education. Outcomes vary and evidence is not uniform for every use.',
+							'th_risks_side_effects' => 'Possible risks include temporary marks, skin irritation, pain, dizziness, infection, burns, bleeding, and delayed care if it is used in place of appropriate treatment.',
+							'th_who_should_not_use' => 'People with active skin infection, significant bleeding risk, uncontrolled medical conditions, pregnancy-related concerns, or medicines affecting clotting should seek qualified advice before considering cupping.',
+							'th_price'              => 'From $65',
+							'th_duration'           => '45-minute assessment and consultation',
+							'th_seek_care'          => 'Seek urgent clinical care for severe symptoms, heavy bleeding, spreading redness, fever, fainting, or any unexpected deterioration.',
+							'th_cta_text'           => 'Ask About Cupping',
+							'th_cta_link'           => home_url( '/contact-us/' ),
+							'th_evidence_level'     => 'Traditional-use practice with safety reviewed case by case.',
+							'th_priority'           => 72,
+							'th_faq'               => array(
+								array(
+									'label' => 'Is a cupping session guaranteed to help?',
+									'value' => 'No. Benefits vary, and evidence differs by use. A practitioner should explain uncertainty and alternatives before consent.',
+								),
+								array(
+									'label' => 'Does an assessment always lead to a procedure?',
+									'value' => 'No. The practitioner may recommend waiting, seeking medical assessment, or choosing another form of support when cupping is not suitable.',
+								),
+							),
+						),
+						'terms'    => array(
+							'remedies'       => array( 'Hijama Cupping' ),
+							'vital_area'     => array( 'Circulatory System' ),
+							'patient_profile'=> array( 'Adults' ),
+						),
+						'image'    => 'treatment-cupping.jpg',
 					),
 				),
 				$term_ids
@@ -1123,47 +1186,44 @@ class Tibbhouse_Starter_Content {
 	 * Move named demo records out of the public site without deleting them.
 	 */
 	private function hide_demo_content() {
-		$demo_records = array(
-			array( 'post_type' => 'treatments', 'slug' => 'honey-olive-oil-wellness-protocol' ),
-			array( 'post_type' => 'conditions', 'slug' => 'digestive-sluggishness' ),
-			array( 'post_type' => 'knowledge', 'slug' => 'a-practical-guide-to-mindful-eating' ),
-			array( 'post_type' => 'practitioners', 'slug' => 'dr-maryam-rahman' ),
-			array( 'post_type' => 'practitioners', 'title' => 'Dr. Maryam Rahman' ),
-		);
-
-		foreach ( $demo_records as $record ) {
-			$args = array(
-				'post_type'      => $record['post_type'],
-				'post_status'    => 'any',
-				'posts_per_page' => -1,
-				'no_found_rows'  => true,
-			);
-			if ( ! empty( $record['slug'] ) ) {
-				$args['name'] = $record['slug'];
-			}
-			if ( ! empty( $record['title'] ) ) {
-				$args['title'] = $record['title'];
-			}
-
-			$posts = get_posts( $args );
-			foreach ( $posts as $post ) {
-				if ( 'publish' === $post->post_status ) {
-					wp_update_post( array( 'ID' => $post->ID, 'post_status' => 'draft' ) );
-				}
-			}
-		}
-
-		$placeholder = 'food cells niceas 24 age';
-		$posts       = get_posts(
+		$posts = get_posts(
 			array(
-				'post_type'      => 'any',
-				'post_status'    => 'publish',
+				'post_type'      => array( 'treatments', 'conditions', 'knowledge', 'practitioners', 'locations' ),
+				'post_status'    => 'any',
 				'posts_per_page' => -1,
 				'no_found_rows'  => true,
 			)
 		);
 		foreach ( $posts as $post ) {
-			if ( false !== stripos( $post->post_title . ' ' . $post->post_content, $placeholder ) ) {
+			$haystack = strtolower( $post->post_title . ' ' . $post->post_content . ' ' . $post->post_excerpt );
+			$is_demo  = false;
+
+			foreach (
+				array(
+					'demo treatment',
+					'demo condition',
+					'demo knowledge',
+					'demo practitioner',
+					'honey & olive oil wellness',
+					'olive oil wellness',
+					'digestive sluggishness',
+					'mindful eating',
+					'maryam rahman',
+					'food cells',
+					'niceas 24 age',
+					'fictional, copyable',
+					'fictional condition record',
+					'fictional knowledge article',
+					'copyable practitioner profile',
+				) as $marker
+			) {
+				if ( false !== strpos( $haystack, $marker ) ) {
+					$is_demo = true;
+					break;
+				}
+			}
+
+			if ( $is_demo && in_array( $post->post_status, array( 'publish', 'future', 'pending', 'private' ), true ) ) {
 				wp_update_post( array( 'ID' => $post->ID, 'post_status' => 'draft' ) );
 			}
 		}

@@ -87,6 +87,7 @@ require_once TIBBHOUSE_CORE_PATH . 'includes/class-intake-ajax.php';
 		add_action( 'admin_init', array( $this, 'maybe_seed_v2_on_admin_init' ) );
 		add_action( 'admin_init', array( $this, 'maybe_seed_v3_on_admin_init' ) );
 add_action( 'admin_init', array( $this, 'maybe_seed_v4_on_admin_init' ) );
+add_action( 'init', array( $this, 'maybe_seed_v4_on_admin_init' ), 99 );
 		add_action( 'admin_init', array( $this, 'maybe_repair_on_admin_init' ) );
 
 		register_activation_hook( TIBBHOUSE_CORE_FILE, array( $this, 'activate' ) );
